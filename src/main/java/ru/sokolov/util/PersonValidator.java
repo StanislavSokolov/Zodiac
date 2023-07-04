@@ -1,5 +1,6 @@
 package ru.sokolov.util;
 
+import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -24,6 +25,8 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        if (personDAO.show(person.getEmail()).isPresent()) errors.rejectValue("email", "", "This email is already used");
+        if (person.getAge() < 0) errors.rejectValue("age", "", "Must be more 0");
+        else if (personDAO.show(person.getEmail()).isPresent()) errors.rejectValue("email", "", "This email is already used");
+        else if (!person.getAddress().matches("[A-Z]\\w+, [A-Z]\\w+, \\d{6}")) errors.rejectValue("address", "", "Your address should be in this format: Country, City, Postal Code (6 digits)");
     }
 }
