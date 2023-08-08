@@ -23,10 +23,10 @@ public class PersonValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Person person = (Person) o;
-
-        if (person.getAge() < 0) errors.rejectValue("age", "", "Must be more 0");
-        else if (personDAO.show(person.getEmail()).isPresent()) errors.rejectValue("email", "", "This email is already used");
-        else if (!person.getAddress().matches("[A-Z]\\w+, [A-Z]\\w+, \\d{6}")) errors.rejectValue("address", "", "Your address should be in this format: Country, City, Postal Code (6 digits)");
+//        Person person = (Person) o;
+//
+//        if (person.getAge() < 0) errors.rejectValue("age", "", "Must be more 0");
+//        else if (personDAO.show(person.getEmail()).isPresent()) errors.rejectValue("email", "", "This email is already used");
+//        else if (!person.getAddress().matches("[A-Z]\\w+, [A-Z]\\w+, \\d{6}")) errors.rejectValue("address", "", "Your address should be in this format: Country, City, Postal Code (6 digits)");
     }
 }

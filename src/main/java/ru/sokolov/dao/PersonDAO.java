@@ -1,23 +1,31 @@
 package ru.sokolov.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sokolov.models.Person;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class PersonDAO {
 
+    private final SessionFactory sessionFactory;
+
+    @Autowired
+    public PersonDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Transactional(readOnly = true)
     public List<Person> index() {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+
+        List<Person> people = session.createQuery("select p from Person p", Person.class).getResultList();
+
+        return people;
     }
 
     public Person show(int id) {
