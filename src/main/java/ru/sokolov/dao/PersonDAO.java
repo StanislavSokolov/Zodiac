@@ -32,6 +32,13 @@ public class PersonDAO {
         return session.get(Person.class, id);
     }
 
+    @Transactional(readOnly = true)
+    public Person checkEmail(String email) {
+        Session session = sessionFactory.getCurrentSession();
+        List<Person> people = session.createQuery("FROM Person WHERE email LIKE '" + email + "'").getResultList();
+        if (people.isEmpty()) return null; else return people.get(0);
+    }
+
     @Transactional
     public void save(Person person) {
         Session session = sessionFactory.getCurrentSession();
