@@ -19,6 +19,8 @@
       <maven.compiler.target>1.7</maven.compiler.target>
 
       <spring.version>5.2.1.RELEASE</spring.version>
+      <hibernate.version>5.4.28.Final</hibernate.version>
+      <slf4j.version>2.0.7</slf4j.version>
     </properties>
 
     <dependencies>
@@ -84,8 +86,41 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
-        <version>5.2.22.RELEASE</version>
+        <version>${spring.version}</version>
       </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>${hibernate.version}</version>
+<!--        <type>pom</type>-->
+      </dependency>
+
+      <!-- https://mvnrepository.com/artifact/org.springframework/spring-orm -->
+      <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${spring.version}</version>
+      </dependency>
+
+<!--      &lt;!&ndash; https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager &ndash;&gt;-->
+<!--      <dependency>-->
+<!--        <groupId>org.hibernate</groupId>-->
+<!--        <artifactId>hibernate-entitymanager</artifactId>-->
+<!--        <version>5.6.15.Final</version>-->
+<!--      </dependency>-->
+
+<!--      <dependency>-->
+<!--        <groupId>org.slf4j</groupId>-->
+<!--        <artifactId>slf4j-api</artifactId>-->
+<!--        <version>${slf4j.version}</version>-->
+<!--      </dependency>-->
+<!--      <dependency>-->
+<!--        <groupId>org.slf4j</groupId>-->
+<!--        <artifactId>slf4j-simple</artifactId>-->
+<!--        <version>${slf4j.version}</version>-->
+<!--      </dependency>-->
 
     </dependencies>
 
