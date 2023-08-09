@@ -9,58 +9,58 @@ import ru.sokolov.models.Person;
 
 import java.util.List;
 
-@Component
-public class PersonDAO {
-
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public PersonDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    @Transactional(readOnly = true)
-    public List<Person> index() {
-        Session session = sessionFactory.getCurrentSession();
-
-        return session.createQuery("select p from Person p", Person.class).getResultList();
-    }
-
-    @Transactional(readOnly = true)
-    public Person show(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(Person.class, id);
-    }
-
-    @Transactional(readOnly = true)
-    public Person checkEmail(String email) {
-        Session session = sessionFactory.getCurrentSession();
-        List<Person> people = session.createQuery("FROM Person WHERE email LIKE '" + email + "'").getResultList();
-        if (people.isEmpty()) return null; else return people.get(0);
-    }
-
-    @Transactional
-    public void save(Person person) {
-        Session session = sessionFactory.getCurrentSession();
-        session.save(person);
-    }
-
-    @Transactional
-    public void update(int id, Person updatedPerson) {
-        Session session = sessionFactory.getCurrentSession();
-        Person personToBeUpdated = session.get(Person.class, id);
-
-        personToBeUpdated.setName(updatedPerson.getName());
-        personToBeUpdated.setAge(updatedPerson.getAge());
-        personToBeUpdated.setEmail(updatedPerson.getEmail());
-        personToBeUpdated.setAddress(updatedPerson.getAddress());
-    }
-
-    @Transactional
-    public void delete(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        session.remove(session.get(Person.class, id));
-    }
+//@Component
+//public class PersonDAO {
+//
+//    private final SessionFactory sessionFactory;
+//
+//    @Autowired
+//    public PersonDAO(SessionFactory sessionFactory) {
+//        this.sessionFactory = sessionFactory;
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public List<Person> index() {
+//        Session session = sessionFactory.getCurrentSession();
+//
+//        return session.createQuery("select p from Person p", Person.class).getResultList();
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public Person show(int id) {
+//        Session session = sessionFactory.getCurrentSession();
+//        return session.get(Person.class, id);
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public Person checkEmail(String email) {
+//        Session session = sessionFactory.getCurrentSession();
+//        List<Person> people = session.createQuery("FROM Person WHERE email LIKE '" + email + "'").getResultList();
+//        if (people.isEmpty()) return null; else return people.get(0);
+//    }
+//
+//    @Transactional
+//    public void save(Person person) {
+//        Session session = sessionFactory.getCurrentSession();
+//        session.save(person);
+//    }
+//
+//    @Transactional
+//    public void update(int id, Person updatedPerson) {
+//        Session session = sessionFactory.getCurrentSession();
+//        Person personToBeUpdated = session.get(Person.class, id);
+//
+//        personToBeUpdated.setName(updatedPerson.getName());
+//        personToBeUpdated.setAge(updatedPerson.getAge());
+//        personToBeUpdated.setEmail(updatedPerson.getEmail());
+//        personToBeUpdated.setAddress(updatedPerson.getAddress());
+//    }
+//
+//    @Transactional
+//    public void delete(int id) {
+//        Session session = sessionFactory.getCurrentSession();
+//        session.remove(session.get(Person.class, id));
+//    }
 
 //    private final JdbcTemplate jdbcTemplate;
 //
@@ -146,4 +146,4 @@ public class PersonDAO {
 //        for (int i = 0; i < 1000; i++) people.add(new Person(i, "Name" + i, 32, "test" + i + "@mail.ru", "some address"));
 //        return people;
 //    }
-}
+//}
