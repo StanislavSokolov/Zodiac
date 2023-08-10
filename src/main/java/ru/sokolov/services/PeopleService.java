@@ -41,6 +41,10 @@ public class PeopleService {
         peopleRepository.save(updatedPerson);
     }
 
+    public Person checkEmail(String email) {
+        List<Person> people = peopleRepository.findByEmail(email);
+        if (people.isEmpty()) return null; else return people.get(0);
+    }
 
     @Transactional
     public void delete(int id) {
