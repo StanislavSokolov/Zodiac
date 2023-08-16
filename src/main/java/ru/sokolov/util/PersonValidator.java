@@ -30,7 +30,8 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
-        if (person.getAge() < 0) errors.rejectValue("age", "", "Must be more 0");
+        if (person.getName().equals("")) errors.rejectValue("name", "", "Must have at least one character");
+        else if (person.getAge() < 0) errors.rejectValue("age", "", "Must be more 0");
         else if (peopleService.checkEmail(person.getEmail()) != null) errors.rejectValue("email", "", "This email is already used");
 //        else if (!person.getAddress().matches("[A-Z]\\w+, [A-Z]\\w+, \\d{6}")) errors.rejectValue("address", "", "Your address should be in this format: Country, City, Postal Code (6 digits)");
     }
