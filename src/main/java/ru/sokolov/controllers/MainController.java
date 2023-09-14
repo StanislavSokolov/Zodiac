@@ -27,7 +27,7 @@ public class MainController {
                 return "first/hello";
             }
         } else {
-            return "second/Продукция";
+            return "main/Статистика";
         }
 
     }
