@@ -57,7 +57,7 @@
 
 .u-section-2 .u-image-1 {
   min-height: 650px;
-  background-image: url("resources/images/wooden-keychain-white.jpg");
+  background-image: url("/resources/images/wooden-keychain-white.jpg");
   background-position: 50% 50%;
   --animation-custom_in-translate_x: 0px;
   --animation-custom_in-translate_y: 0px;
