@@ -67,9 +67,13 @@
       </div></header>
     <section class="u-clearfix u-palette-1-light-3 u-section-1" id="sec-e76e">
       <div class="u-clearfix u-sheet u-sheet-1">
+          <div class="u-align-right u-form-group u-form-submit u-label-top">
+              <a href="/" class="u-btn u-btn-submit u-button-style">Войти</a>
+              <input type="submit" value="submit" class="u-form-control-hidden">
+          </div>
         <h2 class="u-text u-text-default u-text-1"> Регистрация</h2>
         <p class="u-custom-font u-font-ubuntu u-text u-text-default u-text-2">Заполните данные формы и получите доступ к мощному инструменту ведения бизнеса</p>
-<!--        <div class="u-expanded-width u-form u-form-1">-->
+        <div class="u-expanded-width u-form">
 <!--          <form th:method="POST" th:action="@{/auth}" th:object="${user}" class="u-clearfix u-form-horizontal u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">-->
 <!--            <div class="u-form-group u-form-name u-label-top u-form-group-1">-->
 <!--              <label for="name-ebed" class="u-label">Логин</label>-->
@@ -95,26 +99,31 @@
 <!--&lt;!&ndash;            <input type="hidden" value="" name="recaptchaResponse">&ndash;&gt;-->
 <!--&lt;!&ndash;            <input type="hidden" name="formServices" value="52cb3b30-d781-1cd0-7e53-aeee750b9536">&ndash;&gt;-->
 <!--          </form>-->
-            <form th:method="POST" th:action="@{/auth}" th:object="${person}">
-                <label for="name">Enter name: </label>
-                <input type="text" th:field="*{name}" id="name"/>
-                <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-                <br/>
-                <label for="age">Enter age: </label>
-                <input type="text" th:field="*{age}" id="age"/>
-                <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
-                <br/>
-                <label for="email">Enter email: </label>
-                <input type="text" th:field="*{email}" id="email"/>
-                <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
-                <br/>
-                <label for="email">Enter address: </label>
-                <input type="text" th:field="*{address}" id="address"/>
-                <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
-                <br/>
-                <input type="submit" value="Create!"/>
+            <form th:method="POST" th:action="@{/auth}" th:object="${person}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+                <div class="u-form-group u-form-name u-label-top u-form-group-1">
+                    <label for="name-ebed" class="u-label">Логин</label>
+                    <input type="text" th:field="*{name}" id="name-ebed" placeholder="Введите логин" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+                    <br/>
+                </div>
+                <div class="u-form-email u-form-group u-label-top u-form-group-2">
+                    <label for="email-cbd5" class="u-label">Эл. почта</label>
+                    <input type="email" th:field="*{email}" id="email-cbd5" placeholder="Введите адрес эл. почты" name="email-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Age Error</div>
+                    <br/>
+                </div>
+                <div class="u-form-group u-label-top u-form-group-3">
+                    <label for="text-ef21" class="u-label">Пароль</label>
+                    <input type="password" th:field="*{address}" id="text-ef21" placeholder="Введите пароль" name="password_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+                    <br/>
+                </div>
+                <div class="u-align-left u-form-group u-form-submit u-label-top">
+                    <a href="/" class="u-btn u-btn-submit u-button-style">Зарегистрироваться</a>
+                    <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
             </form>
-<!--        </div>-->
+        </div>
       </div>
     </section>
     <section class="u-clearfix u-section-2" id="carousel_bac2">
