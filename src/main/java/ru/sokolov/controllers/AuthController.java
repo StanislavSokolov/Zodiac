@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.sokolov.models.Person;
 import ru.sokolov.models.User;
 import ru.sokolov.services.UserService;
-import ru.sokolov.util.UserValidator;
+import ru.sokolov.util.UserValidatorAuthentication;
+import ru.sokolov.util.UserValidatorAuthorization;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,39 +19,70 @@ public class AuthController {
 
     @Autowired
     private final UserService userService;
-    private final UserValidator userValidator;
+    private final UserValidatorAuthentication userValidatorAuthentication;
+    private final UserValidatorAuthorization userValidatorAuthorization;
 
-    public AuthController(UserService userService, UserValidator userValidator) {
+    public AuthController(UserService userService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization) {
         this.userService = userService;
-        this.userValidator = userValidator;
+        this.userValidatorAuthentication = userValidatorAuthentication;
+        this.userValidatorAuthorization = userValidatorAuthorization;
     }
 
     @GetMapping
-    public String authPage(@ModelAttribute("user") User user, @CookieValue(value = "Authentication", required = false) String authentication, HttpServletResponse httpServletResponse) {
+    public String authenticationPage(@ModelAttribute("user") User user, @CookieValue(value = "Authorization", required = false) String authorization, HttpServletResponse httpServletResponse) {
 
-        if (authentication != null) {
-            if (authentication.equals("true")) return "main/start";
+        if (authorization != null) {
+            if (authorization.equals("true")) return "main/start";
             else {
 //                model.addAttribute("message", "Hello,  MainController");
-                Cookie cookie = new Cookie("Authentication", "true");
+                Cookie cookie = new Cookie("Authorization", "true");
                 cookie.setMaxAge(60);
                 httpServletResponse.addCookie(cookie);
                 return "first/hello";
             }
         } else {
-            return "auth/Регистрация";
+            return "auth/authentication";
         }
-
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        userValidator.validate(user, bindingResult);
+    public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        userValidatorAuthentication.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
-            return "auth/Регистрация";
+            return "auth/authentication";
 
         userService.save(user); // если данные формы введены корректно, то сохраняем пользовтеля
         return "redirect:/"; // и переходим в лк
     }
+
+    @GetMapping("/authorization")
+    public String authorizationPage(@ModelAttribute("user") User user, @CookieValue(value = "Authorization", required = false) String authorization, HttpServletResponse httpServletResponse) {
+
+        if (authorization != null) {
+            if (authorization.equals("true")) return "main/start";
+            else {
+//                model.addAttribute("message", "Hello,  MainController");
+                Cookie cookie = new Cookie("Authorization", "true");
+                cookie.setMaxAge(60);
+                httpServletResponse.addCookie(cookie);
+                return "first/hello";
+            }
+        } else {
+            return "auth/authorization";
+        }
+    }
+
+    @PostMapping("/authorization")
+    public String authorizationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        userValidatorAuthorization.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors())
+            return "auth/authorization";
+
+//        userService.save(user); // если данные формы введены корректно, то сохраняем пользовтеля
+        return "redirect:/exit"; // и переходим в лк
+    }
+
+
 }

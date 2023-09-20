@@ -7,11 +7,11 @@ import ru.sokolov.models.User;
 import ru.sokolov.services.UserService;
 
 @Component
-public class UserValidator implements Validator {
+public class UserValidatorAuthentication implements Validator {
 
     private final UserService userService;
 
-    public UserValidator(UserService userService) {
+    public UserValidatorAuthentication(UserService userService) {
         this.userService = userService;
     }
 

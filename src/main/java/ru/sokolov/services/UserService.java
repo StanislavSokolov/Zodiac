@@ -43,13 +43,18 @@ public class UserService {
         userRepository.save(updatedUser);
     }
 
+    @Transactional
+    public void delete(int id) {
+        userRepository.deleteById(id);
+    }
+
     public User checkEmail(String email) {
         List<User> users = userRepository.findByEmail(email);
         if (users.isEmpty()) return null; else return users.get(0);
     }
 
-    @Transactional
-    public void delete(int id) {
-        userRepository.deleteById(id);
+    public User checkAuthorization(String login, String password) {
+        List<User> users = userRepository.findByLoginAndPassword(login, password);
+        if (users.isEmpty()) return null; else return users.get(0); // надо проверять, возможно такой будет и не один
     }
 }
