@@ -99,11 +99,11 @@
 <!--&lt;!&ndash;            <input type="hidden" value="" name="recaptchaResponse">&ndash;&gt;-->
 <!--&lt;!&ndash;            <input type="hidden" name="formServices" value="52cb3b30-d781-1cd0-7e53-aeee750b9536">&ndash;&gt;-->
 <!--          </form>-->
-            <form th:method="POST" th:action="@{/auth}" th:object="${person}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+            <form th:method="POST" th:action="@{/auth}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                 <div class="u-form-group u-form-name u-label-top u-form-group-1">
                     <label for="name-ebed" class="u-label">Логин</label>
-                    <input type="text" th:field="*{name}" id="name-ebed" placeholder="Введите логин" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
-                    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+                    <input type="text" th:field="*{login}" id="name-ebed" placeholder="Введите логин" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
                     <br/>
                 </div>
                 <div class="u-form-email u-form-group u-label-top u-form-group-2">
@@ -114,8 +114,8 @@
                 </div>
                 <div class="u-form-group u-label-top u-form-group-3">
                     <label for="text-ef21" class="u-label">Пароль</label>
-                    <input type="password" th:field="*{address}" id="text-ef21" placeholder="Введите пароль" name="password_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
-                    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+                    <input type="password" th:field="*{password}" id="text-ef21" placeholder="Введите пароль" name="password_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
                     <br/>
                 </div>
                 <div class="u-align-left u-form-group u-form-submit u-label-top">

@@ -6,8 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sokolov.models.Person;
-import ru.sokolov.services.PeopleService;
-import ru.sokolov.util.PersonValidator;
+import ru.sokolov.models.User;
+import ru.sokolov.services.UserService;
+import ru.sokolov.util.UserValidator;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -17,16 +18,16 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController {
 
     @Autowired
-    private final PeopleService peopleService;
-    private final PersonValidator personValidator;
+    private final UserService userService;
+    private final UserValidator userValidator;
 
-    public AuthController(PeopleService peopleService, PersonValidator personValidator) {
-        this.peopleService = peopleService;
-        this.personValidator = personValidator;
+    public AuthController(UserService userService, UserValidator userValidator) {
+        this.userService = userService;
+        this.userValidator = userValidator;
     }
 
     @GetMapping
-    public String authPage(@ModelAttribute("person") Person person, @CookieValue(value = "Authentication", required = false) String authentication, HttpServletResponse httpServletResponse) {
+    public String authPage(@ModelAttribute("user") User user, @CookieValue(value = "Authentication", required = false) String authentication, HttpServletResponse httpServletResponse) {
 
         if (authentication != null) {
             if (authentication.equals("true")) return "main/start";
@@ -44,14 +45,13 @@ public class AuthController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        userValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
             return "auth/Регистрация";
 
-//        personDAO.save(person);
-        peopleService.save(person);
-        return "redirect:/";
+        userService.save(user); // если данные формы введены корректно, то сохраняем пользовтеля
+        return "redirect:/"; // и переходим в лк
     }
 }
