@@ -11,6 +11,7 @@ import ru.sokolov.util.UserValidatorAuthentication;
 import ru.sokolov.util.UserValidatorAuthorization;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -46,6 +47,7 @@ public class AuthController {
 
     @PostMapping()
     public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                     HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
         userValidatorAuthentication.validate(user, bindingResult);
 
@@ -55,17 +57,28 @@ public class AuthController {
         userService.save(user); // если данные формы введены корректно, то сохраняем пользователя
         // получаем уникальный номер
 
+        System.out.println(httpServletRequest.getHeaderNames());
+
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
         cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
+        cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
+
+//        Cookie cookieUniqueIdentificator = new Cookie("UniqueIdentificator", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
+//        cookieUniqueIdentificator.setMaxAge(60);
+//        cookieUniqueIdentificator.setSecure(true);
+//        cookieUniqueIdentificator.setHttpOnly(true);
+//        cookieUniqueIdentificator.setPath("/");
+//        httpServletResponse.addCookie(cookieUniqueIdentificator);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
@@ -87,20 +100,26 @@ public class AuthController {
 
     @PostMapping("/authorization")
     public String authorizationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                    HttpServletRequest httpServletRequest,
                                     HttpServletResponse httpServletResponse) {
         userValidatorAuthorization.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
             return "auth/authorization";
 
+        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua"));
+        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
+
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
         cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
+        cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
