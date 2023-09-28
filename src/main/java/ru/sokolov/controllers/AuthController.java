@@ -61,7 +61,7 @@ public class AuthController {
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
+        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
@@ -99,7 +99,7 @@ public class AuthController {
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
+        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");

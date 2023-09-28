@@ -53,8 +53,8 @@ public class UserService {
         if (users.isEmpty()) return null; else return users.get(0);
     }
 
-    public User checkAuthorization(String login, String password) {
-        List<User> users = userRepository.findByLoginAndPassword(login, password);
+    public User checkAuthorization(String email, String password) {
+        List<User> users = userRepository.findByEmailAndPassword(email, password);
         if (users.isEmpty()) return null; else return users.get(0); // надо проверять, возможно такой будет и не один
     }
 }

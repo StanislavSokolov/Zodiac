@@ -71,10 +71,16 @@
         <p class="u-custom-font u-font-ubuntu u-text u-text-default u-text-2">Пожалуйста авторизируйтесь на сайте</p>
         <div class="u-expanded-width u-form">
             <form th:method="POST" th:action="@{/auth/authorization}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
-                <div class="u-form-group u-form-name u-label-top u-form-group-1">
-                    <label for="name-ebed" class="u-label">Логин</label>
-                    <input type="text" th:field="*{login}" id="name-ebed" placeholder="Введите логин" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
-                    <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
+<!--                <div class="u-form-group u-form-name u-label-top u-form-group-1">-->
+<!--                    <label for="name-ebed" class="u-label">Логин</label>-->
+<!--                    <input type="text" th:field="*{login}" id="name-ebed" placeholder="Введите логин" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>-->
+<!--                    <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>-->
+<!--                    <br/>-->
+<!--                </div>-->
+                <div class="u-form-email u-form-group u-label-top u-form-group-2">
+                    <label for="email-cbd5" class="u-label">Эл. почта</label>
+                    <input type="email" th:field="*{email}" id="email-cbd5" placeholder="Введите адрес эл. почты" name="email-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Age Error</div>
                     <br/>
                 </div>
                 <div class="u-form-group u-label-top u-form-group-3">

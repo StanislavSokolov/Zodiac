@@ -23,6 +23,6 @@ public class UserValidatorAuthorization implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-        if (userService.checkAuthorization(user.getLogin(), user.getPassword()) == null) errors.rejectValue("login", "", "Логин и пароль не совпадают");
+        if (userService.checkAuthorization(user.getEmail(), user.getPassword()) == null) errors.rejectValue("login", "", "Неверный адрес электронной почты или пароль");
     }
 }
