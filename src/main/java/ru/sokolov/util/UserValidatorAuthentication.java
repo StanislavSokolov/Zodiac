@@ -23,9 +23,9 @@ public class UserValidatorAuthentication implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-        if (user.getLogin().equals("")) errors.rejectValue("login", "", "Ваш логин не должен быть пустым");
+//        if (user.getLogin().equals("")) errors.rejectValue("login", "", "Ваш логин не должен быть пустым");
 //        else if (user.getPassword()) errors.rejectValue("age", "", "Must be more 0");
-        else if (userService.checkEmail(user.getEmail()) != null) errors.rejectValue("email", "", "Такой адрес электронной почты уже существует");
+        if (userService.checkEmail(user.getEmail()) != null) errors.rejectValue("email", "", "Такой адрес электронной почты уже существует");
 //        else if (!person.getAddress().matches("[A-Z]\\w+, [A-Z]\\w+, \\d{6}")) errors.rejectValue("address", "", "Your address should be in this format: Country, City, Postal Code (6 digits)");
 //        else if (user.getPassword().length() < 7) errors.rejectValue("password", "", "Пароль не должен быть меньше 8 символов");
         else if (!user.getPassword().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")) errors.rejectValue("password", "", "Пароль должен быть длиной от 8-20 символов, иметь в своем состваве не менее одной цифры 0-9, не менее одного символа из нижнего регистра a-z, не менее одного символа из верхнего регистра A-Z и не менее одного специального символа !@#&()–[{}]:;',?/*~$^+=<>");
