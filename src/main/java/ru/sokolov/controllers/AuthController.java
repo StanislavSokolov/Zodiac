@@ -57,10 +57,14 @@ public class AuthController {
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
         cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setHttpOnly(true);
+        cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
+        cookieClient.setHttpOnly(true);
+        cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
@@ -91,10 +95,14 @@ public class AuthController {
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
         cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setHttpOnly(true);
+        cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
+        cookieClient.setHttpOnly(true);
+        cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
 
         return "redirect:/exit"; // и переходим в лк
