@@ -34,7 +34,7 @@ public class AuthController {
                                      @CookieValue(value = "Client", required = false) String client) {
 
         if (authorization != null) {
-            if (authorization.equals("true")) return "main/exit";
+            if (authorization.equals("true")) return "redirect:/exit";
                 // показать страницу статистики магазина, используя куки
             else {
                 return "auth/authentication";
@@ -62,7 +62,7 @@ public class AuthController {
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
         cookieClient.setMaxAge(60);
         httpServletResponse.addCookie(cookieClient);
-        return "redirect:/setting"; // и переходим в лк (в раздел настройки)
+        return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
     @GetMapping("/authorization")
@@ -71,7 +71,7 @@ public class AuthController {
                                     @CookieValue(value = "Client", required = false) String client) {
 
         if (authorization != null) {
-            if (authorization.equals("true")) return "main/exit";
+            if (authorization.equals("true")) return "redirect:/exit";
             // показать страницу статистики магазина, используя куки
             else {
                 return "auth/authorization";
