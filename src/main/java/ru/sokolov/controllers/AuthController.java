@@ -29,16 +29,15 @@ public class AuthController {
     }
 
     @GetMapping
-    public String authenticationPage(@ModelAttribute("user") User user, @CookieValue(value = "Authorization", required = false) String authorization, HttpServletResponse httpServletResponse) {
+    public String authenticationPage(@ModelAttribute("user") User user,
+                                     @CookieValue(value = "Authorization", required = false) String authorization,
+                                     @CookieValue(value = "Client", required = false) String client) {
 
         if (authorization != null) {
-            if (authorization.equals("true")) return "main/start";
+            if (authorization.equals("true")) return "main/exit";
+                // показать страницу статистики магазина, используя куки
             else {
-//                model.addAttribute("message", "Hello,  MainController");
-                Cookie cookie = new Cookie("Authorization", "true");
-                cookie.setMaxAge(60);
-                httpServletResponse.addCookie(cookie);
-                return "first/hello";
+                return "auth/authentication";
             }
         } else {
             return "auth/authentication";
@@ -46,27 +45,36 @@ public class AuthController {
     }
 
     @PostMapping()
-    public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                     HttpServletResponse httpServletResponse) {
         userValidatorAuthentication.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
             return "auth/authentication";
 
-        userService.save(user); // если данные формы введены корректно, то сохраняем пользовтеля
-        return "redirect:/"; // и переходим в лк
+        userService.save(user); // если данные формы введены корректно, то сохраняем пользователя
+        // получаем уникальный номер
+
+        Cookie cookieAuthorization = new Cookie("Authorization", "true");
+        cookieAuthorization.setMaxAge(60);
+        httpServletResponse.addCookie(cookieAuthorization);
+
+        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
+        cookieClient.setMaxAge(60);
+        httpServletResponse.addCookie(cookieClient);
+        return "redirect:/setting"; // и переходим в лк (в раздел настройки)
     }
 
     @GetMapping("/authorization")
-    public String authorizationPage(@ModelAttribute("user") User user, @CookieValue(value = "Authorization", required = false) String authorization, HttpServletResponse httpServletResponse) {
+    public String authorizationPage(@ModelAttribute("user") User user,
+                                    @CookieValue(value = "Authorization", required = false) String authorization,
+                                    @CookieValue(value = "Client", required = false) String client) {
 
         if (authorization != null) {
-            if (authorization.equals("true")) return "main/start";
+            if (authorization.equals("true")) return "main/exit";
+            // показать страницу статистики магазина, используя куки
             else {
-//                model.addAttribute("message", "Hello,  MainController");
-                Cookie cookie = new Cookie("Authorization", "true");
-                cookie.setMaxAge(60);
-                httpServletResponse.addCookie(cookie);
-                return "first/hello";
+                return "auth/authorization";
             }
         } else {
             return "auth/authorization";
@@ -74,13 +82,21 @@ public class AuthController {
     }
 
     @PostMapping("/authorization")
-    public String authorizationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String authorizationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                    HttpServletResponse httpServletResponse) {
         userValidatorAuthorization.validate(user, bindingResult);
 
         if (bindingResult.hasErrors())
             return "auth/authorization";
 
-//        userService.save(user); // если данные формы введены корректно, то сохраняем пользовтеля
+        Cookie cookieAuthorization = new Cookie("Authorization", "true");
+        cookieAuthorization.setMaxAge(60);
+        httpServletResponse.addCookie(cookieAuthorization);
+
+        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getLogin(), user.getPassword()).getId()));
+        cookieClient.setMaxAge(60);
+        httpServletResponse.addCookie(cookieClient);
+
         return "redirect:/exit"; // и переходим в лк
     }
 
