@@ -43,40 +43,27 @@ public class PersonalAccountController {
         }
     }
 
-//    @PostMapping("/settings/wb")
-//    public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-//                                     HttpServletRequest httpServletRequest,
-//                                     HttpServletResponse httpServletResponse) {
-//        userValidatorAuthentication.validate(user, bindingResult);
-//
-//        if (bindingResult.hasErrors())
-//            return "auth/authentication";
-//
-//        userService.save(user); // если данные формы введены корректно, то сохраняем пользователя
-//        // получаем уникальный номер
-//
-//        System.out.println(httpServletRequest.getHeaderNames());
-//
-//        Cookie cookieAuthorization = new Cookie("Authorization", "true");
-//        cookieAuthorization.setMaxAge(60);
-//        cookieAuthorization.setSecure(true);
-//        cookieAuthorization.setHttpOnly(true);
-//        cookieAuthorization.setPath("/");
-//        httpServletResponse.addCookie(cookieAuthorization);
-//
-//        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-//        cookieClient.setMaxAge(60);
-//        cookieClient.setSecure(true);
-//        cookieClient.setHttpOnly(true);
-//        cookieClient.setPath("/");
-//        httpServletResponse.addCookie(cookieClient);
-//
-////        Cookie cookieUniqueIdentificator = new Cookie("UniqueIdentificator", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-////        cookieUniqueIdentificator.setMaxAge(60);
-////        cookieUniqueIdentificator.setSecure(true);
-////        cookieUniqueIdentificator.setHttpOnly(true);
-////        cookieUniqueIdentificator.setPath("/");
-////        httpServletResponse.addCookie(cookieUniqueIdentificator);
-//        return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
-//    }
+    @PostMapping("/settings/wb")
+    public String addTokenWB(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                     HttpServletRequest httpServletRequest,
+                                     HttpServletResponse httpServletResponse) {
+        userValidatorAuthentication.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors())
+            return "auth/authentication";
+
+        return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
+    }
+
+    @PostMapping("/settings/ozon")
+    public String addTokenOzon(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                                     HttpServletRequest httpServletRequest,
+                                     HttpServletResponse httpServletResponse) {
+        userValidatorAuthentication.validate(user, bindingResult);
+
+        if (bindingResult.hasErrors())
+            return "auth/authentication";
+
+        return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
+    }
 }
