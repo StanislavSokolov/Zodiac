@@ -19,13 +19,13 @@ public class User {
     private String nameShopWB;
 
     @Column(name = "tokenStandartWB")
-    private int tokenStandartWB;
+    private String tokenStandartWB;
 
     @Column(name = "tokenStatisticWB")
-    private int tokenStatisticWB;
+    private String tokenStatisticWB;
 
     @Column(name = "tokenAdvertisingWB")
-    private int tokenAdvertisingWB;
+    private String tokenAdvertisingWB;
 
     @Column(name = "nameShopOzon")
     private String nameShopOzon;
@@ -53,7 +53,7 @@ public class User {
 
     }
 
-    public User(String nameShopWB, int tokenStandartWB, int tokenStatisticWB, int tokenAdvertisingWB, String nameShopOzon, String tokenClientOzon, String tokenStatisticOzon, String login, String email, String password) {
+    public User(String nameShopWB, String tokenStandartWB, String tokenStatisticWB, String tokenAdvertisingWB, String nameShopOzon, String tokenClientOzon, String tokenStatisticOzon, String login, String email, String password) {
         this.nameShopWB = nameShopWB;
         this.tokenStandartWB = tokenStandartWB;
         this.tokenStatisticWB = tokenStatisticWB;
@@ -82,27 +82,27 @@ public class User {
         this.nameShopWB = nameShopWB;
     }
 
-    public int getTokenStandartWB() {
+    public String getTokenStandartWB() {
         return tokenStandartWB;
     }
 
-    public void setTokenStandartWB(int tokenStandartWB) {
+    public void setTokenStandartWB(String tokenStandartWB) {
         this.tokenStandartWB = tokenStandartWB;
     }
 
-    public int getTokenStatisticWB() {
+    public String getTokenStatisticWB() {
         return tokenStatisticWB;
     }
 
-    public void setTokenStatisticWB(int tokenStatisticWB) {
+    public void setTokenStatisticWB(String tokenStatisticWB) {
         this.tokenStatisticWB = tokenStatisticWB;
     }
 
-    public int getTokenAdvertisingWB() {
+    public String getTokenAdvertisingWB() {
         return tokenAdvertisingWB;
     }
 
-    public void setTokenAdvertisingWB(int tokenAdvertisingWB) {
+    public void setTokenAdvertisingWB(String tokenAdvertisingWB) {
         this.tokenAdvertisingWB = tokenAdvertisingWB;
     }
 
