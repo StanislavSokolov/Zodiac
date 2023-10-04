@@ -15,6 +15,8 @@ import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/account")
@@ -42,7 +44,16 @@ public class PersonalAccountController {
 
         if (authorization != null) {
             if (authorization.equals("true")) {
-                model.addAttribute("user", userService.findOne(Integer.valueOf(client)));
+                ArrayList<String> shops = new ArrayList<>();
+                User userDB = userService.findOne(Integer.valueOf(client));
+                System.out.println(userDB.getTokenClientOzon());
+                System.out.println(userDB.getTokenAdvertisingWB());
+                shops.add("dd");
+//                if ((userDB.getTokenClientOzon() == null) & (userDB.getTokenStatisticOzon() == null)) shops.add("Ozon");
+//                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+//                System.out.println(shops.get(0));
+                model.addAttribute("shops", shops);
+                model.addAttribute("user", userDB);
                 return "account/settings";
             }
             else {
