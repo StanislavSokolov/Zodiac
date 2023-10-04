@@ -1,6 +1,8 @@
 package ru.sokolov.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolov.models.Person;
@@ -38,9 +40,13 @@ public class UserService {
     }
 
     @Transactional
-    public void update(int id, User updatedUser) {
-        updatedUser.setId(id);
-        userRepository.save(updatedUser);
+    public void updateTokenWB(int id, User updatedUser) {
+        userRepository.setTokenWB(updatedUser.getTokenStandartWB(), updatedUser.getTokenStatisticWB(), updatedUser.getTokenAdvertisingWB(), id);
+    }
+
+    @Transactional
+    public void updateTokenOzon(int id, User updatedUser) {
+        userRepository.setTokenOzon(updatedUser.getTokenClientOzon(), updatedUser.getTokenStatisticOzon(), id);
     }
 
     @Transactional

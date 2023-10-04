@@ -124,7 +124,7 @@ public class AuthController {
         cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
 
-        return "redirect:/exit"; // и переходим в лк
+        return "redirect:/account/settings"; // и переходим в лк
     }
 
 

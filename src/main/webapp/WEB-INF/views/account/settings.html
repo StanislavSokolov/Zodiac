@@ -73,7 +73,7 @@
         <h2 class="u-text u-text-default u-text-1">Wildberries</h2>
         <p class="u-custom-font u-font-ubuntu u-text u-text-default u-text-2">В личном кабинете продавца https://seller.wildberries.ru/ зайдите в раздел "Настройки", перейдите в закладку "Доступ к API". Создайте токены и скопируйте их в соответствующие поля ниже .</p>
         <div class="u-expanded-width u-form">
-            <form th:method="POST" th:action="@{/account/settings}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+            <form th:method="POST" th:action="@{/account/settings/wb}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                 <div class="u-form-group u-form-name u-label-top u-form-group-1">
                     <label for="name-ebed" class="u-label">Стандартный токен</label>
                     <input type="text" th:field="*{tokenStandartWB}" id="name-ebed" placeholder="Введите стандартный токен из личного кабинета продавца" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
@@ -106,7 +106,7 @@
         <h2 class="u-text u-text-default u-text-1">Ozon</h2>
         <p class="u-custom-font u-font-ubuntu u-text u-text-default u-text-2">В личном кабинете продавца https://seller.ozon.ru/ зайдите в раздел "Настройки", перейдите в закладку "API ключи". Скопируйте Client ID, сгенерируйте API key и вставтье в соответствующие поля ниже.</p>
         <div class="u-expanded-width u-form">
-            <form th:method="POST" th:action="@{/account/settings}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+            <form th:method="POST" th:action="@{/account/settings/ozon}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                 <div class="u-form-group u-form-name u-label-top u-form-group-1">
                     <label for="name-ebed1" class="u-label">Клиентский идентификатор (Client ID)</label>
                     <input type="text" th:field="*{tokenClientOzon}" id="name-ebed1" placeholder="Введите клиентский идентификатор (Client ID) из личного кабинета продавца" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
@@ -120,7 +120,7 @@
                     <br/>
                 </div>
                 <div class="u-align-left u-form-group u-form-submit u-label-top">
-                    <a href="/Ozon" class="u-btn u-btn-submit u-button-style">Принять</a>
+                    <a href="/ozon" class="u-btn u-btn-submit u-button-style">Принять</a>
                     <input type="submit" value="submit" class="u-form-control-hidden">
                 </div>
             </form>
