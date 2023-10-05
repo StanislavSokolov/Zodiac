@@ -88,7 +88,10 @@ public class PersonalAccountController {
                 String activeShop = shop;
                 model.addAttribute("activeShop", activeShop);
 
-                model.addAttribute("item", itemService.findAll());
+                model.addAttribute("ordered", itemService.findByStatus("ordered").size());
+                model.addAttribute("sold", itemService.findByStatus("sold").size());
+                model.addAttribute("cancelled", itemService.findByStatus("cancelled").size());
+                model.addAttribute("profit", itemService.findByStatus("profit").size());
 
                 return "account/shop";
             }

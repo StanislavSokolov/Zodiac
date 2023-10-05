@@ -35,7 +35,7 @@ public class AuthController {
                                      @CookieValue(value = "Client", required = false) String client) {
 
         if (authorization != null) {
-            if (authorization.equals("true")) return "redirect:/account/Wildberries";
+            if (authorization.equals("true")) return "redirect:/account/settings";
                 // показать страницу статистики магазина, используя куки
             else {
                 return "auth/authentication";

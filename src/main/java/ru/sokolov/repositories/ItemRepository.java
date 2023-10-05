@@ -5,5 +5,5 @@ import ru.sokolov.models.Item;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
-//    List<Item> findByNmId(String nmId);
+    List<Item> findByStatus(String status);
 }

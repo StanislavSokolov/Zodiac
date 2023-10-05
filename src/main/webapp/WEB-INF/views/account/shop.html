@@ -58,7 +58,7 @@
                         <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/account/settings" style="padding: 10px 20px;">Личный кабинет</a>
                         <div class="u-nav-popup">
                             <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10" th:each="shop : ${shops}">
-                                <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/{id}(id=${shop})}" th:text="${shop}">shop</a>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/shop?shop={id}(id=${shop})}" th:text="${shop}">shop</a>
                                 </li>
                             </ul>
                             <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
@@ -119,27 +119,27 @@
             <div class="u-repeater u-repeater-1">
                 <div class="u-align-center-xl u-align-left-lg u-align-left-md u-align-left-sm u-align-left-xs u-container-style u-list-item u-repeater-item">
                     <div class="u-container-layout u-similar-container u-container-layout-1">
-                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-3" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">120</h3>
-                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-4">Sample Headline</h6>
+                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-3" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000" th:text="${ordered}">0</h3>
+                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-4">Заказы</h6>
                     </div>
                 </div>
                 <div class="u-align-center-xl u-align-left-lg u-align-left-md u-align-left-sm u-align-left-xs u-container-style u-list-item u-repeater-item">
                     <div class="u-container-layout u-similar-container u-container-layout-2">
-                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-5" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">90</h3>
-                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-6">Sample Headline</h6>
+                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-5" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000" th:text="${sold}">0</h3>
+                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-6">Продажи</h6>
                     </div>
                 </div>
                 <div class="u-align-center-xl u-align-left-lg u-align-left-md u-align-left-sm u-align-left-xs u-container-style u-list-item u-repeater-item">
                     <div class="u-container-layout u-similar-container u-container-layout-3">
-                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-7" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">50<br>
+                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-7" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000" th:text="${cancelled}">0<br>
                         </h3>
-                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-8">Sample Headline</h6>
+                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-8">Отказы</h6>
                     </div>
                 </div>
                 <div class="u-align-center-xl u-align-left-lg u-align-left-md u-align-left-sm u-align-left-xs u-container-style u-list-item u-repeater-item">
                     <div class="u-container-layout u-similar-container u-container-layout-4">
-                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-9" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000">100</h3>
-                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-10">Sample Headline</h6>
+                        <h3 class="u-custom-font u-font-oswald u-hover-feature u-text u-text-default u-text-9" data-animation-name="counter" data-animation-event="scroll" data-animation-duration="3000" th:text="${profit}">100</h3>
+                        <h6 class="u-custom-font u-font-oswald u-text u-text-default u-text-10">Оборот</h6>
                     </div>
                 </div>
             </div>

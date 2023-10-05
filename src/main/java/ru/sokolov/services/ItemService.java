@@ -23,4 +23,6 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findByStatus(String status) { return itemRepository.findByStatus(status); }
+
 }
