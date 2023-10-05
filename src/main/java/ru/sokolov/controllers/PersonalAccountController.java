@@ -19,20 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/account")
 public class PersonalAccountController {
     @Autowired
     private final UserService userService;
-    private final UserValidatorAuthentication userValidatorAuthentication;
-    private final UserValidatorAuthorization userValidatorAuthorization;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
 
-    public PersonalAccountController(UserService userService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
         this.userService = userService;
-        this.userValidatorAuthentication = userValidatorAuthentication;
-        this.userValidatorAuthorization = userValidatorAuthorization;
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
@@ -40,9 +37,9 @@ public class PersonalAccountController {
     @GetMapping("/Wildberries")
     public String wbStatPage(@ModelAttribute("user") User user,
                              Model model,
-                            @CookieValue(value = "Authorization", required = false) String authorization,
-                            @CookieValue(value = "Client", required = false) String client,
-                            HttpServletResponse httpServletResponse) {
+                             @CookieValue(value = "Authorization", required = false) String authorization,
+                             @CookieValue(value = "Client", required = false) String client,
+                             HttpServletResponse httpServletResponse) {
 
         if (authorization != null) {
             if (authorization.equals("true")) {
@@ -52,6 +49,8 @@ public class PersonalAccountController {
                 if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
                 model.addAttribute("shops", shops);
                 model.addAttribute("user", userDB);
+                String activeShop = "Wildberries";
+                model.addAttribute("activeShop", activeShop);
                 return "account/shop";
             }
             else {
