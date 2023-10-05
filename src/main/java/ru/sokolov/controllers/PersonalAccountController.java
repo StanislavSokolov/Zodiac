@@ -7,17 +7,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sokolov.models.User;
+import ru.sokolov.services.ItemService;
+import ru.sokolov.services.ProductService;
+import ru.sokolov.services.StockService;
 import ru.sokolov.services.UserService;
-import ru.sokolov.util.UserValidatorAuthentication;
-import ru.sokolov.util.UserValidatorAuthorization;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 
 
 @Controller
@@ -25,11 +24,17 @@ import java.util.List;
 public class PersonalAccountController {
     @Autowired
     private final UserService userService;
+    private final ProductService productService;
+    private final ItemService itemService;
+    private final StockService stockService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
 
-    public PersonalAccountController(UserService userService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
         this.userService = userService;
+        this.productService = productService;
+        this.itemService = itemService;
+        this.stockService = stockService;
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
@@ -52,7 +57,9 @@ public class PersonalAccountController {
                 String activeShop = "Wildberries";
                 model.addAttribute("activeShop", activeShop);
 
-                return "account/shop";
+                model.addAttribute("stock", stockService.findAll());
+
+                return "account/stock";
             }
             else {
                 return "auth/authorization";
@@ -62,8 +69,9 @@ public class PersonalAccountController {
         }
     }
 
-    @GetMapping("/Wildberries")
-    public String wbStatPage(@ModelAttribute("user") User user,
+    @GetMapping("/shop")
+    public String wbStatPage(@RequestParam("shop") String shop,
+                             @ModelAttribute("user") User user,
                              Model model,
                              @CookieValue(value = "Authorization", required = false) String authorization,
                              @CookieValue(value = "Client", required = false) String client,
@@ -77,9 +85,10 @@ public class PersonalAccountController {
                 if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
                 model.addAttribute("shops", shops);
                 model.addAttribute("user", userDB);
-                String activeShop = "Wildberries";
+                String activeShop = shop;
                 model.addAttribute("activeShop", activeShop);
 
+                model.addAttribute("item", itemService.findAll());
 
                 return "account/shop";
             }

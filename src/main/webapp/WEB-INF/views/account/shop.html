@@ -93,7 +93,7 @@
                             <li class="u-nav-item"><a class="u-button-style u-nav-link" href="/account/settings">Личный кабинет</a>
                                 <div class="u-nav-popup">
                                     <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
-                                        <li class="u-nav-item" th:each="shop : ${shops}"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/{id}(id=${shop})}" th:text="${shop}">shop</a>
+                                        <li class="u-nav-item" th:each="shop : ${shops}"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/shop?shop={id}(id=${shop})}" th:text="${shop}">shop</a>
                                         </li>
                                         <li class="u-nav-item"><a class="u-button-style u-nav-link" href="/account/settings">Настройки</a>
                                         </li>
