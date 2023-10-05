@@ -26,67 +26,85 @@
     <meta property="og:title" content="Настройки">
     <meta property="og:type" content="website">
     <meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
-<body class="u-body u-xl-mode" data-lang="ru"><header class="u-clearfix u-container-align-left u-header u-header" id="sec-6772"><div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-    <nav class="u-dropdown-icon u-menu u-menu-dropdown u-offcanvas u-menu-1">
-        <div class="menu-collapse u-custom-font u-font-ubuntu" style="font-size: 1rem; letter-spacing: 0px; font-weight: 700;">
-            <a class="u-button-style u-custom-active-color u-custom-color u-custom-hover-color u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-                <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
-                <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-                </g></svg>
-            </a>
-        </div>
-        <div class="u-custom-menu u-nav-container">
-            <ul class="u-custom-font u-font-ubuntu u-nav u-unstyled u-nav-1">
-                <li class="u-nav-item">
-                    <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/" style="padding: 10px 20px;">Статистика</a>
-                    <div class="u-nav-popup">
-                        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
-                            <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2">Wildberries</a>
-                            </li>
-                            <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2">Ozon</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="Информация.html" style="padding: 10px 20px;">Информация</a>
-                </li>
-
-                <li class="u-nav-item">
-                    <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/account/settings" style="padding: 10px 20px;">Личный кабинет</a>
-                    <div class="u-nav-popup">
-                        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
-                            <li class="u-nav-item" th:each="shop : ${shops}"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/{id}(id=${shop})}" th:text="${shop}">shop</a>
-                            </li>
-                            <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/account/settings">Настройки</a>
-                            </li>
-                        </ul>
-<!--                        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">-->
-<!--                            -->
-<!--                        </ul>-->
-                    </div>
-                </li>
-            </ul>
-        </div>
-    <div class="u-custom-menu u-nav-container-collapse">
-        <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-            <div class="u-inner-container-layout u-sidenav-overflow">
-                <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-4"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/">Статистика</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10"><li class="u-nav-item"><a class="u-button-style u-nav-link">Wildberries</a>
-                </li><li class="u-nav-item"><a class="u-button-style u-nav-link">Ozon</a>
-                </li></ul>
+<body class="u-body u-xl-mode" data-lang="ru">
+    <header class="u-clearfix u-container-align-left u-header u-header" id="sec-6772">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+            <nav class="u-dropdown-icon u-menu u-menu-dropdown u-offcanvas u-menu-1">
+                <div class="menu-collapse u-custom-font u-font-ubuntu" style="font-size: 1rem; letter-spacing: 0px; font-weight: 700;">
+                    <a class="u-button-style u-custom-active-color u-custom-color u-custom-hover-color u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-hover-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+                        <svg class="u-svg-link" viewBox="0 0 24 24"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
+                        <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+                        </g></svg>
+                    </a>
                 </div>
-                </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Информация.html">Информация</a>
-                </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/auth">Личный кабинет</a><div class="u-nav-popup"><ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/account/settings">Настройки</a>
-                </li></ul>
-            </div>
-            </li></ul>
+                <div class="u-custom-menu u-nav-container">
+                    <ul class="u-custom-font u-font-ubuntu u-nav u-unstyled u-nav-1">
+                        <li class="u-nav-item">
+                            <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/" style="padding: 10px 20px;">Статистика</a>
+                            <div class="u-nav-popup">
+                                <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
+                                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2">Wildberries</a>
+                                    </li>
+                                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2">Ozon</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="Информация.html" style="padding: 10px 20px;">Информация</a>
+                        </li>
+
+                        <li class="u-nav-item">
+                            <a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/account/settings" style="padding: 10px 20px;">Личный кабинет</a>
+                            <div class="u-nav-popup">
+                                <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10" th:each="shop : ${shops}">
+                                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/{id}(id=${shop})}" th:text="${shop}">shop</a>
+                                    </li>
+                                </ul>
+                                <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
+                                    <li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" href="/account/settings">Настройки</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="u-custom-menu u-nav-container-collapse">
+                    <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+                        <div class="u-inner-container-layout u-sidenav-overflow">
+                            <div class="u-menu-close"></div>
+                            <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-4">
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="/">Статистика</a>
+                                    <div class="u-nav-popup">
+                                        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
+                                            <li class="u-nav-item"><a class="u-button-style u-nav-link">Wildberries</a>
+                                            </li>
+                                            <li class="u-nav-item"><a class="u-button-style u-nav-link">Ozon</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Информация.html">Информация</a>
+                                </li>
+                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="/account/settings">Личный кабинет</a>
+                                    <div class="u-nav-popup">
+                                        <ul class="u-h-spacing-20 u-nav u-unstyled u-v-spacing-10">
+                                            <li class="u-nav-item" th:each="shop : ${shops}"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-1-light-2" th:href="@{/account/{id}(id=${shop})}" th:text="${shop}">shop</a>
+                                            </li>
+                                            <li class="u-nav-item"><a class="u-button-style u-nav-link" href="/account/settings">Настройки</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+                </div>
+            </nav>
         </div>
-    </div>
-    <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
-    </div>
-    </nav>
-    </div></header>
+    </header>
+
 <section class="u-clearfix u-palette-1-light-3 u-section-1" id="sec-e76e">
     <div class="u-clearfix u-sheet u-sheet-1">
         <div class="u-align-right u-form-group u-form-submit u-label-top">
