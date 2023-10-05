@@ -48,10 +48,9 @@ public class PersonalAccountController {
                 User userDB = userService.findOne(Integer.valueOf(client));
                 System.out.println(userDB.getTokenClientOzon());
                 System.out.println(userDB.getTokenAdvertisingWB());
-                shops.add("dd");
-//                if ((userDB.getTokenClientOzon() == null) & (userDB.getTokenStatisticOzon() == null)) shops.add("Ozon");
-//                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-//                System.out.println(shops.get(0));
+                if ((userDB.getTokenClientOzon() == null) & (userDB.getTokenStatisticOzon() == null)) shops.add("Ozon");
+                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+                System.out.println(shops.get(0));
                 model.addAttribute("shops", shops);
                 model.addAttribute("user", userDB);
                 return "account/settings";
