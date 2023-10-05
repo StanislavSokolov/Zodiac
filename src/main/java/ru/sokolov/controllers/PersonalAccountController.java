@@ -13,6 +13,7 @@ import ru.sokolov.util.UserValidatorAuthorization;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -46,14 +47,42 @@ public class PersonalAccountController {
             if (authorization.equals("true")) {
                 ArrayList<String> shops = new ArrayList<>();
                 User userDB = userService.findOne(Integer.valueOf(client));
-                System.out.println(userDB.getTokenClientOzon());
-                System.out.println(userDB.getTokenAdvertisingWB());
-                if ((userDB.getTokenClientOzon() == null) & (userDB.getTokenStatisticOzon() == null)) shops.add("Ozon");
+                if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
                 if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-                System.out.println(shops.get(0));
                 model.addAttribute("shops", shops);
                 model.addAttribute("user", userDB);
                 return "account/settings";
+            }
+            else {
+                return "auth/authorization";
+            }
+        } else {
+            return "auth/authorization";
+        }
+    }
+
+    @GetMapping("/out")
+    public String outPage(@ModelAttribute("user") User user,
+                          @CookieValue(value = "Authorization", required = false) String authorization,
+                          @CookieValue(value = "Client", required = false) String client,
+                          HttpServletResponse httpServletResponse) {
+
+        if (authorization != null) {
+            if (authorization.equals("true")) {
+                Cookie cookieAuthorization = new Cookie("Authorization", "false");
+                cookieAuthorization.setMaxAge(0);
+                cookieAuthorization.setSecure(true);
+                cookieAuthorization.setHttpOnly(true);
+                cookieAuthorization.setPath("/");
+                httpServletResponse.addCookie(cookieAuthorization);
+
+                Cookie cookieClient = new Cookie("Client", "Qwxs12MM");
+                cookieClient.setMaxAge(0);
+                cookieClient.setSecure(true);
+                cookieClient.setHttpOnly(true);
+                cookieClient.setPath("/");
+                httpServletResponse.addCookie(cookieClient);
+                return "auth/authorization";
             }
             else {
                 return "auth/authorization";
