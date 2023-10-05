@@ -37,6 +37,31 @@ public class PersonalAccountController {
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
 
+    @GetMapping("/Wildberries")
+    public String wbStatPage(@ModelAttribute("user") User user,
+                             Model model,
+                            @CookieValue(value = "Authorization", required = false) String authorization,
+                            @CookieValue(value = "Client", required = false) String client,
+                            HttpServletResponse httpServletResponse) {
+
+        if (authorization != null) {
+            if (authorization.equals("true")) {
+                ArrayList<String> shops = new ArrayList<>();
+                User userDB = userService.findOne(Integer.valueOf(client));
+                if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
+                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+                model.addAttribute("shops", shops);
+                model.addAttribute("user", userDB);
+                return "account/shop";
+            }
+            else {
+                return "auth/authorization";
+            }
+        } else {
+            return "auth/authorization";
+        }
+    }
+
     @GetMapping("/settings")
     public String settingPage(@ModelAttribute("user") User user,
                               Model model,
