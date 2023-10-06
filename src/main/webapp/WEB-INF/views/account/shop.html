@@ -163,43 +163,28 @@
                 </colgroup>
                 <thead class="u-black u-table-header u-table-header-1">
                 <tr>
-                    <th class="u-table-cell">Date </th>
-                    <th class="u-table-cell"> Order ID </th>
-                    <th class="u-table-cell">Name</th>
-                    <th class="u-table-cell">Price</th>
+                    <th class="u-table-cell">Наименование </th>
+                    <th class="u-table-cell">Заказы</th>
+                    <th class="u-table-cell">Продажи</th>
+                    <th class="u-table-cell">Возвраты</th>
                 </tr>
                 </thead>
-                <tbody class="u-table-alt-palette-1-light-3 u-table-body">
+                <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="itemToShow : ${itemsToShow}">
                 <tr>
-                    <td class="u-table-cell">2020-06-04 01:22</td>
-                    <td class="u-table-cell"> 200398</td>
-                    <td class="u-table-cell">iPhone SE</td>
-                    <td class="u-table-cell">$399</td>
+                    <td class="u-table-cell"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
+                        арт.
+                        <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                    </td>
+                    <td class="u-table-cell" th:text="${itemToShow.getOrdered()}">Заказы</td>
+                    <td class="u-table-cell" th:text="${itemToShow.getSold()}">Продажи</td>
+                    <td class="u-table-cell" th:text="${itemToShow.getCancelled()}">Возвраты</td>
                 </tr>
-                <tr>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">2020-06-04 03:04</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-10"> 200399</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-11">iPhone 11</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-12">$499</td>
-                </tr>
-                <tr>
-                    <td class="u-table-cell">2020-06-04 04:00</td>
-                    <td class="u-table-cell"> 200400</td>
-                    <td class="u-table-cell">iPad Pro</td>
-                    <td class="u-table-cell">$999</td>
-                </tr>
-                <tr>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-17">2020-06-04 05:06</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-18"> 200401</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-19">iPhone 11 Pro</td>
-                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-20">$680</td>
-                </tr>
-                <tr>
-                    <td class="u-table-cell">2020-06-04 06:00</td>
-                    <td class="u-table-cell">200403</td>
-                    <td class="u-table-cell">Headphone</td>
-                    <td class="u-table-cell">$200</td>
-                </tr>
+<!--                <tr>-->
+<!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">2020-06-04 03:04</td>-->
+<!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-10"> 200399</td>-->
+<!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-11">iPhone 11</td>-->
+<!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-12">$499</td>-->
+<!--                </tr>-->
                 </tbody>
             </table>
         </div>

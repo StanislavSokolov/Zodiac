@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sokolov.com.Data;
+import ru.sokolov.com.ItemToShow;
+import ru.sokolov.models.Item;
+import ru.sokolov.models.Product;
 import ru.sokolov.models.User;
 import ru.sokolov.services.ItemService;
 import ru.sokolov.services.ProductService;
@@ -17,6 +21,7 @@ import ru.sokolov.util.UserValidatorTokenWB;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -88,10 +93,32 @@ public class PersonalAccountController {
                 String activeShop = shop;
                 model.addAttribute("activeShop", activeShop);
 
-                model.addAttribute("ordered", itemService.findByStatus("ordered").size());
-                model.addAttribute("sold", itemService.findByStatus("sold").size());
-                model.addAttribute("cancelled", itemService.findByStatus("cancelled").size());
-                model.addAttribute("profit", itemService.findByStatus("profit").size());
+                model.addAttribute("ordered", itemService.findByCdateAndStatus(Data.getData(0),"ordered").size());
+                model.addAttribute("sold", itemService.findBySdateAndStatus(Data.getData(0),"sold").size());
+                model.addAttribute("cancelled", itemService.findByCdateAndStatus(Data.getData(0), "cancelled").size());
+                model.addAttribute("profit", 0);
+
+                ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
+                for (Product product: productService.findAll()) {
+                    List<Item> itemList = product.getItems();
+                    if (!itemList.isEmpty()) {
+                        int ordered = 0;
+                        int sold = 0;
+                        int cancelled = 0;
+                        for (Item item: itemList) {
+                            if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
+                                if (item.getStatus().equals("ordered")) ordered++;
+                                if (item.getStatus().equals("sold")) sold++;
+                                if (item.getStatus().equals("cancelled")) cancelled++;
+                            }
+                        }
+                        itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled));
+                    }
+                }
+
+
+//                System.out.println(listArrayItem.size());
+                model.addAttribute("itemsToShow", itemsToShow);
 
                 return "account/shop";
             }

@@ -24,5 +24,6 @@ public class ItemService {
     }
 
     public List<Item> findByStatus(String status) { return itemRepository.findByStatus(status); }
-
+    public List<Item> findByCdateAndStatus(String cdate, String status) { return itemRepository.findByCdateAndStatus(cdate, status); }
+    public List<Item> findBySdateAndStatus(String sdate, String status) { return itemRepository.findBySdateAndStatus(sdate, status); }
 }

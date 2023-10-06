@@ -33,7 +33,7 @@ public class Product {
     @OneToMany(mappedBy = "owner")
     private List<Stock> stocks;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Item> items;
 
     public Product() {
