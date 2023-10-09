@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sokolov.com.Auth;
 import ru.sokolov.models.User;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorAuthentication;
@@ -34,15 +35,9 @@ public class AuthController {
                                      @CookieValue(value = "Authorization", required = false) String authorization,
                                      @CookieValue(value = "Client", required = false) String client) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) return "redirect:/account/settings";
-                // показать страницу статистики магазина, используя куки
-            else {
-                return "auth/authentication";
-            }
-        } else {
-            return "auth/authentication";
-        }
+        if (!Auth.authorization(authorization, client)) return "auth/authentication";
+
+        return "redirect:/account/settings";
     }
 
     @PostMapping()
@@ -87,15 +82,9 @@ public class AuthController {
                                     @CookieValue(value = "Authorization", required = false) String authorization,
                                     @CookieValue(value = "Client", required = false) String client) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) return "redirect:/exit";
-            // показать страницу статистики магазина, используя куки
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
-        }
+        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+
+        return "redirect:/account/settings";
     }
 
     @PostMapping("/authorization")

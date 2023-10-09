@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sokolov.com.Auth;
 import ru.sokolov.com.Data;
 import ru.sokolov.com.ItemToShow;
 import ru.sokolov.models.Item;
@@ -51,27 +52,20 @@ public class PersonalAccountController {
                              @CookieValue(value = "Client", required = false) String client,
                              HttpServletResponse httpServletResponse) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) {
-                ArrayList<String> shops = new ArrayList<>();
-                User userDB = userService.findOne(Integer.valueOf(client));
-                if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-                model.addAttribute("shops", shops);
-                model.addAttribute("user", userDB);
-                String activeShop = "Wildberries";
-                model.addAttribute("activeShop", activeShop);
+        if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-                model.addAttribute("stock", stockService.findAll());
+        ArrayList<String> shops = new ArrayList<>();
+        User userDB = userService.findOne(Integer.valueOf(client));
+        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
+        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+        model.addAttribute("shops", shops);
+        model.addAttribute("user", userDB);
+        String activeShop = "Wildberries";
+        model.addAttribute("activeShop", activeShop);
 
-                return "account/stock";
-            }
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
-        }
+        model.addAttribute("stock", stockService.findAll());
+
+        return "account/stock";
     }
 
     @GetMapping("/shop")
@@ -82,52 +76,42 @@ public class PersonalAccountController {
                              @CookieValue(value = "Client", required = false) String client,
                              HttpServletResponse httpServletResponse) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) {
-                ArrayList<String> shops = new ArrayList<>();
-                User userDB = userService.findOne(Integer.valueOf(client));
-                if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-                model.addAttribute("shops", shops);
-                model.addAttribute("user", userDB);
-                String activeShop = shop;
-                model.addAttribute("activeShop", activeShop);
+        if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-                model.addAttribute("ordered", itemService.findByCdateAndStatus(Data.getData(0),"ordered").size());
-                model.addAttribute("sold", itemService.findBySdateAndStatus(Data.getData(0),"sold").size());
-                model.addAttribute("cancelled", itemService.findByCdateAndStatus(Data.getData(0), "cancelled").size());
-                model.addAttribute("profit", 0);
+        ArrayList<String> shops = new ArrayList<>();
+        User userDB = userService.findOne(Integer.valueOf(client));
+        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
+        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+        model.addAttribute("shops", shops);
+        model.addAttribute("user", userDB);
+        String activeShop = shop;
+        model.addAttribute("activeShop", activeShop);
 
-                ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
-                for (Product product: productService.findAll()) {
-                    List<Item> itemList = product.getItems();
-                    if (!itemList.isEmpty()) {
-                        int ordered = 0;
-                        int sold = 0;
-                        int cancelled = 0;
-                        for (Item item: itemList) {
-                            if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
-                                if (item.getStatus().equals("ordered")) ordered++;
-                                if (item.getStatus().equals("sold")) sold++;
-                                if (item.getStatus().equals("cancelled")) cancelled++;
-                            }
-                        }
-                        itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled));
+        model.addAttribute("ordered", itemService.findByCdateAndStatus(Data.getData(0),"ordered").size());
+        model.addAttribute("sold", itemService.findBySdateAndStatus(Data.getData(0),"sold").size());
+        model.addAttribute("cancelled", itemService.findByCdateAndStatus(Data.getData(0), "cancelled").size());
+        model.addAttribute("profit", 0);
+
+        ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
+        for (Product product: productService.findAll()) {
+            List<Item> itemList = product.getItems();
+            if (!itemList.isEmpty()) {
+                int ordered = 0;
+                int sold = 0;
+                int cancelled = 0;
+                for (Item item: itemList) {
+                    if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
+                        if (item.getStatus().equals("ordered")) ordered++;
+                        if (item.getStatus().equals("sold")) sold++;
+                        if (item.getStatus().equals("cancelled")) cancelled++;
                     }
-                }
-
-
-//                System.out.println(listArrayItem.size());
-                model.addAttribute("itemsToShow", itemsToShow);
-
-                return "account/shop";
+                    }
+                itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled));
             }
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
         }
+        model.addAttribute("itemsToShow", itemsToShow);
+
+        return "account/shop";
     }
 
     @GetMapping("/settings")
@@ -136,22 +120,16 @@ public class PersonalAccountController {
                               @CookieValue(value = "Authorization", required = false) String authorization,
                               @CookieValue(value = "Client", required = false) String client) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) {
-                ArrayList<String> shops = new ArrayList<>();
-                User userDB = userService.findOne(Integer.valueOf(client));
-                if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-                if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-                model.addAttribute("shops", shops);
-                model.addAttribute("user", userDB);
-                return "account/settings";
-            }
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
-        }
+        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+
+        ArrayList<String> shops = new ArrayList<>();
+        User userDB = userService.findOne(Integer.valueOf(client));
+        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
+        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+        model.addAttribute("shops", shops);
+        model.addAttribute("user", userDB);
+
+        return "account/settings";
     }
 
     @GetMapping("/out")
@@ -160,29 +138,23 @@ public class PersonalAccountController {
                           @CookieValue(value = "Client", required = false) String client,
                           HttpServletResponse httpServletResponse) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) {
-                Cookie cookieAuthorization = new Cookie("Authorization", "false");
-                cookieAuthorization.setMaxAge(0);
-                cookieAuthorization.setSecure(true);
-                cookieAuthorization.setHttpOnly(true);
-                cookieAuthorization.setPath("/");
-                httpServletResponse.addCookie(cookieAuthorization);
+        if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-                Cookie cookieClient = new Cookie("Client", "Qwxs12MM");
-                cookieClient.setMaxAge(0);
-                cookieClient.setSecure(true);
-                cookieClient.setHttpOnly(true);
-                cookieClient.setPath("/");
-                httpServletResponse.addCookie(cookieClient);
-                return "auth/authorization";
-            }
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
-        }
+        Cookie cookieAuthorization = new Cookie("Authorization", "false");
+        cookieAuthorization.setMaxAge(0);
+        cookieAuthorization.setSecure(true);
+        cookieAuthorization.setHttpOnly(true);
+        cookieAuthorization.setPath("/");
+        httpServletResponse.addCookie(cookieAuthorization);
+
+        Cookie cookieClient = new Cookie("Client", "Qwxs12MM");
+        cookieClient.setMaxAge(0);
+        cookieClient.setSecure(true);
+        cookieClient.setHttpOnly(true);
+        cookieClient.setPath("/");
+        httpServletResponse.addCookie(cookieClient);
+
+        return "auth/authorization";
     }
 
     @PostMapping("/settings/wb")
