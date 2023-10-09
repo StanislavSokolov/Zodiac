@@ -1,5 +1,8 @@
 package ru.sokolov.models;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -31,9 +34,12 @@ public class Product {
     private String shopName;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     private List<Stock> stocks;
 
-    @OneToMany(mappedBy = "owner")
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     private List<Item> items;
 
     public Product() {
