@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.Auth;
 import ru.sokolov.com.Data;
 import ru.sokolov.com.ItemToShow;
+import ru.sokolov.com.StockToShow;
 import ru.sokolov.models.Item;
 import ru.sokolov.models.Product;
+import ru.sokolov.models.Stock;
 import ru.sokolov.models.User;
 import ru.sokolov.services.ItemService;
 import ru.sokolov.services.ProductService;
@@ -53,7 +55,7 @@ public class PersonalAccountController {
                             @CookieValue(value = "Client", required = false) String client,
                             HttpServletResponse httpServletResponse) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
         User userDB = userService.findOne(Integer.valueOf(client));
 
@@ -62,6 +64,22 @@ public class PersonalAccountController {
         model.addAttribute("activeShop", shop);
 
         model.addAttribute("stock", stockService.findAll());
+
+        ArrayList<StockToShow> stocksToShow = new ArrayList<>();
+        for (Product product: productService.findAll()) {
+            List<Stock> stocksList = product.getStocks();
+            if (!stocksList.isEmpty()) {
+                int quantity = 0;
+                int quantityFull = 0;
+                for (Stock stock: stocksList) {
+                    quantity = quantity + stock.getQuantity();
+                    quantityFull = quantityFull + stock.getQuantityFull();
+                }
+                if ((quantity != 0) || (quantityFull != 0))
+                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull));
+            }
+        }
+        model.addAttribute("stocksToShow", stocksToShow);
 
         return "account/stock";
     }
@@ -74,7 +92,7 @@ public class PersonalAccountController {
                              @CookieValue(value = "Client", required = false) String client,
                              HttpServletResponse httpServletResponse) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
         User userDB = userService.findOne(Integer.valueOf(client));
         model.addAttribute("shops", Auth.getShops(userDB));
@@ -114,7 +132,7 @@ public class PersonalAccountController {
                               @CookieValue(value = "Authorization", required = false) String authorization,
                               @CookieValue(value = "Client", required = false) String client) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
         User userDB = userService.findOne(Integer.valueOf(client));
         model.addAttribute("shops", Auth.getShops(userDB));
@@ -129,7 +147,7 @@ public class PersonalAccountController {
                           @CookieValue(value = "Client", required = false) String client,
                           HttpServletResponse httpServletResponse) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
         Cookie cookieAuthorization = new Cookie("Authorization", "false");
         cookieAuthorization.setMaxAge(0);

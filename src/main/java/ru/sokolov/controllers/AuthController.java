@@ -35,7 +35,7 @@ public class AuthController {
                                      @CookieValue(value = "Authorization", required = false) String authorization,
                                      @CookieValue(value = "Client", required = false) String client) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authentication";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
 
         return "redirect:/account/settings";
     }
@@ -82,7 +82,7 @@ public class AuthController {
                                     @CookieValue(value = "Authorization", required = false) String authorization,
                                     @CookieValue(value = "Client", required = false) String client) {
 
-        if (!Auth.authorization(authorization, client)) return "auth/authorization";
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
         return "redirect:/account/settings";
     }

@@ -5,7 +5,7 @@ import ru.sokolov.models.User;
 import java.util.ArrayList;
 
 public class Auth {
-    public static boolean authorization(String authorization, String client) {
+    public static boolean getAuthorization(String authorization, String client) {
         if (authorization != null) {
             if (authorization.equals("true")) {
                 return true;

@@ -34,6 +34,14 @@ public class Stock {
         this.owner = owner;
     }
 
+    public int getQuantityFull() {
+        return quantityFull;
+    }
+
+    public void setQuantityFull(int quantityFull) {
+        this.quantityFull = quantityFull;
+    }
+
     public int getId() {
         return id;
     }

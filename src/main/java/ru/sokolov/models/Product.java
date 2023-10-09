@@ -30,10 +30,10 @@ public class Product {
     @Column(name = "shopName")
     private String shopName;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Stock> stocks;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner")
     private List<Item> items;
 
     public Product() {
