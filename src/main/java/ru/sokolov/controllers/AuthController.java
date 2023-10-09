@@ -55,14 +55,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeaderNames());
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setMaxAge(600);
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(60);
+        cookieClient.setMaxAge(600);
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
@@ -100,14 +100,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setMaxAge(600);
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(60);
+        cookieClient.setMaxAge(600);
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
