@@ -23,7 +23,9 @@ public class UserValidatorTokenOzon implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
-        if (user.getTokenClientOzon().length() < 6) errors.rejectValue("tokenClientOzon", "", "Уникальный ключ (API Key) не должен быть меньше 6 символов и должен состоять из цифр 0-9");
-//        else if (!user.getTokenStatisticOzon().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")) errors.rejectValue("password", "", "Пароль должен быть длиной от 8-20 символов, иметь в своем состваве не менее одной цифры 0-9, не менее одного символа из нижнего регистра a-z, не менее одного символа из верхнего регистра A-Z и не менее одного специального символа !@#&()–[{}]:;',?/*~$^+=<>");
+        if (userService.checkTokenClientOzon(user.getTokenClientOzon()) != null)
+            errors.rejectValue("tokenClientOzon", "", "Токен не подходит");
+        if (userService.checkTokenStatisticOzon(user.getTokenStatisticOzon()) != null)
+            errors.rejectValue("tokenStatisticOzon", "", "Токен не подходит");
     }
 }
