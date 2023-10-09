@@ -46,22 +46,20 @@ public class PersonalAccountController {
     }
 
     @GetMapping("/stock")
-    public String stockPage(@ModelAttribute("user") User user,
-                             Model model,
-                             @CookieValue(value = "Authorization", required = false) String authorization,
-                             @CookieValue(value = "Client", required = false) String client,
-                             HttpServletResponse httpServletResponse) {
+    public String stockPage(@RequestParam("shop") String shop,
+                            @ModelAttribute("user") User user,
+                            Model model,
+                            @CookieValue(value = "Authorization", required = false) String authorization,
+                            @CookieValue(value = "Client", required = false) String client,
+                            HttpServletResponse httpServletResponse) {
 
         if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-        ArrayList<String> shops = new ArrayList<>();
         User userDB = userService.findOne(Integer.valueOf(client));
-        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-        model.addAttribute("shops", shops);
+
+        model.addAttribute("shops", Auth.getShops(userDB));
         model.addAttribute("user", userDB);
-        String activeShop = "Wildberries";
-        model.addAttribute("activeShop", activeShop);
+        model.addAttribute("activeShop", shop);
 
         model.addAttribute("stock", stockService.findAll());
 
@@ -78,14 +76,10 @@ public class PersonalAccountController {
 
         if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-        ArrayList<String> shops = new ArrayList<>();
         User userDB = userService.findOne(Integer.valueOf(client));
-        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-        model.addAttribute("shops", shops);
+        model.addAttribute("shops", Auth.getShops(userDB));
         model.addAttribute("user", userDB);
-        String activeShop = shop;
-        model.addAttribute("activeShop", activeShop);
+        model.addAttribute("activeShop", shop);
 
         model.addAttribute("ordered", itemService.findByCdateAndStatus(Data.getData(0),"ordered").size());
         model.addAttribute("sold", itemService.findBySdateAndStatus(Data.getData(0),"sold").size());
@@ -122,11 +116,8 @@ public class PersonalAccountController {
 
         if (!Auth.authorization(authorization, client)) return "auth/authorization";
 
-        ArrayList<String> shops = new ArrayList<>();
         User userDB = userService.findOne(Integer.valueOf(client));
-        if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
-        model.addAttribute("shops", shops);
+        model.addAttribute("shops", Auth.getShops(userDB));
         model.addAttribute("user", userDB);
 
         return "account/settings";
