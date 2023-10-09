@@ -114,7 +114,17 @@
 <section class="u-align-center-lg u-align-center-md u-align-left-sm u-align-left-xs u-clearfix u-palette-1-light-3 u-section-1" id="carousel_8faf">
     <div class="u-clearfix u-sheet u-valign-middle-lg u-valign-middle-xs u-sheet-1">
         <h2 class="u-hover-feature u-text u-text-1" th:text="${activeShop}">Ваш магазин</h2>
+        <div class="u-align-right u-form-group u-form-submit u-label-top">
+            <a th:href="'/account/shop?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Магазин</a>
+            <a th:href="'/account/stock?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Склад</a>
+            <a th:href="'/account/information?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Товары</a>
+            <a th:href="'/account/shipments?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Поставки</a>
+            <a th:href="'/account/reports?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Отчеты</a>
+        </div>
+        <h2 class="u-align-center u-hover-feature u-text u-text-1">Склад</h2>
     </div>
+
+
 </section>
 
 <section class="skrollable u-align-center u-clearfix u-image u-parallax u-section-2" id="carousel_b863">
