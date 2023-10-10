@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.sokolov.com.Auth;
-import ru.sokolov.com.Data;
-import ru.sokolov.com.ItemToShow;
-import ru.sokolov.com.StockToShow;
+import ru.sokolov.com.*;
 import ru.sokolov.models.Item;
 import ru.sokolov.models.Product;
 import ru.sokolov.models.Stock;
@@ -20,11 +17,14 @@ import ru.sokolov.services.StockService;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
+import sun.util.calendar.BaseCalendar;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 @Controller
@@ -104,10 +104,20 @@ public class PersonalAccountController {
         model.addAttribute("user", userDB);
         model.addAttribute("activeShop", shop);
 
-        model.addAttribute("ordered", itemService.findByCdateAndStatus(Data.getData(0),"ordered").size());
-        model.addAttribute("sold", itemService.findBySdateAndStatus(Data.getData(0),"sold").size());
-        model.addAttribute("cancelled", itemService.findByCdateAndStatus(Data.getData(0), "cancelled").size());
-        model.addAttribute("profit", 0);
+
+
+        ArrayList<DayToShow> daysToShow = new ArrayList<>();
+
+        for (int i = -10; i < 1; i++) {
+            daysToShow.add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i),"ordered").size(),
+                    itemService.findBySdateAndStatus(Data.getData(i),"sold").size(),
+                    itemService.findByCdateAndStatus(Data.getData(i), "cancelled").size(),
+                    0,
+                    Data.getData(i)));
+        }
+
+        model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+        model.addAttribute("daysToShow", daysToShow);
 
         ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
         int countForColor = 0;
