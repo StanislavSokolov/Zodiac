@@ -19,18 +19,10 @@
                var dataTable = new google.visualization.DataTable();
                dataTable.addColumn({ type: 'date', id: 'Date' });
                dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
-<!--               dataTable.addRows(/*[[${graphData}]]*/);-->
                dataTable.addRows([
-                  [ new Date(/*[[${daysToShow.get(0).getYear()}]]*/, 3, 13), 36789 ],
-                  // Many rows omitted for brevity.
-                  [ new Date(2023, 9, 4), 38177 ],
-                  [ new Date(2023, 9, 5), 38705 ],
-                  [ new Date(2023, 9, 12), 38210 ],
-                  [ new Date(2023, 9, 13), 38029 ],
-                  [ new Date(2023, 9, 19), 38823 ],
-                  [ new Date(2023, 9, 23), 38345 ],
-                  [ new Date(2023, 9, 24), 38436 ],
-                  [ new Date(2023, 9, 30), 38447 ]
+                    /*[# th:each="dayToShow : ${daysToShow}"]*/
+                        [ new Date(/*[[${dayToShow.getYear()}]]*/, /*[[${dayToShow.getMonth()}]]*/, /*[[${dayToShow.getDay()}]]*/), /*[[${dayToShow.getOrdered()}]]*/ ],
+                    /*[/]*/
                 ]);
 
                var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
