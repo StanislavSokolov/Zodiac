@@ -6,6 +6,7 @@ public class StockToShow {
     int quantity;
     int quantityFull;
     int inWayFromClient;
+    String color;
 
     public String getSubject() {
         return subject;
@@ -47,11 +48,20 @@ public class StockToShow {
         this.inWayFromClient = inWayFromClient;
     }
 
-    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull, int inWayFromClient) {
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull, int inWayFromClient, int color) {
         this.subject = subject;
         this.supplierArticle = supplierArticle;
         this.quantity = quantity;
         this.quantityFull = quantityFull;
         this.inWayFromClient = inWayFromClient;
+        if (color == 0) this.color = "black"; else this.color = "white";
     }
 }

@@ -66,6 +66,7 @@ public class PersonalAccountController {
         model.addAttribute("stock", stockService.findAll());
 
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
+        int countForColor = 0;
         for (Product product: productService.findAll()) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
@@ -77,8 +78,10 @@ public class PersonalAccountController {
                     quantityFull = quantityFull + stock.getQuantityFull();
                     inWayFromClient = inWayFromClient + stock.getInWayFromClient();
                 }
-                if ((quantity != 0) || (quantityFull != 0))
-                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient));
+                if ((quantity != 0) || (quantityFull != 0)) {
+                    countForColor++;
+                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2));
+                }
             }
         }
         model.addAttribute("stocksToShow", stocksToShow);
@@ -107,6 +110,7 @@ public class PersonalAccountController {
         model.addAttribute("profit", 0);
 
         ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
+        int countForColor = 0;
         for (Product product: productService.findAll()) {
             List<Item> itemList = product.getItems();
             if (!itemList.isEmpty()) {
@@ -119,8 +123,9 @@ public class PersonalAccountController {
                         if (item.getStatus().equals("sold")) sold++;
                         if (item.getStatus().equals("cancelled")) cancelled++;
                     }
-                    }
-                itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled));
+                }
+                countForColor++;
+                itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2));
             }
         }
         model.addAttribute("itemsToShow", itemsToShow);

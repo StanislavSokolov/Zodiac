@@ -6,6 +6,15 @@ public class ItemToShow {
     int ordered;
     int sold;
     int cancelled;
+    String color;
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public String getSubject() {
         return subject;
@@ -47,11 +56,12 @@ public class ItemToShow {
         this.cancelled = cancelled;
     }
 
-    public ItemToShow(String subject, String supplierArticle, int ordered, int sold, int cancelled) {
+    public ItemToShow(String subject, String supplierArticle, int ordered, int sold, int cancelled, int color) {
         this.subject = subject;
         this.supplierArticle = supplierArticle;
         this.ordered = ordered;
         this.sold = sold;
         this.cancelled = cancelled;
+        if (color == 0) this.color = "black"; else this.color = "white";
     }
 }
