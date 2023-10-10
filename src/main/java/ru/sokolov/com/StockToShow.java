@@ -5,6 +5,7 @@ public class StockToShow {
     String supplierArticle;
     int quantity;
     int quantityFull;
+    int inWayFromClient;
 
     public String getSubject() {
         return subject;
@@ -38,10 +39,19 @@ public class StockToShow {
         this.quantityFull = quantityFull;
     }
 
-    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull) {
+    public int getInWayFromClient() {
+        return inWayFromClient;
+    }
+
+    public void setInWayFromClient(int inWayFromClient) {
+        this.inWayFromClient = inWayFromClient;
+    }
+
+    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull, int inWayFromClient) {
         this.subject = subject;
         this.supplierArticle = supplierArticle;
         this.quantity = quantity;
         this.quantityFull = quantityFull;
+        this.inWayFromClient = inWayFromClient;
     }
 }

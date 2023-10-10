@@ -71,12 +71,14 @@ public class PersonalAccountController {
             if (!stocksList.isEmpty()) {
                 int quantity = 0;
                 int quantityFull = 0;
+                int inWayFromClient = 0;
                 for (Stock stock: stocksList) {
                     quantity = quantity + stock.getQuantity();
                     quantityFull = quantityFull + stock.getQuantityFull();
+                    inWayFromClient = inWayFromClient + stock.getInWayFromClient();
                 }
                 if ((quantity != 0) || (quantityFull != 0))
-                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull));
+                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient));
             }
         }
         model.addAttribute("stocksToShow", stocksToShow);

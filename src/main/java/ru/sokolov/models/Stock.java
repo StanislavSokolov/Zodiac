@@ -20,6 +20,9 @@ public class Stock {
     @Column(name = "quantityFull")
     private int quantityFull;
 
+    @Column(name = "inWayFromClient")
+    private int inWayFromClient;
+
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product owner;
@@ -27,10 +30,11 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(String warehouseName, int quantity, int quantityFull, Product owner) {
+    public Stock(String warehouseName, int quantity, int quantityFull, int inWayFromClient, Product owner) {
         this.warehouseName = warehouseName;
         this.quantity = quantity;
         this.quantityFull = quantityFull;
+        this.inWayFromClient = inWayFromClient;
         this.owner = owner;
     }
 
@@ -64,6 +68,14 @@ public class Stock {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public int getInWayFromClient() {
+        return inWayFromClient;
+    }
+
+    public void setInWayFromClient(int inWayFromClient) {
+        this.inWayFromClient = inWayFromClient;
     }
 
     public Product getOwner() {

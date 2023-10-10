@@ -153,7 +153,7 @@
                     </td>
                     <td class="u-table-cell" th:text="${stockToShow.getQuantity()}">Остаток</td>
                     <td class="u-table-cell" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
-                    <td class="u-table-cell">Возвраты</td>
+                    <td class="u-table-cell" th:text="${stockToShow.getInWayFromClient()}">Возвраты</td>
                 </tr>
 <!--                <tr>-->
 <!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">2020-06-04 03:04</td>-->
