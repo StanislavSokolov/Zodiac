@@ -70,9 +70,7 @@ public class PersonalAccountController {
         for (Product product: productService.findAll()) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
-                int quantity = 0;
-                int quantityFull = 0;
-                int inWayFromClient = 0;
+                int quantity = 0, quantityFull = 0, inWayFromClient = 0;
                 for (Stock stock: stocksList) {
                     quantity = quantity + stock.getQuantity();
                     quantityFull = quantityFull + stock.getQuantityFull();
@@ -108,6 +106,8 @@ public class PersonalAccountController {
 
         ArrayList<DayToShow> daysToShow = new ArrayList<>();
 
+        // i - количество дней для показа на календаре
+        // i = 0 (только сегодня), i = -6 (оследняя неделя)
         for (int i = -10; i < 1; i++) {
             daysToShow.add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i),"ordered").size(),
                     itemService.findBySdateAndStatus(Data.getData(i),"sold").size(),
@@ -124,9 +124,7 @@ public class PersonalAccountController {
         for (Product product: productService.findAll()) {
             List<Item> itemList = product.getItems();
             if (!itemList.isEmpty()) {
-                int ordered = 0;
-                int sold = 0;
-                int cancelled = 0;
+                int ordered = 0, sold = 0, cancelled = 0;
                 for (Item item: itemList) {
                     if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
                         if (item.getStatus().equals("ordered")) ordered++;
@@ -134,8 +132,10 @@ public class PersonalAccountController {
                         if (item.getStatus().equals("cancelled")) cancelled++;
                     }
                 }
-                countForColor++;
-                itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2));
+                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
+                    countForColor++;
+                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2));
+                }
             }
         }
         model.addAttribute("itemsToShow", itemsToShow);

@@ -75,7 +75,7 @@ public class DayToShow {
         String delimeter = "-"; // Разделитель
         subStr = date.split(delimeter); // Разделения строки str с помощью метода split()
         day = subStr[2];
-        month = subStr[1];
+        month = String.valueOf(Integer.parseInt(subStr[1]) - 1);
         year = subStr[0];
     }
 }
