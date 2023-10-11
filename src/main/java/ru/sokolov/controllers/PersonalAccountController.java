@@ -17,14 +17,11 @@ import ru.sokolov.services.StockService;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
-import sun.util.calendar.BaseCalendar;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 
 @Controller
@@ -63,7 +60,7 @@ public class PersonalAccountController {
         model.addAttribute("user", userDB);
         model.addAttribute("activeShop", shop);
 
-        model.addAttribute("stock", stockService.findAll());
+//        model.addAttribute("stock", stockService.findAll());
 
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
         int countForColor = 0;
@@ -82,13 +79,14 @@ public class PersonalAccountController {
                 }
             }
         }
+        stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
         model.addAttribute("stocksToShow", stocksToShow);
 
         return "account/stock";
     }
 
     @GetMapping("/shop")
-    public String wbStatPage(@RequestParam("shop") String shop,
+    public String shopPage(@RequestParam("shop") String shop,
                              @ModelAttribute("user") User user,
                              Model model,
                              @CookieValue(value = "Authorization", required = false) String authorization,
@@ -138,6 +136,7 @@ public class PersonalAccountController {
                 }
             }
         }
+        itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
         model.addAttribute("itemsToShow", itemsToShow);
 
         return "account/shop";
