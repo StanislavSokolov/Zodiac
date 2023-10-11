@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.sokolov.com.Auth;
 import ru.sokolov.models.User;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorAuthentication;
@@ -34,15 +35,9 @@ public class AuthController {
                                      @CookieValue(value = "Authorization", required = false) String authorization,
                                      @CookieValue(value = "Client", required = false) String client) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) return "redirect:/exit";
-                // показать страницу статистики магазина, используя куки
-            else {
-                return "auth/authentication";
-            }
-        } else {
-            return "auth/authentication";
-        }
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
+
+        return "redirect:/account/settings";
     }
 
     @PostMapping()
@@ -60,14 +55,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeaderNames());
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setMaxAge(600);
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(60);
+        cookieClient.setMaxAge(600);
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
@@ -87,15 +82,9 @@ public class AuthController {
                                     @CookieValue(value = "Authorization", required = false) String authorization,
                                     @CookieValue(value = "Client", required = false) String client) {
 
-        if (authorization != null) {
-            if (authorization.equals("true")) return "redirect:/exit";
-            // показать страницу статистики магазина, используя куки
-            else {
-                return "auth/authorization";
-            }
-        } else {
-            return "auth/authorization";
-        }
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+
+        return "redirect:/account/settings";
     }
 
     @PostMapping("/authorization")
@@ -111,14 +100,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(60);
+        cookieAuthorization.setMaxAge(600);
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(60);
+        cookieClient.setMaxAge(600);
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");

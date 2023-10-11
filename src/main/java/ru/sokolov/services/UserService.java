@@ -59,6 +59,31 @@ public class UserService {
         if (users.isEmpty()) return null; else return users.get(0);
     }
 
+    public User checkTokenStandartWB(String tokenStandartWB) {
+        List<User> users = userRepository.findByTokenStandartWB(tokenStandartWB);
+        if (users.isEmpty()) return null; else return users.get(0);
+    }
+
+    public User checkTokenStatisticWB(String tokenStatisticWB) {
+        List<User> users = userRepository.findByTokenStatisticWB(tokenStatisticWB);
+        if (users.isEmpty()) return null; else return users.get(0);
+    }
+
+    public User checkTokenAdvertisingWB(String tokenAdvertisingWB) {
+        List<User> users = userRepository.findByTokenAdvertisingWB(tokenAdvertisingWB);
+        if (users.isEmpty()) return null; else return users.get(0);
+    }
+
+    public User checkTokenClientOzon(String tokenClientOzon) {
+        List<User> users = userRepository.findByTokenClientOzon(tokenClientOzon);
+        if (users.isEmpty()) return null; else return users.get(0);
+    }
+
+    public User checkTokenStatisticOzon(String tokenStatisticOzon) {
+        List<User> users = userRepository.findByTokenStatisticOzon(tokenStatisticOzon);
+        if (users.isEmpty()) return null; else return users.get(0);
+    }
+
     public User checkAuthorization(String email, String password) {
         List<User> users = userRepository.findByEmailAndPassword(email, password);
         if (users.isEmpty()) return null; else return users.get(0); // надо проверять, возможно такой будет и не один
