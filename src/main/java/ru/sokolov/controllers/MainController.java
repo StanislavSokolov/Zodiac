@@ -16,19 +16,6 @@ public class MainController {
 
     @GetMapping
     public String mainPage(@CookieValue(value = "Authentication", required = false) String authentication, HttpServletResponse httpServletResponse, Model model) {
-
-        if (authentication != null) {
-            if (authentication.equals("true")) return "main/start";
-            else {
-                model.addAttribute("message", "Hello,  MainController");
-                Cookie cookie = new Cookie("Authentication", "true");
-                cookie.setMaxAge(60);
-                httpServletResponse.addCookie(cookie);
-                return "first/hello";
-            }
-        } else {
             return "main/Статистика";
-        }
-
     }
 }
