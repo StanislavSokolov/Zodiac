@@ -202,10 +202,10 @@
                 </colgroup>
                 <thead class="u-black u-table-header u-table-header-1">
                 <tr>
-                    <th class="u-table-cell">Наименование </th>
-                    <th class="u-table-cell">Заказы</th>
-                    <th class="u-table-cell">Продажи</th>
-                    <th class="u-table-cell">Возвраты</th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=subject'">Наименование</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=ordered'">Заказы</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=sold'">Продажи</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=cancelled'">Возвраты</a></th>
                 </tr>
                 </thead>
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="itemToShow : ${itemsToShow}">

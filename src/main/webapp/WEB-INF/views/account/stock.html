@@ -138,11 +138,13 @@
                     <col width="18.5%">
                 </colgroup>
                 <thead class="u-black u-table-header u-table-header-1">
-                <tr>
-                    <th class="u-table-cell">Наименование </th>
-                    <th class="u-table-cell">Остаток</th>
-                    <th class="u-table-cell">В пути</th>
-                    <th class="u-table-cell">Возвраты</th>
+                    <tr>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=subject'">Наименование</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantity'">Остаток</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantityFull'">В пути</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=inWayFromClient'">Возвраты</a></th>
+                    <tr>
+                </tr>
                 </tr>
                 </thead>
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="stockToShow : ${stocksToShow}">

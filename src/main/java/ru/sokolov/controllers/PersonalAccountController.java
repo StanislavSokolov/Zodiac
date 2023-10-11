@@ -46,6 +46,7 @@ public class PersonalAccountController {
 
     @GetMapping("/stock")
     public String stockPage(@RequestParam("shop") String shop,
+                            @RequestParam(value = "sort", required = false) String sort,
                             @ModelAttribute("user") User user,
                             Model model,
                             @CookieValue(value = "Authorization", required = false) String authorization,
@@ -79,7 +80,14 @@ public class PersonalAccountController {
                 }
             }
         }
-        stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+        if (sort != null) {
+            if (sort.equals("subject")) stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+            if (sort.equals("quantity")) stocksToShow.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+            if (sort.equals("quantityFull")) stocksToShow.sort((o1, o2) -> (o2.getQuantityFull() - o2.getQuantity()) - (o1.getQuantityFull() - o1.getQuantity()));
+            if (sort.equals("inWayFromClient")) stocksToShow.sort((o1, o2) -> o2.getInWayFromClient() - o1.getInWayFromClient());
+        } else
+            stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+
         model.addAttribute("stocksToShow", stocksToShow);
 
         return "account/stock";
@@ -87,11 +95,12 @@ public class PersonalAccountController {
 
     @GetMapping("/shop")
     public String shopPage(@RequestParam("shop") String shop,
-                             @ModelAttribute("user") User user,
-                             Model model,
-                             @CookieValue(value = "Authorization", required = false) String authorization,
-                             @CookieValue(value = "Client", required = false) String client,
-                             HttpServletResponse httpServletResponse) {
+                           @RequestParam(value = "sort", required = false) String sort,
+                           @ModelAttribute("user") User user,
+                           Model model,
+                           @CookieValue(value = "Authorization", required = false) String authorization,
+                           @CookieValue(value = "Client", required = false) String client,
+                           HttpServletResponse httpServletResponse) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
@@ -136,7 +145,13 @@ public class PersonalAccountController {
                 }
             }
         }
-        itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+        if (sort != null) {
+            if (sort.equals("subject")) itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+            if (sort.equals("ordered")) itemsToShow.sort((o1, o2) -> o2.getOrdered() - o1.getOrdered());
+            if (sort.equals("sold")) itemsToShow.sort((o1, o2) -> o2.getSold() - o1.getSold());
+            if (sort.equals("cancelled")) itemsToShow.sort((o1, o2) -> o2.getCancelled() - o1.getCancelled());
+        } else
+            itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
         model.addAttribute("itemsToShow", itemsToShow);
 
         return "account/shop";
