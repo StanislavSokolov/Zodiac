@@ -152,7 +152,7 @@
                     <tr th:case="'white'">
                         <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
                             арт.
-                            <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
                         </td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>

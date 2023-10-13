@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.Auth;
+import ru.sokolov.com.Define;
 import ru.sokolov.models.User;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorAuthentication;
@@ -55,14 +56,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeaderNames());
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(600);
+        cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(600);
+        cookieClient.setMaxAge(Define.getCookieMaxAge());
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
@@ -100,14 +101,14 @@ public class AuthController {
         System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
-        cookieAuthorization.setMaxAge(600);
+        cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
         Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-        cookieClient.setMaxAge(600);
+        cookieClient.setMaxAge(Define.getCookieMaxAge());
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
