@@ -213,7 +213,7 @@
                         <tr th:case="'white'">
                             <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
                                 арт.
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
                             </td>
                             <td class="u-table-cell" th:text="${itemToShow.getOrdered()}">Заказы</td>
                             <td class="u-table-cell" th:text="${itemToShow.getSold()}">Продажи</td>

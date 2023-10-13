@@ -161,7 +161,7 @@
                     <tr th:case="'black'">
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
                             арт.
-                            <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
                         </td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>

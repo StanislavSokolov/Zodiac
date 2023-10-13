@@ -122,7 +122,7 @@
         <a th:href="'/account/shipments?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Поставки</a>
         <a th:href="'/account/reports?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Отчеты</a>
       </div>
-      <h2 class="u-align-center u-hover-feature u-text u-text-1">Склад</h2>
+      <h2 class="u-align-center u-hover-feature u-text u-text-1" th:text="${product}">Товар</h2>
     </div>
 
 

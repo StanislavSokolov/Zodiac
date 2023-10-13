@@ -19,7 +19,9 @@ import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +48,12 @@ public class PersonalAccountController {
 
     @GetMapping("/information")
     public String itemPage(@RequestParam("shop") String shop,
-                            @RequestParam(value = "subject", required = false) String subject,
-                            @ModelAttribute("user") User user,
-                            Model model,
-                            @CookieValue(value = "Authorization", required = false) String authorization,
-                            @CookieValue(value = "Client", required = false) String client,
-                            HttpServletResponse httpServletResponse) {
+                           @RequestParam(value = "subject", required = false) String subject,
+                           @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
+                           @ModelAttribute("user") User user,
+                           Model model,
+                           @CookieValue(value = "Authorization", required = false) String authorization,
+                           @CookieValue(value = "Client", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
@@ -60,8 +62,29 @@ public class PersonalAccountController {
         model.addAttribute("shops", Auth.getShops(userDB));
         model.addAttribute("activeShop", shop);
 
+        if (subject != null) {
 
-        return "account/itemCard";
+            System.out.println(subject);
+
+            List<Product> productList = productService.findBySubject(subject);
+            System.out.println(productList.size());
+            Product product = productList.get(0);
+            model.addAttribute("product", product.getSubject());
+
+            return "account/productCard";
+        } else if (supplierArticle != null) {
+            Product product = productService.findBySupplierArticle(supplierArticle).get(0);
+            model.addAttribute("product", product.getSubject() + " арт. (" + product.getSupplierArticle() + ")");
+
+            return "account/productCard";
+        } else {
+            model.addAttribute("product", "Товар");
+
+            return "account/productCard";
+        }
+
+//        if (subject != null) return getProduct(); else getItem();
+
     }
 
     @GetMapping("/stock")
