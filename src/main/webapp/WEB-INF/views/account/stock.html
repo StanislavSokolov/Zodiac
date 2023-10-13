@@ -150,18 +150,18 @@
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="stockToShow : ${stocksToShow}">
                 <div th:switch="${stockToShow.color}">
                     <tr th:case="'white'">
-                        <td class="u-table-cell"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                        <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
                             арт.
-                            <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
                         </td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
                         <td class="u-table-cell" th:text="${stockToShow.getInWayFromClient()}">Возвраты</td>
                     </tr>
                     <tr th:case="'black'">
-                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
                             арт.
-                            <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
                         </td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>

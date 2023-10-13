@@ -211,18 +211,18 @@
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="itemToShow : ${itemsToShow}">
                     <div th:switch="${itemToShow.color}">
                         <tr th:case="'white'">
-                            <td class="u-table-cell"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
+                            <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
                                 арт.
-                                <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
                             </td>
                             <td class="u-table-cell" th:text="${itemToShow.getOrdered()}">Заказы</td>
                             <td class="u-table-cell" th:text="${itemToShow.getSold()}">Продажи</td>
                             <td class="u-table-cell" th:text="${itemToShow.getCancelled()}">Возвраты</td>
                         </tr>
                         <tr th:case="'black'">
-                            <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
+                            <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
                                 арт.
-                                <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
                             </td>
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-10" th:text="${itemToShow.getOrdered()}">Заказы</td>
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-11" th:text="${itemToShow.getSold()}">Продажи</td>

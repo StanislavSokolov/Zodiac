@@ -44,6 +44,26 @@ public class PersonalAccountController {
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
 
+    @GetMapping("/information")
+    public String itemPage(@RequestParam("shop") String shop,
+                            @RequestParam(value = "subject", required = false) String subject,
+                            @ModelAttribute("user") User user,
+                            Model model,
+                            @CookieValue(value = "Authorization", required = false) String authorization,
+                            @CookieValue(value = "Client", required = false) String client,
+                            HttpServletResponse httpServletResponse) {
+
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+
+        User userDB = userService.findOne(Integer.valueOf(client));
+
+        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("activeShop", shop);
+
+
+        return "account/itemCard";
+    }
+
     @GetMapping("/stock")
     public String stockPage(@RequestParam("shop") String shop,
                             @RequestParam(value = "sort", required = false) String sort,
