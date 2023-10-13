@@ -64,17 +64,15 @@ public class PersonalAccountController {
 
         if (subject != null) {
 
-            System.out.println(subject);
-
             List<Product> productList = productService.findBySubject(subject);
-            System.out.println(productList.size());
             Product product = productList.get(0);
             model.addAttribute("product", product.getSubject());
 
             return "account/productCard";
         } else if (supplierArticle != null) {
             Product product = productService.findBySupplierArticle(supplierArticle).get(0);
-            model.addAttribute("product", product.getSubject() + " арт. (" + product.getSupplierArticle() + ")");
+            model.addAttribute("product", product);
+            model.addAttribute("name", product.getSubject() + " арт. (" + product.getSupplierArticle() + ")");
 
             return "account/productCard";
         } else {
@@ -82,8 +80,6 @@ public class PersonalAccountController {
 
             return "account/productCard";
         }
-
-//        if (subject != null) return getProduct(); else getItem();
 
     }
 

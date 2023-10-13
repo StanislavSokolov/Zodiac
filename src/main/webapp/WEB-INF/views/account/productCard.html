@@ -122,7 +122,7 @@
         <a th:href="'/account/shipments?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Поставки</a>
         <a th:href="'/account/reports?shop=' + ${activeShop}" class="u-btn u-btn-submit u-button-style">Отчеты</a>
       </div>
-      <h2 class="u-align-center u-hover-feature u-text u-text-1" th:text="${product}">Товар</h2>
+      <h2 class="u-align-center u-hover-feature u-text u-text-1" th:text="${name}">Товар</h2>
     </div>
 
 
@@ -206,7 +206,7 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                 </h2><!--/product_title--><!--product_price-->
                 <div class="u-product-control u-product-price u-product-price-1">
                   <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
-                    <div class="u-hide-price u-old-price" style="text-decoration: line-through !important;"><!--product_old_price_content-->$12<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
+                    <div class="u-old-price" style="text-decoration: line-through !important;"><!--product_old_price_content-->$12<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
                     <div class="u-price u-text-palette-2-base" style="font-size: 1.875rem; font-weight: 700;"><!--product_regular_price_content-->$9.95<!--/product_regular_price_content--></div><!--/product_regular_price-->
                   </div>
                 </div><!--/product_price-->
@@ -250,7 +250,8 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
             <div class="u-product-control u-product-price u-product-price-1">
               <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
                 <div class="u-hide-price u-old-price" style="text-decoration: line-through !important;"><!--product_old_price_content-->$20.00<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
-                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;" th:text="${'Цена: ' + product.getPrice()}"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;" th:text="${'Скидка: ' + product.getDiscount()}"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
               </div>
             </div><!--/product_price--><!--product_tabs-->
             <div class="u-expanded-width u-product-control u-tabs u-tabs-1">
@@ -425,8 +426,13 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
             </h2><!--/product_title--><!--product_price-->
             <div class="u-product-control u-product-price u-product-price-1">
               <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
-                <div class="u-hide-price u-old-price" style="text-decoration: line-through !important;"><!--product_old_price_content-->$20.00<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
-                <div class="u-price" style="font-size: 1.5rem; font-weight: 700;"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;"><!--product_regular_price_content-->Цена:<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-old-price" style="text-decoration: line-through !important;" th:text="${product.getPrice()}"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;" th:text="${(product.getPrice() * (100 - product.getDiscount())) / 100}"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
+              </div>
+              <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;"><!--product_regular_price_content-->Скидка:<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                <div class="u-price" style="font-size: 1.25rem; font-weight: 700;" th:text="${product.getDiscount()}"><!--product_regular_price_content-->$17.00<!--/product_regular_price_content--></div><!--/product_regular_price-->
               </div>
             </div><!--/product_price--><!--product_variations-->
             <div class="u-product-control u-product-variations u-product-variations-1"><!--product_variation-->
@@ -444,8 +450,35 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
             </div><!--/product_variations--><!--product_content-->
             <div class="u-product-control u-product-desc u-text u-text-2"><!--product_content_content-->
               <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p><!--/product_content_content-->
+              <div class="u-expanded-width u-form">
+                <form th:method="POST" th:action="@{/account/settings/wb}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+                  <div class="u-form-group u-form-name u-label-top u-form-group-1">
+                    <label for="name-ebed" class="u-label">Стандартный токен</label>
+                    <input type="text" th:field="*{tokenStandartWB}" id="name-ebed" placeholder="Введите стандартный токен из личного кабинета продавца" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('tokenStandartWB')}" th:errors="*{tokenStandartWB}">Token Error</div>
+                    <br/>
+                  </div>
+                  <div class="u-form-group u-form-name u-label-top u-form-group-2">
+                    <label for="email-cbd5" class="u-label">Токен "Статистика"</label>
+                    <input type="text" th:field="*{tokenStatisticWB}" id="email-cbd5" placeholder="Введите токен ''Статистика'' из личного кабинета продавца" name="email-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    <div style="color:red" th:if="${#fields.hasErrors('tokenStatisticWB')}" th:errors="*{tokenStatisticWB}">Token Error</div>
+                    <br/>
+                  </div>
+                  <div class="u-form-group u-form-name u-label-top u-form-group-3">
+                    <label for="text-ef21" class="u-label">Токен "Продвижение"</label>
+                    <input type="text" th:field="*{tokenAdvertisingWB}" id="text-ef21" placeholder="Введите токен ''Продвижение'' из личного кабинета продавца" name="password_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                    <div style="color:red" th:if="${#fields.hasErrors('tokenAdvertisingWB')}" th:errors="*{tokenAdvertisingWB}">Token Error</div>
+                    <br/>
+                  </div>
+                  <div class="u-align-left u-form-group u-form-submit u-label-top">
+                    <a href="/wb" class="u-btn u-btn-submit u-button-style">Принять</a>
+                    <input type="submit" value="submit" class="u-form-control-hidden">
+                  </div>
+                </form>
+              </div>
             </div><!--/product_content--><!--product_button--><!--options_json--><!--{"clickType":"add-to-cart","content":"Add to Cart"}--><!--/options_json-->
-            <a href="#" class="u-black u-btn u-button-style u-product-control u-btn-1"><!--product_button_content-->Add to Cart<!--/product_button_content--></a><!--/product_button-->
+<!--            <a href="#" class="u-black u-btn u-button-style u-product-control u-btn-1">&lt;!&ndash;product_button_content&ndash;&gt;Add to Cart&lt;!&ndash;/product_button_content&ndash;&gt;</a>&lt;!&ndash;/product_button&ndash;&gt;-->
+
           </div>
         </div><!--/product_item--><!--/product-->
       </div>
