@@ -1,5 +1,9 @@
 package ru.sokolov.com;
 
+import ru.sokolov.models.Stock;
+
+import java.util.List;
+
 public class StockToShow {
     String subject;
     String supplierArticle;
@@ -7,6 +11,7 @@ public class StockToShow {
     int quantityFull;
     int inWayFromClient;
     String color;
+    List<Stock> stocks;
 
     public String getSubject() {
         return subject;
@@ -56,12 +61,21 @@ public class StockToShow {
         this.color = color;
     }
 
-    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull, int inWayFromClient, int color) {
+    public List<Stock> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks) {
+        this.stocks = stocks;
+    }
+
+    public StockToShow(String subject, String supplierArticle, int quantity, int quantityFull, int inWayFromClient, int color, List<Stock> stocks) {
         this.subject = subject;
         this.supplierArticle = supplierArticle;
         this.quantity = quantity;
         this.quantityFull = quantityFull;
         this.inWayFromClient = inWayFromClient;
+        this.stocks = stocks;
         if (color == 0) this.color = "black"; else this.color = "white";
     }
 }

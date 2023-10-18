@@ -149,8 +149,13 @@
                 </thead>
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="stockToShow : ${stocksToShow}">
                 <div th:switch="${stockToShow.color}">
-                    <tr th:case="'white'">
-                        <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                    <tr th:case="'white'" th:each="stock : ${stockToShow.getStocks()}">
+<!--                        <th:title th:each="stock : ${stocksToShow.getStocks()}"><a th:text="${stock.getWarehouseName()}"></a></th:title>-->
+<!--                        th:title="${stock.getWarehouseName() + ' : ' + stock.getQuantity()} + '&#013'"-->
+                        <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}" th:title="${stockToShow.getStocks().get(0).getWarehouseName() + ' : ' + stockToShow.getStocks().get(0).getQuantity()} + '&#013'
++ ${stockToShow.getStocks().get(1).getWarehouseName() + ' : ' + stockToShow.getStocks().get(1).getQuantity()} + '&#013'
++ ${stockToShow.getStocks().get(2).getWarehouseName() + ' : ' + stockToShow.getStocks().get(2).getQuantity()} + '&#013'
++ ${stockToShow.getStocks().get(3).getWarehouseName() + ' : ' + stockToShow.getStocks().get(3).getQuantity()} + '&#013'"></a>
                             арт.
                             <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
                         </td>

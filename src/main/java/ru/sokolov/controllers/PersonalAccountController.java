@@ -104,7 +104,9 @@ public class PersonalAccountController {
 
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
         int countForColor = 0;
-        for (Product product: productService.findAll()) {
+        List<Product> productList = productService.findAll();
+        model.addAttribute("productList", productList);
+        for (Product product: productList) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
                 int quantity = 0, quantityFull = 0, inWayFromClient = 0;
@@ -115,7 +117,7 @@ public class PersonalAccountController {
                 }
                 if ((quantity != 0) || (quantityFull != 0)) {
                     countForColor++;
-                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2));
+                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2, stocksList));
                 }
             }
         }
@@ -126,6 +128,11 @@ public class PersonalAccountController {
             if (sort.equals("inWayFromClient")) stocksToShow.sort((o1, o2) -> o2.getInWayFromClient() - o1.getInWayFromClient());
         } else
             stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+
+        for(StockToShow s : stocksToShow) {
+            System.out.println(s.getSubject() + " арт. " + s.getSupplierArticle());
+            for (int i = 0; i < s.getStocks().size() - 1; i++) System.out.println(s.getStocks().get(i).getWarehouseName() + ": " + s.getStocks().get(i).getQuantity());
+        }
 
         model.addAttribute("stocksToShow", stocksToShow);
 
@@ -153,7 +160,7 @@ public class PersonalAccountController {
         ArrayList<DayToShow> daysToShow = new ArrayList<>();
 
         // i - количество дней для показа на календаре
-        // i = 0 (только сегодня), i = -6 (оследняя неделя)
+        // i = 0 (только сегодня), i = -6 (последняя неделя)
         for (int i = -10; i < 1; i++) {
             daysToShow.add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i),"ordered").size(),
                     itemService.findBySdateAndStatus(Data.getData(i),"sold").size(),

@@ -422,7 +422,7 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
               </ol>
             </div><!--/product_gallery--><!--product_title-->
             <h2 class="u-product-control u-text u-text-default u-text-1">
-              <a class="u-product-title-link" href="#"><!--product_title_content-->Product 1 Title<!--/product_title_content--></a>
+              <a class="u-product-title-link" title="Хрю!" th:text="${product.getSubject() + ' арт. ' + product.getSupplierArticle()}"><!--product_title_content-->Product 1 Title<!--/product_title_content--></a>
             </h2><!--/product_title--><!--product_price-->
             <div class="u-product-control u-product-price u-product-price-1">
               <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
@@ -450,8 +450,10 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
             </div><!--/product_variations--><!--product_content-->
             <div class="u-product-control u-product-desc u-text u-text-2"><!--product_content_content-->
               <p>Sample text. Lorem ipsum dolor sit amet, consectetur adipiscing elit nullam nunc justo sagittis suscipit ultrices.</p><!--/product_content_content-->
-              <div class="u-expanded-width u-form">
-                <form th:method="POST" th:action="@{/account/settings/wb}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+<!--              <div class="u-expanded-width u-form">-->
+              <div class="u-align-center-sm u-align-center-xs u-align-left-lg u-align-left-md u-align-left-xl u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-grey-5 u-group u-shape-rectangle u-group-1">
+
+              <form th:method="POST" th:action="@{/account/settings/wb}" th:object="${user}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                   <div class="u-form-group u-form-name u-label-top u-form-group-1">
                     <label for="name-ebed" class="u-label">Стандартный токен</label>
                     <input type="text" th:field="*{tokenStandartWB}" id="name-ebed" placeholder="Введите стандартный токен из личного кабинета продавца" name="name-1" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
@@ -470,8 +472,11 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                     <div style="color:red" th:if="${#fields.hasErrors('tokenAdvertisingWB')}" th:errors="*{tokenAdvertisingWB}">Token Error</div>
                     <br/>
                   </div>
-                  <div class="u-align-left u-form-group u-form-submit u-label-top">
-                    <a href="/wb" class="u-btn u-btn-submit u-button-style">Принять</a>
+                  <div class="u-container-layout u-valign-middle u-container-layout-2"><!--product_title-->
+<!--                  <div class="u-align-left u-form-group u-form-submit u-label-top">-->
+                    <a href="/wb" class="u-border-2 u-btn-submit u-button-style u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1"><!--product_button_content-->Принять<!--/product_button_content--></a><!--/product_button-->
+
+<!--                    <a href="/wb" class="u-btn u-btn-submit u-button-style">Принять</a>-->
                     <input type="submit" value="submit" class="u-form-control-hidden">
                   </div>
                 </form>
