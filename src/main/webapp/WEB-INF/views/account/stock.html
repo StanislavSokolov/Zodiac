@@ -149,24 +149,27 @@
                 </thead>
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="stockToShow : ${stocksToShow}">
                 <div th:switch="${stockToShow.color}">
-                    <tr th:case="'white'" th:each="stock : ${stockToShow.getStocks()}">
-<!--                        <th:title th:each="stock : ${stocksToShow.getStocks()}"><a th:text="${stock.getWarehouseName()}"></a></th:title>-->
-<!--                        th:title="${stock.getWarehouseName() + ' : ' + stock.getQuantity()} + '&#013'"-->
-                        <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}" th:title="${stockToShow.getStocks().get(0).getWarehouseName() + ' : ' + stockToShow.getStocks().get(0).getQuantity()} + '&#013'
-+ ${stockToShow.getStocks().get(1).getWarehouseName() + ' : ' + stockToShow.getStocks().get(1).getQuantity()} + '&#013'
-+ ${stockToShow.getStocks().get(2).getWarehouseName() + ' : ' + stockToShow.getStocks().get(2).getQuantity()} + '&#013'
-+ ${stockToShow.getStocks().get(3).getWarehouseName() + ' : ' + stockToShow.getStocks().get(3).getQuantity()} + '&#013'"></a>
+                    <tr th:case="'white'">
+                        <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}" th:title="'Основные склады:' + '&#013'
+                            + ${stockToShow.getStocks().get(0).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(0).getQuantity()} + '&#013'
+                            + ${stockToShow.getStocks().get(1).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(1).getQuantity()}"></a>
                             арт.
-                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}" th:title="'Основные склады:' + '&#013'
+                            + ${stockToShow.getStocks().get(0).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(0).getQuantity()} + '&#013'
+                            + ${stockToShow.getStocks().get(1).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(1).getQuantity()}"></a>
                         </td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
                         <td class="u-table-cell" th:text="${stockToShow.getInWayFromClient()}">Возвраты</td>
                     </tr>
-                    <tr th:case="'black'">
-                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                    <tr th:case="'black'" >
+                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" > <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}" th:title="'Основные склады:' + '&#013'
+                            + ${stockToShow.getStocks().get(0).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(0).getQuantity()} + '&#013'
+                            + ${stockToShow.getStocks().get(1).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(1).getQuantity()}"></a>
                             арт.
-                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}" th:title="'Основные склады:' + '&#013'
+                            + ${stockToShow.getStocks().get(0).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(0).getQuantity()} + '&#013'
+                            + ${stockToShow.getStocks().get(1).getWarehouseName()} + ' : ' + ${stockToShow.getStocks().get(1).getQuantity()}"></a>
                         </td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
@@ -179,6 +182,20 @@
 <!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-11">iPhone 11</td>-->
 <!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-12">$499</td>-->
 <!--                </tr>-->
+                </tbody>
+                <tbody>
+                <tr th:if="${stocksToShow.size()} % 2 == 0">
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-13"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-14"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-15"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-16"></td>
+                </tr>
+                <tr>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                </tr>
                 </tbody>
             </table>
         </div>

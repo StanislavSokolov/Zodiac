@@ -117,6 +117,7 @@ public class PersonalAccountController {
                 }
                 if ((quantity != 0) || (quantityFull != 0)) {
                     countForColor++;
+//                    stocksList.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
                     stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2, stocksList));
                 }
             }
@@ -129,9 +130,8 @@ public class PersonalAccountController {
         } else
             stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
 
-        for(StockToShow s : stocksToShow) {
-            System.out.println(s.getSubject() + " арт. " + s.getSupplierArticle());
-            for (int i = 0; i < s.getStocks().size() - 1; i++) System.out.println(s.getStocks().get(i).getWarehouseName() + ": " + s.getStocks().get(i).getQuantity());
+        for(int i = 0; i < stocksToShow.size(); i++) {
+            stocksToShow.get(i).setColor(i % 2);
         }
 
         model.addAttribute("stocksToShow", stocksToShow);
