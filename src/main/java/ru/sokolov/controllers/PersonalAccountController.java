@@ -117,7 +117,7 @@ public class PersonalAccountController {
                 }
                 if ((quantity != 0) || (quantityFull != 0)) {
                     countForColor++;
-//                    stocksList.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+                    stocksList.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
                     stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2, stocksList));
                 }
             }
