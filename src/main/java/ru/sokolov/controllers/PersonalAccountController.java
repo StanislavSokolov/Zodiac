@@ -105,7 +105,7 @@ public class PersonalAccountController {
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
         int countForColor = 0;
         List<Product> productList = productService.findAll();
-        model.addAttribute("productList", productList);
+//        model.addAttribute("productList", productList);
         for (Product product: productList) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
@@ -132,6 +132,39 @@ public class PersonalAccountController {
 
         for(int i = 0; i < stocksToShow.size(); i++) {
             stocksToShow.get(i).setColor(i % 2);
+        }
+
+        for(int i = 0; i < stocksToShow.size(); i++) {
+            if (!stocksToShow.get(i).isCoincidence()) {
+                stocksToShow.get(i).setCoincidence(true);
+                ArrayList<StockToShow> stockCoincidence = new ArrayList<>();
+                stockCoincidence.add(stocksToShow.get(i));
+                for (int j = i + 1; j < stocksToShow.size() - 1; j++) {
+                    if (stocksToShow.get(i).getSubject().equals(stocksToShow.get(j).getSubject())) {
+                        stocksToShow.get(j).setCoincidence(true);
+                        stockCoincidence.add(stocksToShow.get(j));
+                    }
+                }
+                for (int j = 0; j < stockCoincidence.size(); j++) {
+                    if (j == 0) {
+                        for (Stock s: stockCoincidence.get(j).getStocks()) stockCoincidence.get(j).getStocksAll().add(s);
+                    } else {
+                        for (int a = 0; a < stockCoincidence.get(j).getStocks().size(); a++) {
+                            boolean considence = false;
+                            for (int b = 0; b < stockCoincidence.get(0).getStocksAll().size(); b++) {
+                                if (stockCoincidence.get(0).getStocksAll().get(b).getWarehouseName().equals(stockCoincidence.get(j).getStocks().get(a))) {
+                                    stockCoincidence.get(0).getStocksAll().get(b).setQuantity(stockCoincidence.get(0).getStocksAll().get(b).getQuantity() + stockCoincidence.get(j).getStocks().get(a).getQuantity());
+                                    considence = true;
+                                }
+                            }
+//                            if (!considence) stockCoincidence.get(0).getStocksAll().add(new )
+                        }
+                    }
+                }
+//                for (int j = 0; j < stockCoincidence.size(); j++) {
+//                    stockCoincidence.get(j).setQuantityAll(quantityAll);
+//                }
+            }
         }
 
         model.addAttribute("stocksToShow", stocksToShow);
