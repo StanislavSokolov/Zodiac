@@ -2,10 +2,7 @@ package ru.sokolov.com;
 
 import ru.sokolov.models.Stock;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class StockToShow {
     String subject;
@@ -16,7 +13,7 @@ public class StockToShow {
     String color;
     List<Stock> stocks;
 
-    List<Stock> stocksAll;
+    ArrayList<Stock> stocksAll;
 
     public boolean isCoincidence() {
         return coincidence;
@@ -84,11 +81,11 @@ public class StockToShow {
         this.stocks = stocks;
     }
 
-    public List<Stock> getStocksAll() {
+    public ArrayList<Stock> getStocksAll() {
         return stocksAll;
     }
 
-    public void setStocksAll(List<Stock> stocksAll) {
+    public void setStocksAll(ArrayList<Stock> stocksAll) {
         this.stocksAll = stocksAll;
     }
 
@@ -99,122 +96,7 @@ public class StockToShow {
         this.quantityFull = quantityFull;
         this.inWayFromClient = inWayFromClient;
         this.stocks = stocks;
-        this.stocksAll = new List<Stock>() {
-            @Override
-            public int size() {
-                return 0;
-            }
-
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                return false;
-            }
-
-            @Override
-            public Iterator<Stock> iterator() {
-                return null;
-            }
-
-            @Override
-            public Object[] toArray() {
-                return new Object[0];
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                return null;
-            }
-
-            @Override
-            public boolean add(Stock stock) {
-                return false;
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                return false;
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Stock> c) {
-                return false;
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Stock> c) {
-                return false;
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                return false;
-            }
-
-            @Override
-            public void clear() {
-
-            }
-
-            @Override
-            public Stock get(int index) {
-                return null;
-            }
-
-            @Override
-            public Stock set(int index, Stock element) {
-                return null;
-            }
-
-            @Override
-            public void add(int index, Stock element) {
-
-            }
-
-            @Override
-            public Stock remove(int index) {
-                return null;
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                return 0;
-            }
-
-            @Override
-            public ListIterator<Stock> listIterator() {
-                return null;
-            }
-
-            @Override
-            public ListIterator<Stock> listIterator(int index) {
-                return null;
-            }
-
-            @Override
-            public List<Stock> subList(int fromIndex, int toIndex) {
-                return null;
-            }
-        };
+        this.stocksAll = new ArrayList<Stock>();
         if (color == 0) this.color = "black"; else this.color = "white";
     }
 }
