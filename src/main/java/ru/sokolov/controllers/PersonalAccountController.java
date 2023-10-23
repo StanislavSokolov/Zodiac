@@ -100,12 +100,9 @@ public class PersonalAccountController {
         model.addAttribute("user", userDB);
         model.addAttribute("activeShop", shop);
 
-//        model.addAttribute("stock", stockService.findAll());
-
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
         int countForColor = 0;
         List<Product> productList = productService.findAll();
-//        model.addAttribute("productList", productList);
         for (Product product: productList) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
@@ -145,27 +142,23 @@ public class PersonalAccountController {
                         stockCoincidence.add(stocksToShow.get(j));
                     }
                 }
-                System.out.println("Subject stockCoincidence " + stockCoincidence.get(0).getSubject());
-                System.out.println("SIZE stockCoincidence " + stockCoincidence.size());
                 for (int j = 0; j < stockCoincidence.size(); j++) {
                     if (j == 0) {
                         for (Stock s: stockCoincidence.get(j).getStocks()) {
-//                            System.out.println(s.getWarehouseName() + " " + s.getQuantity());
                             stockCoincidence.get(j).getStocksAll().add(new Stock(s.getWarehouseName(), s.getQuantity(), s.getQuantityFull(), s.getInWayFromClient(), s.getOwner()));
                         }
-                        System.out.println("SIZE StocksAll (j=" + j +") " + stockCoincidence.get(j).getStocksAll().size());
                     } else {
                         for (int a = 0; a < stockCoincidence.get(j).getStocks().size(); a++) {
                             boolean coincidence = false;
                             for (int b = 0; b < stockCoincidence.get(0).getStocksAll().size(); b++) {
-                                if (stockCoincidence.get(0).getStocksAll().get(b).getWarehouseName().equals(stockCoincidence.get(j).getStocks().get(a))) {
+                                if (stockCoincidence.get(0).getStocksAll().get(b).getWarehouseName().equals(stockCoincidence.get(j).getStocks().get(a).getWarehouseName())) {
                                     stockCoincidence.get(0).getStocksAll().get(b).setQuantity(stockCoincidence.get(0).getStocksAll().get(b).getQuantity() + stockCoincidence.get(j).getStocks().get(a).getQuantity());
                                     stockCoincidence.get(0).getStocksAll().get(b).setQuantityFull(stockCoincidence.get(0).getStocksAll().get(b).getQuantityFull() + stockCoincidence.get(j).getStocks().get(a).getQuantityFull());
                                     stockCoincidence.get(0).getStocksAll().get(b).setInWayFromClient(stockCoincidence.get(0).getStocksAll().get(b).getInWayFromClient() + stockCoincidence.get(j).getStocks().get(a).getInWayFromClient());
                                     coincidence = true;
                                 }
                             }
-                            if (!coincidence) stockCoincidence.get(j).getStocksAll().add(new Stock(stockCoincidence.get(j).getStocks().get(a).getWarehouseName(),
+                            if (!coincidence) stockCoincidence.get(0).getStocksAll().add(new Stock(stockCoincidence.get(j).getStocks().get(a).getWarehouseName(),
                                     stockCoincidence.get(j).getStocks().get(a).getQuantity(),
                                     stockCoincidence.get(j).getStocks().get(a).getQuantityFull(),
                                     stockCoincidence.get(j).getStocks().get(a).getInWayFromClient(),
@@ -173,9 +166,12 @@ public class PersonalAccountController {
                         }
                     }
                 }
-//                for (int j = 0; j < stockCoincidence.size(); j++) {
-//                    stockCoincidence.get(j).setQuantityAll(quantityAll);
-//                }
+                stockCoincidence.get(0).getStocksAll().sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+                for (int j = 1; j < stockCoincidence.size(); j++) {
+                    for (int k = 0; k < stockCoincidence.get(0).getStocksAll().size(); k++) {
+                        stockCoincidence.get(j).setStocksAll(stockCoincidence.get(0).getStocksAll());
+                    }
+                }
             }
         }
 
