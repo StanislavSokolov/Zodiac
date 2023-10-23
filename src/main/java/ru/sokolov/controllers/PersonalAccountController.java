@@ -239,7 +239,12 @@ public class PersonalAccountController {
             if (sort.equals("cancelled")) itemsToShow.sort((o1, o2) -> o2.getCancelled() - o1.getCancelled());
         } else
             itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+
+        for(int i = 0; i < itemsToShow.size(); i++) {
+            itemsToShow.get(i).setColor(i % 2);
+        }
         model.addAttribute("itemsToShow", itemsToShow);
+
 
         return "account/shop";
     }

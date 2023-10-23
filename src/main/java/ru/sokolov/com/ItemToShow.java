@@ -12,8 +12,8 @@ public class ItemToShow {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColor(int color) {
+        if (color == 0) this.color = "black"; else this.color = "white";
     }
 
     public String getSubject() {
