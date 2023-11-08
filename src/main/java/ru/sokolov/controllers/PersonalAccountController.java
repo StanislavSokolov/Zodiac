@@ -7,21 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.*;
-import ru.sokolov.models.Item;
-import ru.sokolov.models.Product;
-import ru.sokolov.models.Stock;
-import ru.sokolov.models.User;
-import ru.sokolov.services.ItemService;
-import ru.sokolov.services.ProductService;
-import ru.sokolov.services.StockService;
-import ru.sokolov.services.UserService;
+import ru.sokolov.models.*;
+import ru.sokolov.services.*;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +26,16 @@ public class PersonalAccountController {
     private final ProductService productService;
     private final ItemService itemService;
     private final StockService stockService;
+    private final YearService yearService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
         this.stockService = stockService;
+        this.yearService = yearService;
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
@@ -202,12 +196,16 @@ public class PersonalAccountController {
 
         // i - количество дней для показа на календаре
         // i = 0 (только сегодня), i = -6 (последняя неделя)
-        for (int i = -10; i < 1; i++) {
-            daysToShow.add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i),"ordered").size(),
-                    itemService.findBySdateAndStatus(Data.getData(i),"sold").size(),
-                    itemService.findByCdateAndStatus(Data.getData(i), "cancelled").size(),
-                    0,
-                    Data.getData(i)));
+
+
+        for (int i = -50; i < 1; i++) {
+            List<Year> years = yearService.findByCdate(Data.getData(i));
+            if (!years.isEmpty())
+                daysToShow.add(new DayToShow(years.get(0).getCsum(),
+                        0,
+                        0,
+                        0,
+                        Data.getData(i)));
         }
 
         model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));

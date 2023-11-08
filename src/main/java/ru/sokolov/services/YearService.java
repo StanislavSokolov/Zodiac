@@ -4,24 +4,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolov.models.Day;
-import ru.sokolov.models.Item;
+import ru.sokolov.models.Year;
 import ru.sokolov.repositories.DayRepository;
-import ru.sokolov.repositories.ItemRepository;
+import ru.sokolov.repositories.YearRepository;
 
 import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-public class DayService {
+public class YearService {
 
-    private final DayRepository dayRepository;
+    private final YearRepository yearRepository;
 
     @Autowired
-    public DayService(DayRepository dayRepository) {
-        this.dayRepository = dayRepository;
+    public YearService(YearRepository yearRepository) {
+        this.yearRepository = yearRepository;
     }
 
-    public List<Day> findByCdate(String cdate) {
-        return dayRepository.findByCdate(cdate);
+    public List<Year> findByCdate(String cdate) {
+        return yearRepository.findByCdate(cdate);
     }
 }
