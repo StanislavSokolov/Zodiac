@@ -208,7 +208,10 @@ public class PersonalAccountController {
                         Data.getData(i)));
         }
 
-        model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+        if (!daysToShow.isEmpty()) {
+            if (daysToShow.get(daysToShow.size() - 1).getDate().equals(Data.getDataCurrent())) model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+            else model.addAttribute("today", new DayToShow(0, 0, 0 , 0, Data.getDataCurrent()));
+        }
         model.addAttribute("daysToShow", daysToShow);
 
         ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
