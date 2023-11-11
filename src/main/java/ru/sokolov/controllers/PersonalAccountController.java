@@ -222,9 +222,8 @@ public class PersonalAccountController {
                 int ordered = 0, sold = 0, cancelled = 0;
                 ArrayList<WareHouse> wareHouses = new ArrayList<>();
                 for (Item item: itemList) {
-                    if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
+                    if (item.getCdate().equals(Data.getData(0))) {
                         if (item.getStatus().equals("ordered")) ordered++;
-                        if (item.getStatus().equals("sold")) sold++;
                         if (item.getStatus().equals("cancelled")) cancelled++;
                         if (wareHouses.isEmpty()) {
                             wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
@@ -236,13 +235,15 @@ public class PersonalAccountController {
                                     if (wh.getName().equals(item.getWarehouseName())) {
                                         wh.setQuantity(wh.getQuantity() + 1);
                                         coincidence = true;
-//                                        System.out.println(wh.getCount());
                                     }
                                 }
                             }
                             if (!coincidence) wareHouses.add(wareHouses.size(), new WareHouse(item.getWarehouseName(), 1));
                         }
 
+                    }
+                    if (item.getSdate().equals(Data.getData(0))) {
+                        if (item.getStatus().equals("sold")) sold++;
                     }
                 }
                 if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
