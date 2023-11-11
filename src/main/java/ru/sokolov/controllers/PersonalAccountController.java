@@ -253,6 +253,9 @@ public class PersonalAccountController {
                 if ((ordered != 0) || (cancelled != 0)) {
                     countForColor++;
                     itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
+                } else if (sold != 0) {
+                    wareHouses.add(new WareHouse("Санкт-Петербург", 0));
+                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
                 }
             }
         }

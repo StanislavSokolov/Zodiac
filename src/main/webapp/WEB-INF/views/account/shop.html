@@ -214,29 +214,26 @@
                             <td class="u-table-cell">
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
-                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
-                                   th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 1}"
-                                   th:title="${'С какого склада:' + '&#013'
+                                   th:title="${'С какого склада заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 2}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 3}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 4}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
@@ -244,7 +241,7 @@
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() != 4 && itemToShow.getWareHousesAll().size() != 3 && itemToShow.getWareHousesAll().size() != 2 && itemToShow.getWareHousesAll().size() != 1}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
@@ -253,29 +250,31 @@
                                 арт.
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
-                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
+                                   th:if="${itemToShow.getWareHouses().size() == 1}"
+                                   th:title="${'С какого склада заказали:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 1}"
-                                   th:title="${'С какого склада:' + '&#013'
+                                   th:title="${'С какого склада заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 2}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 3}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 4}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
@@ -283,7 +282,7 @@
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() != 4 && itemToShow.getWareHouses().size() != 3 && itemToShow.getWareHouses().size() != 2 && itemToShow.getWareHouses().size() != 1}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
@@ -299,29 +298,26 @@
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
-                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
-                                   th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 1}"
-                                   th:title="${'С какого склада:' + '&#013'
+                                   th:title="${'С какого склада заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 2}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 3}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 4}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
@@ -329,7 +325,7 @@
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() != 4 && itemToShow.getWareHousesAll().size() != 3 && itemToShow.getWareHousesAll().size() != 2 && itemToShow.getWareHousesAll().size() != 1}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
@@ -338,29 +334,26 @@
                                 арт.
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
-                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
-                                   th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 1}"
-                                   th:title="${'С какого склада:' + '&#013'
+                                   th:title="${'С какого склада заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 2}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 3}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 4}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
@@ -368,7 +361,7 @@
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() != 4 && itemToShow.getWareHouses().size() != 3 && itemToShow.getWareHouses().size() != 2 && itemToShow.getWareHouses().size() != 1}"
-                                   th:title="${'С каких складов:' + '&#013'
+                                   th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
                                             + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
