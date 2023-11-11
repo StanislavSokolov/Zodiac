@@ -220,16 +220,34 @@ public class PersonalAccountController {
             List<Item> itemList = product.getItems();
             if (!itemList.isEmpty()) {
                 int ordered = 0, sold = 0, cancelled = 0;
+                ArrayList<WareHouse> wareHouses = new ArrayList<>();
                 for (Item item: itemList) {
                     if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
                         if (item.getStatus().equals("ordered")) ordered++;
                         if (item.getStatus().equals("sold")) sold++;
                         if (item.getStatus().equals("cancelled")) cancelled++;
+                        if (wareHouses.isEmpty()) {
+                            wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
+                        }
+                        else {
+                            boolean coincidence = false;
+                            for (WareHouse wh: wareHouses) {
+                                if (!coincidence) {
+                                    if (wh.getName().equals(item.getWarehouseName())) {
+                                        wh.setQuantity(wh.getQuantity() + 1);
+                                        coincidence = true;
+//                                        System.out.println(wh.getCount());
+                                    }
+                                }
+                            }
+                            if (!coincidence) wareHouses.add(wareHouses.size(), new WareHouse(item.getWarehouseName(), 1));
+                        }
+
                     }
                 }
                 if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
                     countForColor++;
-                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2));
+                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
                 }
             }
         }
@@ -244,6 +262,48 @@ public class PersonalAccountController {
         for(int i = 0; i < itemsToShow.size(); i++) {
             itemsToShow.get(i).setColor(i % 2);
         }
+
+        ArrayList<ItemToShow> its = new ArrayList<>();
+
+        for (int i = 0; i < itemsToShow.size(); i++) {
+            if (its.isEmpty()) {
+                ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
+                its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
+            } else {
+                boolean coincidence = false;
+                for (int j = 0; j < its.size(); j++) {
+                    if (its.get(j).getSubject().equals(itemsToShow.get(i).getSubject())) {
+                        for (int a = 0; a < itemsToShow.get(i).getWareHouses().size(); a++) {
+                            boolean coincedence2 = false;
+                            for (int b = 0; b < its.get(j).getWareHousesAll().size(); b++) {
+                                if (its.get(j).getWareHousesAll().get(b).getName().equals(itemsToShow.get(i).getWareHouses().get(a).getName())) {
+                                    its.get(j).getWareHousesAll().get(b).setQuantity(its.get(j).getWareHousesAll().get(b).getQuantity() + itemsToShow.get(i).getWareHouses().get(a).getQuantity());
+                                    coincedence2 = true;
+                                }
+                            }
+                            if (!coincedence2) its.get(j).getWareHousesAll().add(new WareHouse(itemsToShow.get(i).getWareHouses().get(a).getName(), itemsToShow.get(i).getWareHouses().get(a).getQuantity()));
+                        }
+                        coincidence = true;
+                    }
+                }
+                if (!coincidence) {
+                    ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                    for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
+                    its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
+                    System.out.println(its.get(its.size() - 1).getSubject() + " " + its.get(its.size() - 1).getWareHousesAll().size());
+                }
+            }
+        }
+
+        for (ItemToShow i: itemsToShow) {
+            for (ItemToShow t: its) {
+                if (i.getSubject().equals(t.getSubject())) {
+                    i.setWareHousesAll(t.getWareHousesAll());
+                }
+            }
+        }
+
         model.addAttribute("itemsToShow", itemsToShow);
 
 
