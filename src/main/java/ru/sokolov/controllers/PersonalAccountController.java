@@ -7,21 +7,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.*;
-import ru.sokolov.models.Item;
-import ru.sokolov.models.Product;
-import ru.sokolov.models.Stock;
-import ru.sokolov.models.User;
-import ru.sokolov.services.ItemService;
-import ru.sokolov.services.ProductService;
-import ru.sokolov.services.StockService;
-import ru.sokolov.services.UserService;
+import ru.sokolov.models.*;
+import ru.sokolov.services.*;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +26,16 @@ public class PersonalAccountController {
     private final ProductService productService;
     private final ItemService itemService;
     private final StockService stockService;
+    private final YearService yearService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
         this.stockService = stockService;
+        this.yearService = yearService;
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
@@ -202,15 +196,22 @@ public class PersonalAccountController {
 
         // i - количество дней для показа на календаре
         // i = 0 (только сегодня), i = -6 (последняя неделя)
-        for (int i = -10; i < 1; i++) {
-            daysToShow.add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i),"ordered").size(),
-                    itemService.findBySdateAndStatus(Data.getData(i),"sold").size(),
-                    itemService.findByCdateAndStatus(Data.getData(i), "cancelled").size(),
-                    0,
-                    Data.getData(i)));
+
+
+        for (int i = -50; i < 1; i++) {
+            List<Year> years = yearService.findByCdate(Data.getData(i));
+            if (!years.isEmpty())
+                daysToShow.add(new DayToShow(years.get(0).getCsum(),
+                        years.get(0).getSales(),
+                        0,
+                        0,
+                        Data.getData(i)));
         }
 
-        model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+        if (!daysToShow.isEmpty()) {
+            if (daysToShow.get(daysToShow.size() - 1).getDate().equals(Data.getDataCurrent())) model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+            else model.addAttribute("today", new DayToShow(0, 0, 0 , 0, Data.getDataCurrent()));
+        }
         model.addAttribute("daysToShow", daysToShow);
 
         ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
@@ -219,16 +220,39 @@ public class PersonalAccountController {
             List<Item> itemList = product.getItems();
             if (!itemList.isEmpty()) {
                 int ordered = 0, sold = 0, cancelled = 0;
+                ArrayList<WareHouse> wareHouses = new ArrayList<>();
                 for (Item item: itemList) {
-                    if ((item.getCdate().equals(Data.getData(0))) || (item.getSdate().equals(Data.getData(0)))) {
+                    if (item.getCdate().equals(Data.getData(0))) {
                         if (item.getStatus().equals("ordered")) ordered++;
-                        if (item.getStatus().equals("sold")) sold++;
+//                        if (item.getStatus().equals("sold")) sold++;
                         if (item.getStatus().equals("cancelled")) cancelled++;
+                        if (wareHouses.isEmpty()) {
+                            wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
+                        }
+                        else {
+                            boolean coincidence = false;
+                            for (WareHouse wh: wareHouses) {
+                                if (!coincidence) {
+                                    if (wh.getName().equals(item.getWarehouseName())) {
+                                        wh.setQuantity(wh.getQuantity() + 1);
+                                        coincidence = true;
+                                    }
+                                }
+                            }
+                            if (!coincidence) wareHouses.add(wareHouses.size(), new WareHouse(item.getWarehouseName(), 1));
+                        }
+
+                    }
+                    else {
+                        if (item.getSdate().equals(Data.getData(0))) {
+                            if (item.getStatus().equals("sold")) sold++;
+                        }
                     }
                 }
-                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
+//                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
+                if ((ordered != 0) || (cancelled != 0)) {
                     countForColor++;
-                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2));
+                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
                 }
             }
         }
@@ -239,7 +263,54 @@ public class PersonalAccountController {
             if (sort.equals("cancelled")) itemsToShow.sort((o1, o2) -> o2.getCancelled() - o1.getCancelled());
         } else
             itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+
+        for(int i = 0; i < itemsToShow.size(); i++) {
+            itemsToShow.get(i).setColor(i % 2);
+        }
+
+        ArrayList<ItemToShow> its = new ArrayList<>();
+
+        for (int i = 0; i < itemsToShow.size(); i++) {
+            if (its.isEmpty()) {
+                ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
+                its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
+            } else {
+                boolean coincidence = false;
+                for (int j = 0; j < its.size(); j++) {
+                    if (its.get(j).getSubject().equals(itemsToShow.get(i).getSubject())) {
+                        for (int a = 0; a < itemsToShow.get(i).getWareHouses().size(); a++) {
+                            boolean coincedence2 = false;
+                            for (int b = 0; b < its.get(j).getWareHousesAll().size(); b++) {
+                                if (its.get(j).getWareHousesAll().get(b).getName().equals(itemsToShow.get(i).getWareHouses().get(a).getName())) {
+                                    its.get(j).getWareHousesAll().get(b).setQuantity(its.get(j).getWareHousesAll().get(b).getQuantity() + itemsToShow.get(i).getWareHouses().get(a).getQuantity());
+                                    coincedence2 = true;
+                                }
+                            }
+                            if (!coincedence2) its.get(j).getWareHousesAll().add(new WareHouse(itemsToShow.get(i).getWareHouses().get(a).getName(), itemsToShow.get(i).getWareHouses().get(a).getQuantity()));
+                        }
+                        coincidence = true;
+                    }
+                }
+                if (!coincidence) {
+                    ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                    for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
+                    its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
+                    System.out.println(its.get(its.size() - 1).getSubject() + " " + its.get(its.size() - 1).getWareHousesAll().size());
+                }
+            }
+        }
+
+        for (ItemToShow i: itemsToShow) {
+            for (ItemToShow t: its) {
+                if (i.getSubject().equals(t.getSubject())) {
+                    i.setWareHousesAll(t.getWareHousesAll());
+                }
+            }
+        }
+
         model.addAttribute("itemsToShow", itemsToShow);
+
 
         return "account/shop";
     }

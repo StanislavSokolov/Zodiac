@@ -28,7 +28,7 @@
                var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
 
                var options = {
-                 title: "Продажи",
+                 title: "Заказы",
                  height: 350,
                };
 
@@ -202,27 +202,178 @@
                 </colgroup>
                 <thead class="u-black u-table-header u-table-header-1">
                 <tr>
-                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=subject'">Наименование</a></th>
-                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=ordered'">Заказы</a></th>
-                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=sold'">Продажи</a></th>
-                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=cancelled'">Возвраты</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=subject'" title="Сортировка по наименованию товаров">Наименование</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=ordered'" title="Сортировка по количеству заказов">Заказы</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=sold'" title="Сортировка по количеству продаж">Продажи</a></th>
+                    <th class="u-table-cell"> <a th:href="'/account/shop?shop=' + ${activeShop} + '&sort=cancelled'" title="Сортировка по количеству возвратов">Возвраты</a></th>
                 </tr>
                 </thead>
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="itemToShow : ${itemsToShow}">
                     <div th:switch="${itemToShow.color}">
                         <tr th:case="'white'">
-                            <td class="u-table-cell"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
+                            <td class="u-table-cell">
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 1}"
+                                   th:title="${'С какого склада:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 2}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 3}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 4}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() != 4 && itemToShow.getWareHousesAll().size() != 3 && itemToShow.getWareHousesAll().size() != 2 && itemToShow.getWareHousesAll().size() != 1}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(4).getName() + ': ' + itemToShow.getWareHousesAll().get(4).getQuantity()}"></a>
                                 арт.
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 1}"
+                                   th:title="${'С какого склада:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 2}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 3}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 4}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(3).getName() + ': ' + itemToShow.getWareHouses().get(3).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() != 4 && itemToShow.getWareHouses().size() != 3 && itemToShow.getWareHouses().size() != 2 && itemToShow.getWareHouses().size() != 1}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(3).getName() + ': ' + itemToShow.getWareHouses().get(3).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(4).getName() + ': ' + itemToShow.getWareHouses().get(4).getQuantity()}"></a>
+
                             </td>
                             <td class="u-table-cell" th:text="${itemToShow.getOrdered()}">Заказы</td>
                             <td class="u-table-cell" th:text="${itemToShow.getSold()}">Продажи</td>
                             <td class="u-table-cell" th:text="${itemToShow.getCancelled()}">Возвраты</td>
                         </tr>
                         <tr th:case="'black'">
-                            <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}" th:text="${itemToShow.getSubject()}"></a>
+                            <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 1}"
+                                   th:title="${'С какого склада:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 2}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 3}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() == 4}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().size() != 4 && itemToShow.getWareHousesAll().size() != 3 && itemToShow.getWareHousesAll().size() != 2 && itemToShow.getWareHousesAll().size() != 1}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(1).getName() + ': ' + itemToShow.getWareHousesAll().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(2).getName() + ': ' + itemToShow.getWareHousesAll().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity() + '&#013'
+                                            + itemToShow.getWareHousesAll().get(4).getName() + ': ' + itemToShow.getWareHousesAll().get(4).getQuantity()}"></a>
                                 арт.
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSupplierArticle()}" th:text="${itemToShow.getSupplierArticle()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 1}"
+                                   th:title="${'С какого склада:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 2}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 3}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() == 4}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(3).getName() + ': ' + itemToShow.getWareHouses().get(3).getQuantity()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().size() != 4 && itemToShow.getWareHouses().size() != 3 && itemToShow.getWareHouses().size() != 2 && itemToShow.getWareHouses().size() != 1}"
+                                   th:title="${'С каких складов:' + '&#013'
+                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(1).getName() + ': ' + itemToShow.getWareHouses().get(1).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(2).getName() + ': ' + itemToShow.getWareHouses().get(2).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(3).getName() + ': ' + itemToShow.getWareHouses().get(3).getQuantity() + '&#013'
+                                            + itemToShow.getWareHouses().get(4).getName() + ': ' + itemToShow.getWareHouses().get(4).getQuantity()}"></a>
                             </td>
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-10" th:text="${itemToShow.getOrdered()}">Заказы</td>
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-11" th:text="${itemToShow.getSold()}">Продажи</td>

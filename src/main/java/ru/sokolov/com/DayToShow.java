@@ -5,6 +5,16 @@ public class DayToShow {
     int sold;
     int cancelled;
     int profit;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    String date;
     String year;
     String month;
     String day;
@@ -70,6 +80,7 @@ public class DayToShow {
         this.sold = sold;
         this.cancelled = cancelled;
         this.profit = profit;
+        this.date = date;
 
         String[] subStr;
         String delimeter = "-"; // Разделитель
