@@ -17,8 +17,19 @@ public class Year {
     @Column(name = "csum")
     private int csum;
 
+    @Column(name = "sales")
+    private int sales;
+
     public int getId() {
         return id;
+    }
+
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        this.sales = sales;
     }
 
     public void setId(int id) {
@@ -41,9 +52,10 @@ public class Year {
         this.csum = csum;
     }
 
-    public Year(String cdate, int csum) {
+    public Year(String cdate, int csum, int sales) {
         this.cdate = cdate;
         this.csum = csum;
+        this.sales = sales;
     }
 
     public Year() {

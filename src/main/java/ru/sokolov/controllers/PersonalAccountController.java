@@ -202,7 +202,7 @@ public class PersonalAccountController {
             List<Year> years = yearService.findByCdate(Data.getData(i));
             if (!years.isEmpty())
                 daysToShow.add(new DayToShow(years.get(0).getCsum(),
-                        0,
+                        years.get(0).getSales(),
                         0,
                         0,
                         Data.getData(i)));
