@@ -214,6 +214,9 @@
                             <td class="u-table-cell">
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 1}"
                                    th:title="${'С какого склада:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
@@ -248,6 +251,9 @@
                                             + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(4).getName() + ': ' + itemToShow.getWareHousesAll().get(4).getQuantity()}"></a>
                                 арт.
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 1}"
@@ -293,6 +299,9 @@
                             <td class="u-palette-5-light-2 u-table-cell u-table-cell-9">
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
                                    th:text="${itemToShow.getSubject()}"
+                                   th:if="${itemToShow.getWareHousesAll().isEmpty()}"></a>
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + ${itemToShow.getSubject()}"
+                                   th:text="${itemToShow.getSubject()}"
                                    th:if="${itemToShow.getWareHousesAll().size() == 1}"
                                    th:title="${'С какого склада:' + '&#013'
                                             + itemToShow.getWareHousesAll().get(0).getName() + ': ' + itemToShow.getWareHousesAll().get(0).getQuantity()}"></a>
@@ -327,6 +336,9 @@
                                             + itemToShow.getWareHousesAll().get(3).getName() + ': ' + itemToShow.getWareHousesAll().get(3).getQuantity() + '&#013'
                                             + itemToShow.getWareHousesAll().get(4).getName() + ': ' + itemToShow.getWareHousesAll().get(4).getQuantity()}"></a>
                                 арт.
+                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
+                                   th:text="${itemToShow.getSupplierArticle()}"
+                                   th:if="${itemToShow.getWareHouses().isEmpty()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 1}"

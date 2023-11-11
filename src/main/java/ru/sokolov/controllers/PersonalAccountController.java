@@ -224,6 +224,7 @@ public class PersonalAccountController {
                 for (Item item: itemList) {
                     if (item.getCdate().equals(Data.getData(0))) {
                         if (item.getStatus().equals("ordered")) ordered++;
+//                        if (item.getStatus().equals("sold")) sold++;
                         if (item.getStatus().equals("cancelled")) cancelled++;
                         if (wareHouses.isEmpty()) {
                             wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
@@ -242,11 +243,14 @@ public class PersonalAccountController {
                         }
 
                     }
-                    if (item.getSdate().equals(Data.getData(0))) {
-                        if (item.getStatus().equals("sold")) sold++;
+                    else {
+                        if (item.getSdate().equals(Data.getData(0))) {
+                            if (item.getStatus().equals("sold")) sold++;
+                        }
                     }
                 }
-                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
+//                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
+                if ((ordered != 0) || (cancelled != 0)) {
                     countForColor++;
                     itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
                 }
