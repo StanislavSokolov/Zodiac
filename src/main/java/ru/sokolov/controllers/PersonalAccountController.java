@@ -13,6 +13,7 @@ import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -84,9 +85,14 @@ public class PersonalAccountController {
                             Model model,
                             @CookieValue(value = "Authorization", required = false) String authorization,
                             @CookieValue(value = "Client", required = false) String client,
-                            HttpServletResponse httpServletResponse) {
+                            HttpServletResponse httpServletResponse,
+                            HttpServletRequest httpServletRequest) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+//        System.out.println(httpServletRequest.getRequestURI() + shop + sort);
+        if (!Auth.getAuthorization(authorization, client)) {
+//            model.addAttribute("stringRequestURI", httpServletRequest.getRequestURI());
+            return "auth/authorization";
+        }
 
         User userDB = userService.findOne(Integer.valueOf(client));
 
@@ -201,9 +207,9 @@ public class PersonalAccountController {
         for (int i = -50; i < 1; i++) {
             List<Year> years = yearService.findByCdate(Data.getData(i));
             if (!years.isEmpty())
-                daysToShow.add(new DayToShow(years.get(0).getCsum(),
+                daysToShow.add(new DayToShow(years.get(0).getOrders(),
                         years.get(0).getSales(),
-                        0,
+                        years.get(0).getReturns(),
                         0,
                         Data.getData(i)));
         }
