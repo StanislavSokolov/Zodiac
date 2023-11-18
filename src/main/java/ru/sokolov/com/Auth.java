@@ -23,4 +23,5 @@ public class Auth {
         if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
         return shops;
     }
+
 }

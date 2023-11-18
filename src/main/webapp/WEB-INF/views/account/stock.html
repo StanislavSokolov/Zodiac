@@ -139,10 +139,10 @@
                 </colgroup>
                 <thead class="u-black u-table-header u-table-header-1">
                     <tr>
-                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=subject'">Наименование</a></th>
-                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantity'">Остаток</a></th>
-                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantityFull'">В пути</a></th>
-                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=inWayFromClient'">Возвраты</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=subject'" title="Сортировка по наименованию товаров">Наименование</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantity'" title="Сортировка по остаткам на складе">Остаток</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=quantityFull'" title="Сортировка по количеству товаров в пути">В пути</a></th>
+                        <th class="u-table-cell"> <a th:href="'/account/stock?shop=' + ${activeShop} + '&sort=inWayFromClient'" title="Сортировка по количеству возвратов">Возвраты</a></th>
                     <tr>
                 </tr>
                 </tr>
@@ -150,18 +150,156 @@
                 <tbody class="u-table-alt-palette-1-light-3 u-table-body" th:each="stockToShow : ${stocksToShow}">
                 <div th:switch="${stockToShow.color}">
                     <tr th:case="'white'">
-                        <td class="u-table-cell"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                        <td class="u-table-cell">
+                            <a th:href="'/account/information?shop=' + ${activeShop} + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 1}"
+                               th:title="${'Основной склад:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 2}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 3}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 4}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(3).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(3).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() != 4 && stockToShow.getStocksAll().size() != 3 && stockToShow.getStocksAll().size() != 2 && stockToShow.getStocksAll().size() != 1}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(3).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(3).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(4).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(4).getQuantity()}"></a>
                             арт.
-                            <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 1}"
+                               th:title="${'Основной склад:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 2}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 3}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 4}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(3).getWarehouseName() + ': ' + stockToShow.getStocks().get(3).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() != 4 && stockToShow.getStocks().size() != 3 && stockToShow.getStocks().size() != 2 && stockToShow.getStocks().size() != 1}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(3).getWarehouseName() + ': ' + stockToShow.getStocks().get(3).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(4).getWarehouseName() + ': ' + stockToShow.getStocks().get(4).getQuantity()}"></a>
                         </td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-table-cell" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
                         <td class="u-table-cell" th:text="${stockToShow.getInWayFromClient()}">Возвраты</td>
                     </tr>
-                    <tr th:case="'black'">
-                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9"> <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSubject()}" th:text="${stockToShow.getSubject()}"></a>
+                    <tr th:case="'black'" >
+                        <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" >
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 1}"
+                               th:title="${'Основной склад:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 2}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 3}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() == 4}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(3).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(3).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&subject=' + stockToShow.getSubject()}"
+                               th:text="${stockToShow.getSubject()}"
+                               th:if="${stockToShow.getStocksAll().size() != 4 && stockToShow.getStocksAll().size() != 3 && stockToShow.getStocksAll().size() != 2 && stockToShow.getStocksAll().size() != 1}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocksAll().get(0).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(1).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(2).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(3).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(3).getQuantity() + '&#013'
+                                    + stockToShow.getStocksAll().get(4).getWarehouseName() + ': ' + stockToShow.getStocksAll().get(4).getQuantity()}"></a>
                             арт.
-                            <a th:href="'/informarion?shop=' + ${activeShop} + '&subject=' + ${stockToShow.getSupplierArticle()}" th:text="${stockToShow.getSupplierArticle()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 1}"
+                               th:title="${'Основной склад:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 2}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 3}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() == 4}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(3).getWarehouseName() + ': ' + stockToShow.getStocks().get(3).getQuantity()}"></a>
+                            <a th:href="${'/account/information?shop=' + activeShop + '&supplierArticle=' + stockToShow.getSupplierArticle()}"
+                               th:text="${stockToShow.getSupplierArticle()}"
+                               th:if="${stockToShow.getStocks().size() != 4 && stockToShow.getStocks().size() != 3 && stockToShow.getStocks().size() != 2 && stockToShow.getStocks().size() != 1}"
+                               th:title="${'Основные склады:' + '&#013'
+                                    + stockToShow.getStocks().get(0).getWarehouseName() + ': ' + stockToShow.getStocks().get(0).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(1).getWarehouseName() + ': ' + stockToShow.getStocks().get(1).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(2).getWarehouseName() + ': ' + stockToShow.getStocks().get(2).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(3).getWarehouseName() + ': ' + stockToShow.getStocks().get(3).getQuantity() + '&#013'
+                                    + stockToShow.getStocks().get(4).getWarehouseName() + ': ' + stockToShow.getStocks().get(4).getQuantity()}"></a>
                         </td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantity()}">Остаток</td>
                         <td class="u-palette-5-light-2 u-table-cell u-table-cell-9" th:text="${stockToShow.getQuantityFull() - stockToShow.getQuantity()}">В пути</td>
@@ -174,6 +312,20 @@
 <!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-11">iPhone 11</td>-->
 <!--                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-12">$499</td>-->
 <!--                </tr>-->
+                </tbody>
+                <tbody>
+                <tr th:if="${stocksToShow.size()} % 2 == 0">
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-13"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-14"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-15"></td>
+                    <td class="u-palette-5-light-2 u-table-cell u-table-cell-16"></td>
+                </tr>
+                <tr>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                    <td class="u-table-cell"></td>
+                </tr>
                 </tbody>
             </table>
         </div>

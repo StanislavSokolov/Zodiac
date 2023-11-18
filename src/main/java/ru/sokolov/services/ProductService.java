@@ -23,5 +23,10 @@ public class ProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
-
+    public List<Product> findBySupplierArticle(String supplierArticle) {
+        return productRepository.findBySupplierArticle(supplierArticle);
+    }
+    public List<Product> findBySubject(String subject) {
+        return productRepository.findBySubject(subject);
+    }
 }

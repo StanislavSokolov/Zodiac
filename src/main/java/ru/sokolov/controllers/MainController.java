@@ -19,3 +19,4 @@ public class MainController {
             return "main/Статистика";
     }
 }
+

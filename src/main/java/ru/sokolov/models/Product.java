@@ -42,6 +42,22 @@ public class Product {
     @Fetch(FetchMode.SELECT)
     private List<Item> items;
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
     public Product() {
     }
 
