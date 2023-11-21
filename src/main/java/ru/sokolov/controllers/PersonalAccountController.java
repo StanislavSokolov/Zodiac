@@ -58,10 +58,9 @@ public class PersonalAccountController {
         model.addAttribute("activeShop", shop);
 
         if (subject != null) {
-
-            List<Product> productList = productService.findBySubject(subject);
-            Product product = productList.get(0);
-            model.addAttribute("product", product.getSubject());
+            List<Product> productsList = productService.findBySubject(subject);
+            model.addAttribute("productsList", productsList);
+            model.addAttribute("media", productsList.get(0).getMedias().get(0).getSrc());
 
             return "account/productCard";
         } else if (supplierArticle != null) {

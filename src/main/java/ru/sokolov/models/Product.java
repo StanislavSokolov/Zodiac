@@ -17,30 +17,51 @@ public class Product {
 
     @Column(name = "supplierArticle")
     private String supplierArticle;
-
+    //    @Column(name = "quantity")
+//    private String quantity;
+//    @Column(name = "quantityFull")
+//    private String quantityFull;
     @Column(name = "nmId")
     private String nmId;
-
     @Column(name = "subject")
     private String subject;
-
+    //    @Column(name = "warehouseName")
+//    private String warehouseName;
     @Column(name = "price")
     private int price;
-
     @Column(name = "discount")
     private int discount;
-
     @Column(name = "shopName")
     private String shopName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "rating")
+    private String rating;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private List<Stock> stocks;
 
-
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private List<Item> items;
+
+    public List<Media> getMedias() {
+        return medias;
+    }
+
+    public void setMedias(List<Media> medias) {
+        this.medias = medias;
+    }
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    private List<Media> medias;
+
+    public Product() {
+    }
 
     public int getPrice() {
         return price;
@@ -58,16 +79,31 @@ public class Product {
         this.discount = discount;
     }
 
-    public Product() {
+    public String getDescription() {
+        return description;
     }
 
-    public Product(String supplierArticle, String nmId, String subject, int price, int discount, String shopName) {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public Product(String supplierArticle, String nmId, String subject, int price, int discount, String shopName, String description, String rating) {
         this.supplierArticle = supplierArticle;
         this.nmId = nmId;
         this.subject = subject;
         this.price = price;
         this.discount = discount;
         this.shopName = shopName;
+        this.description = description;
+        this.rating = rating;
     }
 
     public int getId() {
