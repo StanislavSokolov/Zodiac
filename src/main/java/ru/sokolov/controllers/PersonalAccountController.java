@@ -60,18 +60,14 @@ public class PersonalAccountController {
         if (subject != null) {
             List<Product> productsList = productService.findBySubject(subject);
             model.addAttribute("productsList", productsList);
-            model.addAttribute("media", productsList.get(0).getMedias().get(0).getSrc());
-
             return "account/productCard";
         } else if (supplierArticle != null) {
-            Product product = productService.findBySupplierArticle(supplierArticle).get(0);
-            model.addAttribute("product", product);
-            model.addAttribute("name", product.getSubject() + " арт. (" + product.getSupplierArticle() + ")");
-
+            List<Product> productsList = productService.findBySupplierArticle(supplierArticle);
+            model.addAttribute("productsList", productsList);
             return "account/productCard";
         } else {
-            model.addAttribute("product", "Товар");
-
+            List<Product> productsList = productService.findAll();
+            model.addAttribute("productsList", productsList);
             return "account/productCard";
         }
 

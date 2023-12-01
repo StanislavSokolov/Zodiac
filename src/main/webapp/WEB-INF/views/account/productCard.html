@@ -9,6 +9,39 @@
 <link rel="stylesheet" href="/resources/css/Карточка-товара.css" media="screen">
     <script class="u-script" type="text/javascript" src="/resources/js/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="/resources/js/nicepage.js" defer=""></script>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+          google.charts.load('current', {'packages':['bar']});
+
+          /*[# th:each="product : ${productsList}"]*/
+            google.charts.setOnLoadCallback(drawChart);
+               function drawChart() {
+                     var data = google.visualization.arrayToDataTable([
+                       ['Дата', 'Купили', 'Заказали'],
+                       ['2023-12-01', 24, 25]
+<!--                       <c:forEach var="day" items="${arrayListWeek}">-->
+<!--                          ['${day.date}', ${day.sumSale}, ${day.sumOrder}],-->
+<!--                       </c:forEach>-->
+                     ]);
+
+                     var options = {
+                       chart: {
+                         title: '[[${activeShop}]]',
+                         subtitle: 'График заказов и продаж за текущую неделю',
+                       }
+                     };
+
+                     var chart = new google.charts.Bar(document.getElementById('product'));
+
+                     chart.draw(data, google.charts.Bar.convertOptions(options));
+                 }
+          /*[/]*/
+
+
+
+        </script>
+
     <meta name="generator" content="Nicepage 5.15.1, nicepage.com">
     <meta name="referrer" content="origin">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
@@ -189,29 +222,31 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
               <div class="u-container-layout u-valign-middle u-container-layout-4"><!--product_title-->
                 <h2 class="u-product-control u-text u-text-1">
 <!--                  <a class="u-product-title-link" href="#">&lt;!&ndash;product_title_content&ndash;&gt;Sample Product&lt;!&ndash;/product_title_content&ndash;&gt;</a>-->
-                  <a class="u-product-title-link" th:text="${product.getSupplierArticle()}"><!--product_title_content-->Sample Product<!--/product_title_content--></a>
+                  <a class="u-product-title-link" title="Артикул" th:text="${'Арт. ' + product.getSupplierArticle()}"><!--product_title_content-->Sample Product<!--/product_title_content--></a>
                 </h2><!--/product_title--><!--product_price-->
                 <div class="u-product-control u-product-price u-product-price-2">
+                  <div class="u-price"><!--product_old_price_content-->Средняя оценка товара:<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
                   <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
-                    <div class="u-hide-price u-old-price" style="text-decoration: line-through !important;"><!--product_old_price_content-->$12<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
-                    <div class="u-price u-text-palette-2-base" style="font-size: 1.875rem; font-weight: 700;"><!--product_regular_price_content-->$9.95<!--/product_regular_price_content--></div><!--/product_regular_price-->
+
+                    <div class="u-price u-text-palette-2-base" style="font-size: 1.875rem; font-weight: 700;" title="Рейтинг" th:text="${product.getRating()}"><!--product_regular_price_content-->$9.95<!--/product_regular_price_content--></div><!--/product_regular_price-->
                   </div>
                 </div><!--/product_price-->
                 <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
-                <div class="u-product-control u-product-variations u-product-variations-1"><!--product_variation-->
-                  <div class="u-product-variant">
-                    <label for="product-variant-select-1" class="u-label"><!--product_variation_label_content-->Size<!--/product_variation_label_content--></label>
-                    <div class="u-form-select-wrapper">
-                      <select id="product-variant-select-3" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white"><!--product_variation_option-->
-                        <option value="Item 1"><!--product_variation_option_content-->XL<!--/product_variation_option_content--></option><!--/product_variation_option--><!--product_variation_option-->
-                        <option value="Item 2"><!--product_variation_option_content-->L<!--/product_variation_option_content--></option><!--/product_variation_option--><!--product_variation_option-->
-                        <option value="Item 3"><!--product_variation_option_content-->M<!--/product_variation_option_content--></option><!--/product_variation_option-->
-                      </select>
-                      <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>
-                    </div>
-                  </div><!--/product_variation-->
-                </div><!--/product_variations--><!--product_button--><!--options_json--><!--{"clickType":"add-to-cart","content":"Add to Cart"}--><!--/options_json-->
-                <a href="" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1"><!--product_button_content-->Add to Cart<!--/product_button_content--></a><!--/product_button-->
+                <div id="product" style="width: 400px; height: 300px;"></div>
+<!--                <div class="u-product-control u-product-variations u-product-variations-1">&lt;!&ndash;product_variation&ndash;&gt;-->
+<!--                  <div class="u-product-variant">-->
+<!--                    <label for="product-variant-select-1" class="u-label">&lt;!&ndash;product_variation_label_content&ndash;&gt;Size&lt;!&ndash;/product_variation_label_content&ndash;&gt;</label>-->
+<!--                    <div class="u-form-select-wrapper">-->
+<!--                      <select id="product-variant-select-3" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">&lt;!&ndash;product_variation_option&ndash;&gt;-->
+<!--                        <option value="Item 1">&lt;!&ndash;product_variation_option_content&ndash;&gt;XL&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;&lt;!&ndash;product_variation_option&ndash;&gt;-->
+<!--                        <option value="Item 2">&lt;!&ndash;product_variation_option_content&ndash;&gt;L&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;&lt;!&ndash;product_variation_option&ndash;&gt;-->
+<!--                        <option value="Item 3">&lt;!&ndash;product_variation_option_content&ndash;&gt;M&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;-->
+<!--                      </select>-->
+<!--                      <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>-->
+<!--                    </div>-->
+<!--                  </div>&lt;!&ndash;/product_variation&ndash;&gt;-->
+<!--                </div>&lt;!&ndash;/product_variations&ndash;&gt;&lt;!&ndash;product_button&ndash;&gt;&lt;!&ndash;options_json&ndash;&gt;&lt;!&ndash;{"clickType":"add-to-cart","content":"Add to Cart"}&ndash;&gt;&lt;!&ndash;/options_json&ndash;&gt;-->
+                <a th:href="${'/account/editing?shop=' + activeShop + '&supplierArticle=' + product.getSupplierArticle()}" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1" title="Редактировать карточку товара"><!--product_button_content-->Редактировать<!--/product_button_content--></a><!--/product_button-->
               </div>
             </div>
           </div>
