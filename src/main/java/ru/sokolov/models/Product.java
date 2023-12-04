@@ -2,8 +2,10 @@ package ru.sokolov.models;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import ru.sokolov.com.DayToShow;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -60,6 +62,17 @@ public class Product {
     @Fetch(FetchMode.SELECT)
     private List<Media> medias;
 
+    private transient ArrayList<DayToShow> dayToShows;
+
+    public ArrayList<DayToShow> getDayToShows() {
+            if (dayToShows == null) dayToShows = new ArrayList<>();
+        return dayToShows;
+    }
+
+    public void setDayToShows(ArrayList<DayToShow> dayToShows) {
+        this.dayToShows = dayToShows;
+    }
+
     public Product() {
     }
 
@@ -104,6 +117,7 @@ public class Product {
         this.shopName = shopName;
         this.description = description;
         this.rating = rating;
+//        dayToShows = new ArrayList<>();
     }
 
     public int getId() {

@@ -4,25 +4,23 @@
     <meta charset="utf-8">
     <meta name="keywords" content="Latest projects, New York, ​Trusted By Best Exclusive Agents, ​Exclusive apartments, ​Get Your Dream House">
     <meta name="description" content="">
-    <title>Карточка товара</title>
+    <title th:text="${productsList.get(0).getSubject()}">Магазин</title>
+<!--    <title>Карточка товара</title>-->
     <link rel="stylesheet" href="/resources/css/nicepage.css" media="screen">
 <link rel="stylesheet" href="/resources/css/Карточка-товара.css" media="screen">
     <script class="u-script" type="text/javascript" src="/resources/js/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="/resources/js/nicepage.js" defer=""></script>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript">
+  <script type="text/javascript" th:each="product : ${productsList}">
           google.charts.load('current', {'packages':['bar']});
-
-          /*[# th:each="product : ${productsList}"]*/
-            google.charts.setOnLoadCallback(drawChart);
-               function drawChart() {
+            google.charts.setOnLoadCallback(drawChart[[${product.getNmId()}]]);
+               function drawChart[[${product.getNmId()}]]() {
                      var data = google.visualization.arrayToDataTable([
                        ['Дата', 'Купили', 'Заказали'],
-                       ['2023-12-01', 24, 25]
-<!--                       <c:forEach var="day" items="${arrayListWeek}">-->
-<!--                          ['${day.date}', ${day.sumSale}, ${day.sumOrder}],-->
-<!--                       </c:forEach>-->
+                       /*[# th:each="dayToShow : ${product.getDayToShows()}"]*/
+                          [ '[[${product.getDayToShows().size()}]]', 5, 7],
+                       /*[/]*/
                      ]);
 
                      var options = {
@@ -32,11 +30,11 @@
                        }
                      };
 
-                     var chart = new google.charts.Bar(document.getElementById('product'));
+                     var chart = new google.charts.Bar(document.getElementById('art[[${product.getNmId()}]]'));
 
                      chart.draw(data, google.charts.Bar.convertOptions(options));
                  }
-          /*[/]*/
+
 
 
 
@@ -232,7 +230,7 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                   </div>
                 </div><!--/product_price-->
                 <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
-                <div id="product" style="width: 400px; height: 300px;"></div>
+                <div th:id="${'art' + product.getNmId()}" style="width: 500px; height: 300px;"></div>
 <!--                <div class="u-product-control u-product-variations u-product-variations-1">&lt;!&ndash;product_variation&ndash;&gt;-->
 <!--                  <div class="u-product-variant">-->
 <!--                    <label for="product-variant-select-1" class="u-label">&lt;!&ndash;product_variation_label_content&ndash;&gt;Size&lt;!&ndash;/product_variation_label_content&ndash;&gt;</label>-->
