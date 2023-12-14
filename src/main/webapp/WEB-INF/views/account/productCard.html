@@ -10,16 +10,16 @@
 <link rel="stylesheet" href="/resources/css/Карточка-товара.css" media="screen">
     <script class="u-script" type="text/javascript" src="/resources/js/jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="/resources/js/nicepage.js" defer=""></script>
-
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript" th:each="product : ${productsList}">
+  <script type="text/javascript" th:inline="javascript">
           google.charts.load('current', {'packages':['bar']});
-            google.charts.setOnLoadCallback(drawChart[[${product.getNmId()}]]);
-               function drawChart[[${product.getNmId()}]]() {
+            /*[# th:each="product : ${productsList}"]*/
+            google.charts.setOnLoadCallback(/*[# th:utext="${'drawChart' + product.getNmId()}"]*/ /*[/]*/);
+               function /*[# th:utext="${'drawChart' + product.getNmId() + '()'}"]*/ /*[/]*/ {
                      var data = google.visualization.arrayToDataTable([
                        ['Дата', 'Купили', 'Заказали'],
                        /*[# th:each="dayToShow : ${product.getDayToShows()}"]*/
-                          [ '[[${product.getDayToShows().size()}]]', 5, 7],
+                          [ /*[# th:utext="|\'${dayToShow.getDate()}\'|"]*/ /*[/]*/, /*[[${dayToShow.getOrdered()}]]*/, /*[[${dayToShow.getSold()}]]*/],
                        /*[/]*/
                      ]);
 
@@ -30,12 +30,12 @@
                        }
                      };
 
-                     var chart = new google.charts.Bar(document.getElementById('art[[${product.getNmId()}]]'));
+                     var chart = new google.charts.Bar(document.getElementById(/*[# th:utext="|\'art${product.getNmId()}\'|"]*/ /*[/]*/));
 
                      chart.draw(data, google.charts.Bar.convertOptions(options));
                  }
 
-
+            /*[/]*/
 
 
         </script>

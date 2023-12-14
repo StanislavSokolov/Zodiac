@@ -255,11 +255,6 @@
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
                                 <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
                                    th:text="${itemToShow.getSupplierArticle()}"
-                                   th:if="${itemToShow.getWareHouses().size() == 1}"
-                                   th:title="${'С какого склада заказали:' + '&#013'
-                                            + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity()}"></a>
-                                <a th:href="'/account/information?shop=' + ${activeShop} + '&supplierArticle=' + ${itemToShow.getSupplierArticle()}"
-                                   th:text="${itemToShow.getSupplierArticle()}"
                                    th:if="${itemToShow.getWareHouses().size() == 2}"
                                    th:title="${'С каких складов заказали:' + '&#013'
                                             + itemToShow.getWareHouses().get(0).getName() + ': ' + itemToShow.getWareHouses().get(0).getQuantity() + '&#013'
