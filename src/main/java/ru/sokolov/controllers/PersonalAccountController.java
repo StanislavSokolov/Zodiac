@@ -59,30 +59,34 @@ public class PersonalAccountController {
 
         if (subject != null) {
             List<Product> productsList = productService.findBySubject(subject);
-            for (Product p : productsList) {
-                int days = -6;
-                for (int i = days; i < 1; i++) {
-                    p.getDayToShows().add(new DayToShow(p.getItemsOrdered(Data.getData(i)),
-                            p.getItemsSold(Data.getData(i)),
-                            0,
-                            0,
-                            Data.getData(i)));
-                }
-                p.setItemsOrderedAllFromLastPeriod(days);
-                p.setItemsSoldAllFromLastPeriod(days);
-            }
-            model.addAttribute("productsList", productsList);
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else if (supplierArticle != null) {
             List<Product> productsList = productService.findBySupplierArticle(supplierArticle);
-            model.addAttribute("productsList", productsList);
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else {
-            List<Product> productsList = productService.findAll();
-            model.addAttribute("productsList", productsList);
+            List<Product> productsList = productService.findBySupplierArticleNotLike("");
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         }
 
+    }
+
+    private List<Product> createProductsList(List<Product> productsList) {
+        for (Product p : productsList) {
+            int days = -6;
+            for (int i = days; i < 1; i++) {
+                p.getDayToShows().add(new DayToShow(p.getItemsOrdered(Data.getData(i)),
+                        p.getItemsSold(Data.getData(i)),
+                        0,
+                        0,
+                        Data.getData(i)));
+            }
+            p.setItemsOrderedAllFromLastPeriod(days);
+            p.setItemsSoldAllFromLastPeriod(days);
+        }
+        return productsList;
     }
 
     @GetMapping("/stock")

@@ -10,4 +10,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByNmId(String nmId);
     List<Product> findBySupplierArticle(String supplierArticle);
     List<Product> findBySubject(String subject);
+    List<Product> findBySupplierArticleNotLike(String supplierArticle);
 }

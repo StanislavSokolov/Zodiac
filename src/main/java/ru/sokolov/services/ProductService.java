@@ -23,6 +23,9 @@ public class ProductService {
     public List<Product> findAll() {
         return productRepository.findAll();
     }
+    public List<Product> findBySupplierArticleNotLike(String supplierArticle) {
+        return productRepository.findBySupplierArticleNotLike(supplierArticle);
+    }
     public List<Product> findBySupplierArticle(String supplierArticle) {
         return productRepository.findBySupplierArticle(supplierArticle);
     }
