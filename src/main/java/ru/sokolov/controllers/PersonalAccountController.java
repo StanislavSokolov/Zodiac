@@ -60,18 +60,13 @@ public class PersonalAccountController {
         if (subject != null) {
             List<Product> productsList = productService.findBySubject(subject);
             for (Product p : productsList) {
-                int days = -7;
-                for (int i = days; i < 0; i++) {
+                int days = -6;
+                for (int i = days; i < 1; i++) {
                     p.getDayToShows().add(new DayToShow(p.getItemsOrdered(Data.getData(i)),
                             p.getItemsSold(Data.getData(i)),
                             0,
                             0,
                             Data.getData(i)));
-//                    p.getDayToShows().add(new DayToShow(itemService.findByCdateAndStatus(Data.getData(i), "ordered").size(),
-//                            itemService.findBySdateAndStatus(Data.getData(i), "sold").size(),
-//                            0,
-//                            0,
-//                            Data.getData(i)));
                 }
                 p.setItemsOrderedAllFromLastPeriod(days);
                 p.setItemsSoldAllFromLastPeriod(days);

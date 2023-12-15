@@ -195,22 +195,20 @@ public class Product {
 
     public void setItemsOrderedAllFromLastPeriod(int lastPeriod) {
         int sum = 0;
-        for (Item i: items) {
-            for (int j = lastPeriod; j < 1; j++) {
-                if (i.getCdate().equals(Data.getData(lastPeriod))) sum++;
+        for (int j = lastPeriod; j < 1; j++) {
+            for (Item i: items) {
+                if (i.getCdate().equals(Data.getData(j))) sum++;
             }
-
         }
         orderedAllFromLastPeriod = sum;
     }
 
     public void setItemsSoldAllFromLastPeriod(int lastPeriod) {
         int sum = 0;
-        for (Item i: items) {
-            for (int j = lastPeriod; j < 1; j++) {
-                if (i.getSdate().equals(Data.getData(lastPeriod))) sum++;
+        for (int j = lastPeriod; j < 1; j++) {
+            for (Item i: items) {
+                if (i.getSdate().equals(Data.getData(j))) sum++;
             }
-
         }
         soldAllFromLastPeriod = sum;
     }

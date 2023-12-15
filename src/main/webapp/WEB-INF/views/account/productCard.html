@@ -19,7 +19,7 @@
                      var data = google.visualization.arrayToDataTable([
                        ['Дата', /*[# th:utext="|\'Купили (${product.getItemsSoldAllFromLastPeriod()})\'|"]*/ /*[/]*/, /*[# th:utext="|\'Заказали (${product.getItemsOrderedAllFromLastPeriod()})\'|"]*/ /*[/]*/],
                        /*[# th:each="dayToShow : ${product.getDayToShows()}"]*/
-                          [ /*[# th:utext="|\'${dayToShow.getDate()}\'|"]*/ /*[/]*/, /*[[${dayToShow.getOrdered()}]]*/, /*[[${dayToShow.getSold()}]]*/],
+                          [ /*[# th:utext="|\'${dayToShow.getDate()}\'|"]*/ /*[/]*/, /*[[${dayToShow.getSold()}]]*/, /*[[${dayToShow.getOrdered()}]]*/],
                        /*[/]*/
                      ]);
 
