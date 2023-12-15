@@ -58,24 +58,35 @@ public class PersonalAccountController {
         model.addAttribute("activeShop", shop);
 
         if (subject != null) {
-
-            List<Product> productList = productService.findBySubject(subject);
-            Product product = productList.get(0);
-            model.addAttribute("product", product.getSubject());
-
+            List<Product> productsList = productService.findBySubject(subject);
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else if (supplierArticle != null) {
-            Product product = productService.findBySupplierArticle(supplierArticle).get(0);
-            model.addAttribute("product", product);
-            model.addAttribute("name", product.getSubject() + " арт. (" + product.getSupplierArticle() + ")");
-
+            List<Product> productsList = productService.findBySupplierArticle(supplierArticle);
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else {
-            model.addAttribute("product", "Товар");
-
+            List<Product> productsList = productService.findBySupplierArticleNotLike("");
+            model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         }
 
+    }
+
+    private List<Product> createProductsList(List<Product> productsList) {
+        for (Product p : productsList) {
+            int days = -6;
+            for (int i = days; i < 1; i++) {
+                p.getDayToShows().add(new DayToShow(p.getItemsOrdered(Data.getData(i)),
+                        p.getItemsSold(Data.getData(i)),
+                        0,
+                        0,
+                        Data.getData(i)));
+            }
+            p.setItemsOrderedAllFromLastPeriod(days);
+            p.setItemsSoldAllFromLastPeriod(days);
+        }
+        return productsList;
     }
 
     @GetMapping("/stock")
