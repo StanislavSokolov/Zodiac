@@ -32,4 +32,10 @@ public class ProductService {
     public List<Product> findBySubject(String subject) {
         return productRepository.findBySubject(subject);
     }
+    public List<Product> findBySupplierArticleAndShopName(String supplierArticle, String shopName) {
+        return productRepository.findBySupplierArticleAndShopName(supplierArticle, shopName);
+    }
+    public List<Product> findBySubjectAndShopName(String subject, String shopName) {
+        return productRepository.findBySubjectAndShopName(subject, shopName);
+    }
 }

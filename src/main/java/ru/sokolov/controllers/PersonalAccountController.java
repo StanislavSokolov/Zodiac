@@ -41,8 +41,40 @@ public class PersonalAccountController {
         this.userValidatorTokenOzon = userValidatorTokenOzon;
     }
 
+    @GetMapping("/editing")
+    public String editingPage(@RequestParam("shop") String shop,
+                           @RequestParam(value = "subject", required = false) String subject,
+                           @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
+                           @ModelAttribute("user") User user,
+                           Model model,
+                           @CookieValue(value = "Authorization", required = false) String authorization,
+                           @CookieValue(value = "Client", required = false) String client) {
+
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+
+        User userDB = userService.findOne(Integer.valueOf(client));
+
+        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("activeShop", shop);
+
+        if (supplierArticle != null) {
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+            model.addAttribute("productsList", createProductsList(productsList));
+            return "account/editingCard";
+        } else {
+            return "account/productCard";
+        }
+
+    }
+
+    private String shopConverter(String shop) {
+        if (shop.equals("Wildberries")) return "WB";
+        else if (shop.equals("Ozon")) return "OZON";
+        return "WB";
+    }
+
     @GetMapping("/information")
-    public String itemPage(@RequestParam("shop") String shop,
+    public String informationPage(@RequestParam("shop") String shop,
                            @RequestParam(value = "subject", required = false) String subject,
                            @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
                            @ModelAttribute("user") User user,
@@ -58,15 +90,16 @@ public class PersonalAccountController {
         model.addAttribute("activeShop", shop);
 
         if (subject != null) {
-            List<Product> productsList = productService.findBySubject(subject);
+            List<Product> productsList = productService.findBySubjectAndShopName(subject, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else if (supplierArticle != null) {
-            List<Product> productsList = productService.findBySupplierArticle(supplierArticle);
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else {
             List<Product> productsList = productService.findBySupplierArticleNotLike("");
+            productsList.get(0).setSubject("Все товары");
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         }
