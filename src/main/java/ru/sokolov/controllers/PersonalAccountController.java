@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.*;
 import ru.sokolov.models.*;
 import ru.sokolov.services.*;
+import ru.sokolov.util.RequestValidator;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
@@ -30,8 +31,9 @@ public class PersonalAccountController {
     private final YearService yearService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
+    private final RequestValidator requestValidator;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
@@ -39,6 +41,7 @@ public class PersonalAccountController {
         this.yearService = yearService;
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
+        this.requestValidator = requestValidator;
     }
 
     @GetMapping("/editing")
@@ -65,6 +68,21 @@ public class PersonalAccountController {
             return "account/productCard";
         }
 
+    }
+
+    @PostMapping("/editing/price")
+    public String editingPrice(@ModelAttribute("request") @Valid Request request, BindingResult bindingResult,
+                               @CookieValue(value = "Authorization", required = false) String authorization,
+                               @CookieValue(value = "Client", required = false) String client) {
+        request.setClientId(Integer.valueOf(client));
+
+        requestValidator.validate(request, bindingResult);
+
+        if (bindingResult.hasErrors())
+            return "/account/settings";
+
+//        productService.updatePrice(Integer.valueOf(client), user);
+        return "redirect:/account/stock"; // и переходим в лк (в раздел настройки)
     }
 
     private String shopConverter(String shop) {
