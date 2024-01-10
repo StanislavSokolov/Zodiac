@@ -81,9 +81,6 @@ public class PersonalAccountController {
 
         requestValidator.validate(request, bindingResult);
 
-        System.out.println(request.getArticle());
-        System.out.println(request.getSupplierArticle());
-
         if (bindingResult.hasErrors()) {
             User userDB = userService.findOne(Integer.valueOf(client));
 
@@ -95,8 +92,6 @@ public class PersonalAccountController {
 
             return "/account/editingCard";
         }
-
-
 
         requestService.save(request);
 

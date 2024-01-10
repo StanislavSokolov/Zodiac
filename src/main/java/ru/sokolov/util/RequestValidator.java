@@ -29,7 +29,20 @@ public class RequestValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Request request = (Request) o;
-        if (!request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) errors.rejectValue("dataToChange", "", "Поле должно состоять из цифр, которых не может быть больше пяти");
+        if (request.getMethod().matches("prices")) {
+            if (request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) {
+                if (Integer.parseInt(request.getDataToChange()) > 10000) errors.rejectValue("dataToChange", "", "Значение не должно превышать 10000");
+                if (Integer.parseInt(request.getDataToChange()) < 0) errors.rejectValue("dataToChange", "", "Значение не может быть отрицательным");
+            } else errors.rejectValue("dataToChange", "", "Поле должно состоять только из цифр, количество которых не может быть больше пяти");
+        }
+        if (request.getMethod().matches("updateDiscounts")) {
+            if (request.getDataToChange().matches("^(?=.*[0-9]).{0,2}$")) {
+                if (Integer.parseInt(request.getDataToChange()) > 99) errors.rejectValue("dataToChange", "", "Значение не должно превышать 99");
+                if (Integer.parseInt(request.getDataToChange()) < 0) errors.rejectValue("dataToChange", "", "Значение не может быть отрицательным");
+            } else errors.rejectValue("dataToChange", "", "Поле должно состоять только из цифр, количество которых не может быть больше двух");
+        }
+
+//        if (!request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) errors.rejectValue("dataToChange", "", "Поле должно состоять из цифр, которых не может быть больше пяти");
 //        User user = userService.findOne(request.getClientId());
 //        if (user == null) errors.rejectValue("dataToChange", "", "Ошибка идентификатора клиента");
 //        else {

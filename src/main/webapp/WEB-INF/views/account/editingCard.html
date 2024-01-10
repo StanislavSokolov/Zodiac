@@ -233,8 +233,8 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                   <div class="u-expanded-width u-form">
                     <form th:method="POST" th:action="@{/account/editing/price}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                       <div class="u-form-group u-label-top u-form-group-1">
-                        <label for="text-ef21" class="u-label" th:text="${'Текущая цена: ' + product.getPrice() + ' руб.'}">Пароль</label>
-                        <input type="text" th:field="*{dataToChange}" id="text-ef21" placeholder="Введите новую цену" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                        <label for="price" class="u-label" th:text="${'Текущая цена: ' + product.getPrice() + ' руб.'}">Пароль</label>
+                        <input type="text" th:field="*{dataToChange}" id="price" placeholder="Установите новую цену" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
                         <div style="color:red" th:if="${#fields.hasErrors('dataToChange')}" th:errors="*{dataToChange}">Password Error</div>
                         <br/>
                       </div>
@@ -251,26 +251,39 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                         <input type="hidden" th:attr="name='supplierArticle'" th:value="${product.getSupplierArticle()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
                       </div>
                       <div class="u-align-left u-form-group u-form-submit u-label-top">
-                        <a href="/price" class="u-btn u-btn-submit u-button-style">Установить новую цену</a>
+                        <a href="/price" class="u-btn u-btn-submit u-button-style">Установить цену</a>
                         <input type="submit" value="submit" class="u-form-control-hidden">
                       </div>
                     </form>
                   </div>
-<!--              </div>-->
-<!--                <div class="u-product-control u-product-variations u-product-variations-1">&lt;!&ndash;product_variation&ndash;&gt;-->
-<!--                  <div class="u-product-variant">-->
-<!--                    <label for="product-variant-select-1" class="u-label">&lt;!&ndash;product_variation_label_content&ndash;&gt;Size&lt;!&ndash;/product_variation_label_content&ndash;&gt;</label>-->
-<!--                    <div class="u-form-select-wrapper">-->
-<!--                      <select id="product-variant-select-3" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">&lt;!&ndash;product_variation_option&ndash;&gt;-->
-<!--                        <option value="Item 1">&lt;!&ndash;product_variation_option_content&ndash;&gt;XL&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;&lt;!&ndash;product_variation_option&ndash;&gt;-->
-<!--                        <option value="Item 2">&lt;!&ndash;product_variation_option_content&ndash;&gt;L&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;&lt;!&ndash;product_variation_option&ndash;&gt;-->
-<!--                        <option value="Item 3">&lt;!&ndash;product_variation_option_content&ndash;&gt;M&lt;!&ndash;/product_variation_option_content&ndash;&gt;</option>&lt;!&ndash;/product_variation_option&ndash;&gt;-->
-<!--                      </select>-->
-<!--                      <svg class="u-caret u-caret-svg" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="16px" height="16px" viewBox="0 0 16 16" style="fill:currentColor;" xml:space="preserve"><polygon class="st0" points="8,12 2,4 14,4 "></polygon></svg>-->
-<!--                    </div>-->
-<!--                  </div>&lt;!&ndash;/product_variation&ndash;&gt;-->
-<!--                </div>&lt;!&ndash;/product_variations&ndash;&gt;&lt;!&ndash;product_button&ndash;&gt;&lt;!&ndash;options_json&ndash;&gt;&lt;!&ndash;{"clickType":"add-to-cart","content":"Add to Cart"}&ndash;&gt;&lt;!&ndash;/options_json&ndash;&gt;-->
-<!--                <a th:href="${'/account/editing?shop=' + activeShop + '&supplierArticle=' + product.getSupplierArticle()}" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1" title="Редактировать карточку товара">&lt;!&ndash;product_button_content&ndash;&gt;Редактировать&lt;!&ndash;/product_button_content&ndash;&gt;</a>&lt;!&ndash;/product_button&ndash;&gt;-->
+                <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
+                <div class="u-expanded-width u-form">
+                  <form th:method="POST" th:action="@{/account/editing/price}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-2" style="padding: 10px;">
+                    <div class="u-form-group u-label-top u-form-group-1">
+                      <label for="discount" class="u-label" th:text="${'Текущая скидка: ' + product.getDiscount() + ' %'}">Пароль</label>
+<!--                      <label for="discount" class="u-label" th:text="${'Текущая скидка: ' + (100 - product.getDiscount()) + ' %'}">Пароль</label>-->
+                      <input type="text" th:field="*{dataToChange}" id="discount" placeholder="Установите новую скидку" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                      <div style="color:red" th:if="${#fields.hasErrors('dataToChange')}" th:errors="*{dataToChange}">Password Error</div>
+                      <br/>
+                    </div>
+                    <div class="u-form-group u-label-top u-form-group-2">
+                      <input type="hidden" th:attr="name='shop'" th:value="${product.getShopName()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    </div>
+                    <div class="u-form-group u-label-top u-form-group-2">
+                      <input type="hidden" th:attr="name='method'" value="updateDiscounts" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    </div>
+                    <div class="u-form-group u-label-top u-form-group-2">
+                      <input type="hidden" th:attr="name='article'" th:value="${product.getNmId()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    </div>
+                    <div class="u-form-group u-label-top u-form-group-2">
+                      <input type="hidden" th:attr="name='supplierArticle'" th:value="${product.getSupplierArticle()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                    </div>
+                    <div class="u-align-left u-form-group u-form-submit u-label-top">
+                      <a href="/price" class="u-btn u-btn-submit u-button-style">Установить скидку</a>
+                      <input type="submit" value="submit" class="u-form-control-hidden">
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
