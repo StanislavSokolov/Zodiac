@@ -46,9 +46,8 @@ public class PersonalAccountController {
 
     @GetMapping("/editing")
     public String editingPage(@RequestParam("shop") String shop,
-                           @RequestParam(value = "subject", required = false) String subject,
-                           @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
-                           @ModelAttribute("user") User user,
+                           @RequestParam(value = "supplierArticle") String supplierArticle,
+                           @ModelAttribute("request") Request request,
                            Model model,
                            @CookieValue(value = "Authorization", required = false) String authorization,
                            @CookieValue(value = "Client", required = false) String client) {
@@ -72,17 +71,25 @@ public class PersonalAccountController {
 
     @PostMapping("/editing/price")
     public String editingPrice(@ModelAttribute("request") @Valid Request request, BindingResult bindingResult,
+                               Model model,
                                @CookieValue(value = "Authorization", required = false) String authorization,
                                @CookieValue(value = "Client", required = false) String client) {
         request.setClientId(Integer.valueOf(client));
 
         requestValidator.validate(request, bindingResult);
 
-        if (bindingResult.hasErrors())
-            return "/account/settings";
+        if (bindingResult.hasErrors()) {
+            User userDB = userService.findOne(Integer.valueOf(client));
 
-//        productService.updatePrice(Integer.valueOf(client), user);
-        return "redirect:/account/stock"; // и переходим в лк (в раздел настройки)
+            model.addAttribute("shops", Auth.getShops(userDB));
+            model.addAttribute("activeShop", request.getShop());
+
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getArticle(), request.getShop());
+            model.addAttribute("productsList", createProductsList(productsList));
+
+            return "/account/editingCard";
+        }
+        return "redirect:/account/editing?shop=Wildberries&supplierArticle=" + request.getArticle();
     }
 
     private String shopConverter(String shop) {

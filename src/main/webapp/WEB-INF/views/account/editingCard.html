@@ -230,7 +230,30 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                   </div>
                 </div><!--/product_price-->
                 <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
-                <div th:id="${'art' + product.getNmId()}" style="width: 485px; height: 300px;"></div>
+                  <div class="u-expanded-width u-form">
+                    <form th:method="POST" th:action="@{/account/editing/price}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+                      <div class="u-form-group u-label-top u-form-group-1">
+                        <label for="text-ef21" class="u-label" th:text="${'Текущая цена: ' + product.getPrice() + ' руб.'}">Пароль</label>
+                        <input type="text" th:field="*{dataToChange}" id="text-ef21" placeholder="Введите новую цену" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                        <div style="color:red" th:if="${#fields.hasErrors('dataToChange')}" th:errors="*{dataToChange}">Password Error</div>
+                        <br/>
+                      </div>
+                      <div class="u-form-group u-label-top u-form-group-2">
+                        <input type="hidden" th:attr="name='shop'" th:value="${product.getShopName()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                      </div>
+                      <div class="u-form-group u-label-top u-form-group-2">
+                        <input type="hidden" th:attr="name='method'" value="prices" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                      </div>
+                      <div class="u-form-group u-label-top u-form-group-2">
+                        <input type="hidden" th:attr="name='article'" th:value="${product.getSupplierArticle()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
+                      </div>
+                      <div class="u-align-left u-form-group u-form-submit u-label-top">
+                        <a href="/price" class="u-btn u-btn-submit u-button-style">Установить новую цену</a>
+                        <input type="submit" value="submit" class="u-form-control-hidden">
+                      </div>
+                    </form>
+                  </div>
+<!--              </div>-->
 <!--                <div class="u-product-control u-product-variations u-product-variations-1">&lt;!&ndash;product_variation&ndash;&gt;-->
 <!--                  <div class="u-product-variant">-->
 <!--                    <label for="product-variant-select-1" class="u-label">&lt;!&ndash;product_variation_label_content&ndash;&gt;Size&lt;!&ndash;/product_variation_label_content&ndash;&gt;</label>-->
@@ -244,7 +267,7 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
 <!--                    </div>-->
 <!--                  </div>&lt;!&ndash;/product_variation&ndash;&gt;-->
 <!--                </div>&lt;!&ndash;/product_variations&ndash;&gt;&lt;!&ndash;product_button&ndash;&gt;&lt;!&ndash;options_json&ndash;&gt;&lt;!&ndash;{"clickType":"add-to-cart","content":"Add to Cart"}&ndash;&gt;&lt;!&ndash;/options_json&ndash;&gt;-->
-                <a th:href="${'/account/editing?shop=' + activeShop + '&supplierArticle=' + product.getSupplierArticle()}" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1" title="Редактировать карточку товара"><!--product_button_content-->Редактировать<!--/product_button_content--></a><!--/product_button-->
+<!--                <a th:href="${'/account/editing?shop=' + activeShop + '&supplierArticle=' + product.getSupplierArticle()}" class="u-border-2 u-border-black u-btn u-button-style u-hover-black u-none u-product-control u-text-black u-text-hover-white u-btn-1" title="Редактировать карточку товара">&lt;!&ndash;product_button_content&ndash;&gt;Редактировать&lt;!&ndash;/product_button_content&ndash;&gt;</a>&lt;!&ndash;/product_button&ndash;&gt;-->
               </div>
             </div>
           </div>

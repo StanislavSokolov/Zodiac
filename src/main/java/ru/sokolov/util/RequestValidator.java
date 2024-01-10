@@ -29,17 +29,17 @@ public class RequestValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         Request request = (Request) o;
-        if (!request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) errors.rejectValue("price", "", "Поле должно состоять из цифр, которых не может быть больше пяти");
-        User user = userService.findOne(request.getClientId());
-        if (user == null) errors.rejectValue("price", "", "Ошибка идентификатора клиента");
-        else {
-            if (request.getShop().equals("wb")) {
-                if (user.getTokenStandartWB() == null) errors.rejectValue("price", "", "Ошибка токена магазина");
-            }
-            if (request.getShop().equals("ozon")) {
-                if (user.getTokenStatisticOzon() == null) errors.rejectValue("price", "", "Ошибка токена магазина");
-            }
-        }
+        if (!request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) errors.rejectValue("dataToChange", "", "Поле должно состоять из цифр, которых не может быть больше пяти");
+//        User user = userService.findOne(request.getClientId());
+//        if (user == null) errors.rejectValue("dataToChange", "", "Ошибка идентификатора клиента");
+//        else {
+//            if (request.getShop().equals("wb")) {
+//                if (user.getTokenStandartWB() == null) errors.rejectValue("dataToChange", "", "Ошибка токена магазина");
+//            }
+//            if (request.getShop().equals("ozon")) {
+//                if (user.getTokenStatisticOzon() == null) errors.rejectValue("dataToChange", "", "Ошибка токена магазина");
+//            }
+//        }
 
 
     }
