@@ -3,6 +3,7 @@ package ru.sokolov.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.sokolov.models.Person;
 import ru.sokolov.models.Request;
 import ru.sokolov.repositories.RequestRepository;
 
@@ -23,4 +24,9 @@ public class RequestService {
 
     @Transactional
     public void delete(int id) { requestRepository.deleteById(id); }
+
+    @Transactional
+    public void save(Request request) {
+        requestRepository.save(request);
+    }
 }

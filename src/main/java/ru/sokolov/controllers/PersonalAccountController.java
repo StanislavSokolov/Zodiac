@@ -29,16 +29,19 @@ public class PersonalAccountController {
     private final ItemService itemService;
     private final StockService stockService;
     private final YearService yearService;
+    private final RequestService requestService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
     private final RequestValidator requestValidator;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
         this.stockService = stockService;
         this.yearService = yearService;
+        this.requestService = requestService;
+
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
         this.requestValidator = requestValidator;
@@ -82,20 +85,25 @@ public class PersonalAccountController {
             User userDB = userService.findOne(Integer.valueOf(client));
 
             model.addAttribute("shops", Auth.getShops(userDB));
-            model.addAttribute("activeShop", request.getShop());
+            model.addAttribute("activeShop", shopConverter(request.getShop()));
 
             List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getArticle(), request.getShop());
             model.addAttribute("productsList", createProductsList(productsList));
 
             return "/account/editingCard";
         }
-        return "redirect:/account/editing?shop=Wildberries&supplierArticle=" + request.getArticle();
+
+        requestService.save(request);
+
+        return "redirect:/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getArticle();
     }
 
     private String shopConverter(String shop) {
-        if (shop.equals("Wildberries")) return "WB";
-        else if (shop.equals("Ozon")) return "OZON";
-        return "WB";
+        if (shop.equals("Wildberries")) return "wb";
+        else if (shop.equals("Ozon")) return "ozon";
+        else if (shop.equals("wb")) return "Wildberries";
+        else if (shop.equals("ozon")) return "Ozon";
+        return "wb";
     }
 
     @GetMapping("/information")
