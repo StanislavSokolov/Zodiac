@@ -81,21 +81,26 @@ public class PersonalAccountController {
 
         requestValidator.validate(request, bindingResult);
 
+        System.out.println(request.getArticle());
+        System.out.println(request.getSupplierArticle());
+
         if (bindingResult.hasErrors()) {
             User userDB = userService.findOne(Integer.valueOf(client));
 
             model.addAttribute("shops", Auth.getShops(userDB));
             model.addAttribute("activeShop", shopConverter(request.getShop()));
 
-            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getArticle(), request.getShop());
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getSupplierArticle(), request.getShop());
             model.addAttribute("productsList", createProductsList(productsList));
 
             return "/account/editingCard";
         }
 
+
+
         requestService.save(request);
 
-        return "redirect:/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getArticle();
+        return "redirect:/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getSupplierArticle();
     }
 
     private String shopConverter(String shop) {

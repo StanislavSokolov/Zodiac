@@ -84,4 +84,13 @@ public class Request {
     public Request() {
     }
 
+    private transient String supplierArticle;
+
+    public String getSupplierArticle() {
+        return supplierArticle;
+    }
+
+    public void setSupplierArticle(String supplierArticle) {
+        this.supplierArticle = supplierArticle;
+    }
 }
