@@ -72,7 +72,7 @@ public class PersonalAccountController {
 
     }
 
-    @PostMapping("/editing/price")
+    @PostMapping("/editing/card")
     public String editingPrice(@ModelAttribute("request") @Valid Request request, BindingResult bindingResult,
                                Model model,
                                @CookieValue(value = "Authorization", required = false) String authorization,

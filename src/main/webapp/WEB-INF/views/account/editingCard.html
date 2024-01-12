@@ -223,19 +223,16 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                   <a class="u-product-title-link" title="Артикул" th:text="${'Арт. ' + product.getSupplierArticle()}"><!--product_title_content-->Sample Product<!--/product_title_content--></a>
                 </h2><!--/product_title--><!--product_price-->
                 <div class="u-product-control u-product-price u-product-price-2">
-                  <div class="u-price"><!--product_old_price_content-->Средняя оценка товара:<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
-                  <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
-
-                    <div class="u-price u-text-palette-2-base" style="font-size: 1.875rem; font-weight: 700;" title="Рейтинг" th:text="${product.getRating()}"><!--product_regular_price_content-->$9.95<!--/product_regular_price_content--></div><!--/product_regular_price-->
-                  </div>
+                  <div class="u-price"><!--product_old_price_content--><!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
+                  <div class="u-price-wrapper u-spacing-10"></div>
                 </div><!--/product_price-->
                 <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
                   <div class="u-expanded-width u-form">
-                    <form th:method="POST" th:action="@{/account/editing/price}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
+                    <form th:method="POST" th:action="@{/account/editing/card}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-1" style="padding: 10px;">
                       <div class="u-form-group u-label-top u-form-group-1">
                         <label for="price" class="u-label" th:text="${'Текущая цена: ' + product.getPrice() + ' руб.'}">Пароль</label>
-                        <input type="text" th:field="*{dataToChange}" id="price" placeholder="Установите новую цену" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
-                        <div style="color:red" th:if="${#fields.hasErrors('dataToChange')}" th:errors="*{dataToChange}">Password Error</div>
+                        <input type="text" th:field="*{price}" id="price" placeholder="Установите новую цену" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                        <div style="color:red" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Password Error</div>
                         <br/>
                       </div>
                       <div class="u-form-group u-label-top u-form-group-2">
@@ -251,19 +248,19 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                         <input type="hidden" th:attr="name='supplierArticle'" th:value="${product.getSupplierArticle()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
                       </div>
                       <div class="u-align-left u-form-group u-form-submit u-label-top">
-                        <a href="/price" class="u-btn u-btn-submit u-button-style">Установить цену</a>
+                        <a href="/card" class="u-btn u-btn-submit u-button-style">Установить цену</a>
                         <input type="submit" value="submit" class="u-form-control-hidden">
                       </div>
                     </form>
                   </div>
                 <div class="u-border-2 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div><!--product_variations-->
                 <div class="u-expanded-width u-form">
-                  <form th:method="POST" th:action="@{/account/editing/price}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-2" style="padding: 10px;">
+                  <form th:method="POST" th:action="@{/account/editing/card}" th:object="${request}" class="u-clearfix u-form-spacing-10 u-inner-form" name="form-2" style="padding: 10px;">
                     <div class="u-form-group u-label-top u-form-group-1">
                       <label for="discount" class="u-label" th:text="${'Текущая скидка: ' + product.getDiscount() + ' %'}">Пароль</label>
 <!--                      <label for="discount" class="u-label" th:text="${'Текущая скидка: ' + (100 - product.getDiscount()) + ' %'}">Пароль</label>-->
-                      <input type="text" th:field="*{dataToChange}" id="discount" placeholder="Установите новую скидку" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
-                      <div style="color:red" th:if="${#fields.hasErrors('dataToChange')}" th:errors="*{dataToChange}">Password Error</div>
+                      <input type="text" th:field="*{discount}" id="discount" placeholder="Установите новую скидку" name="price_1" class="u-border-none u-input u-input-rectangle u-radius-20" required="required"/>
+                      <div style="color:red" th:if="${#fields.hasErrors('discount')}" th:errors="*{discount}">Password Error</div>
                       <br/>
                     </div>
                     <div class="u-form-group u-label-top u-form-group-2">
@@ -279,7 +276,7 @@ c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,24
                       <input type="hidden" th:attr="name='supplierArticle'" th:value="${product.getSupplierArticle()}" class="u-border-none u-input u-input-rectangle u-radius-20" required=""/>
                     </div>
                     <div class="u-align-left u-form-group u-form-submit u-label-top">
-                      <a href="/price" class="u-btn u-btn-submit u-button-style">Установить скидку</a>
+                      <a href="/card" class="u-btn u-btn-submit u-button-style">Установить скидку</a>
                       <input type="submit" value="submit" class="u-form-control-hidden">
                     </div>
                   </form>

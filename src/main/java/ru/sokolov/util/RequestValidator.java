@@ -30,16 +30,16 @@ public class RequestValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Request request = (Request) o;
         if (request.getMethod().matches("prices")) {
-            if (request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) {
-                if (Integer.parseInt(request.getDataToChange()) > 10000) errors.rejectValue("dataToChange", "", "Значение не должно превышать 10000");
-                if (Integer.parseInt(request.getDataToChange()) < 0) errors.rejectValue("dataToChange", "", "Значение не может быть отрицательным");
-            } else errors.rejectValue("dataToChange", "", "Поле должно состоять только из цифр, количество которых не может быть больше пяти");
+            if (request.getPrice().matches("^(?=.*[0-9]).{0,5}$")) {
+                if (Integer.parseInt(request.getPrice()) > 10000) errors.rejectValue("price", "", "Значение не должно превышать 10000");
+                if (Integer.parseInt(request.getPrice()) < 0) errors.rejectValue("price", "", "Значение не может быть отрицательным");
+            } else errors.rejectValue("price", "", "Поле должно состоять только из цифр, количество которых не может быть больше пяти");
         }
         if (request.getMethod().matches("updateDiscounts")) {
-            if (request.getDataToChange().matches("^(?=.*[0-9]).{0,2}$")) {
-                if (Integer.parseInt(request.getDataToChange()) > 99) errors.rejectValue("dataToChange", "", "Значение не должно превышать 99");
-                if (Integer.parseInt(request.getDataToChange()) < 0) errors.rejectValue("dataToChange", "", "Значение не может быть отрицательным");
-            } else errors.rejectValue("dataToChange", "", "Поле должно состоять только из цифр, количество которых не может быть больше двух");
+            if (request.getDiscount().matches("^(?=.*[0-9]).{0,2}$")) {
+                if (Integer.parseInt(request.getDiscount()) > 99) errors.rejectValue("discount", "", "Значение не должно превышать 99");
+                if (Integer.parseInt(request.getDiscount()) < 0) errors.rejectValue("discount", "", "Значение не может быть отрицательным");
+            } else errors.rejectValue("discount", "", "Поле должно состоять только из цифр, количество которых не может быть больше двух");
         }
 
 //        if (!request.getDataToChange().matches("^(?=.*[0-9]).{0,5}$")) errors.rejectValue("dataToChange", "", "Поле должно состоять из цифр, которых не может быть больше пяти");

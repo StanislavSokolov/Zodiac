@@ -93,4 +93,32 @@ public class Request {
     public void setSupplierArticle(String supplierArticle) {
         this.supplierArticle = supplierArticle;
     }
+
+    private transient String price;
+    private transient String discount;
+    private transient String description;
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
