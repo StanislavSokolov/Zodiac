@@ -81,6 +81,8 @@ public class PersonalAccountController {
 
         requestValidator.validate(request, bindingResult);
 
+        String s = "qwe";
+
         if (bindingResult.hasErrors()) {
             User userDB = userService.findOne(Integer.valueOf(client));
 
@@ -92,6 +94,9 @@ public class PersonalAccountController {
 
             return "/account/editingCard";
         }
+
+        if (request.getMethod().equals("prices")) request.setDataToChange(request.getPrice());
+        else if (request.getMethod().equals("updateDiscounts")) request.setDataToChange(request.getDiscount());
 
         requestService.save(request);
 
