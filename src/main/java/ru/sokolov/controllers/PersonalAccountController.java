@@ -81,13 +81,12 @@ public class PersonalAccountController {
 
         requestValidator.validate(request, bindingResult);
 
-        String s = "qwe";
+        User userDB = userService.findOne(Integer.valueOf(client));
+
+        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("activeShop", shopConverter(request.getShop()));
 
         if (bindingResult.hasErrors()) {
-            User userDB = userService.findOne(Integer.valueOf(client));
-
-            model.addAttribute("shops", Auth.getShops(userDB));
-            model.addAttribute("activeShop", shopConverter(request.getShop()));
 
             List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getSupplierArticle(), request.getShop());
             model.addAttribute("productsList", createProductsList(productsList));
@@ -100,7 +99,10 @@ public class PersonalAccountController {
 
         requestService.save(request);
 
-        return "redirect:/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getSupplierArticle();
+        model.addAttribute("back", "/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getSupplierArticle());
+        model.addAttribute("request", request);
+
+        return "/account/successMessage";
     }
 
     private String shopConverter(String shop) {
