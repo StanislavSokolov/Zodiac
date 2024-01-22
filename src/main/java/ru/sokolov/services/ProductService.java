@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolov.models.Product;
+import ru.sokolov.models.User;
 import ru.sokolov.repositories.ProductRepository;
 
 import java.util.List;
@@ -31,5 +32,15 @@ public class ProductService {
     }
     public List<Product> findBySubject(String subject) {
         return productRepository.findBySubject(subject);
+    }
+    public List<Product> findBySupplierArticleAndShopName(String supplierArticle, String shopName) {
+        return productRepository.findBySupplierArticleAndShopName(supplierArticle, shopName);
+    }
+    public List<Product> findBySubjectAndShopName(String subject, String shopName) {
+        return productRepository.findBySubjectAndShopName(subject, shopName);
+    }
+    public Product checkProduct(String supplierArticle) {
+        List<Product> products = productRepository.findBySupplierArticle(supplierArticle);
+        if (products.isEmpty()) return null; else return products.get(0);
     }
 }

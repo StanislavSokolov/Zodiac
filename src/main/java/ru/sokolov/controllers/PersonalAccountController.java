@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.*;
 import ru.sokolov.models.*;
 import ru.sokolov.services.*;
+import ru.sokolov.util.RequestValidator;
 import ru.sokolov.util.UserValidatorTokenOzon;
 import ru.sokolov.util.UserValidatorTokenWB;
 
@@ -28,21 +29,92 @@ public class PersonalAccountController {
     private final ItemService itemService;
     private final StockService stockService;
     private final YearService yearService;
+    private final RequestService requestService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
+    private final RequestValidator requestValidator;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon) {
+    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
         this.userService = userService;
         this.productService = productService;
         this.itemService = itemService;
         this.stockService = stockService;
         this.yearService = yearService;
+        this.requestService = requestService;
+
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
+        this.requestValidator = requestValidator;
+    }
+
+    @GetMapping("/editing")
+    public String editingPage(@RequestParam("shop") String shop,
+                           @RequestParam(value = "supplierArticle") String supplierArticle,
+                           @ModelAttribute("request") Request request,
+                           Model model,
+                           @CookieValue(value = "Authorization", required = false) String authorization,
+                           @CookieValue(value = "Client", required = false) String client) {
+
+        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+
+        User userDB = userService.findOne(Integer.valueOf(client));
+
+        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("activeShop", shop);
+
+        if (supplierArticle != null) {
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+            model.addAttribute("productsList", createProductsList(productsList));
+            return "account/editingCard";
+        } else {
+            return "account/productCard";
+        }
+
+    }
+
+    @PostMapping("/editing/card")
+    public String editingPrice(@ModelAttribute("request") @Valid Request request, BindingResult bindingResult,
+                               Model model,
+                               @CookieValue(value = "Authorization", required = false) String authorization,
+                               @CookieValue(value = "Client", required = false) String client) {
+        request.setClientId(Integer.valueOf(client));
+
+        requestValidator.validate(request, bindingResult);
+
+        User userDB = userService.findOne(Integer.valueOf(client));
+
+        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("activeShop", shopConverter(request.getShop()));
+
+        if (bindingResult.hasErrors()) {
+
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getSupplierArticle(), request.getShop());
+            model.addAttribute("productsList", createProductsList(productsList));
+
+            return "/account/editingCard";
+        }
+
+        if (request.getMethod().equals("prices")) request.setDataToChange(request.getPrice());
+        else if (request.getMethod().equals("updateDiscounts")) request.setDataToChange(request.getDiscount());
+
+        requestService.save(request);
+
+        model.addAttribute("back", "/account/editing?shop=" + shopConverter(request.getShop()) + "&supplierArticle=" + request.getSupplierArticle());
+        model.addAttribute("request", request);
+
+        return "/account/successMessage";
+    }
+
+    private String shopConverter(String shop) {
+        if (shop.equals("Wildberries")) return "wb";
+        else if (shop.equals("Ozon")) return "ozon";
+        else if (shop.equals("wb")) return "Wildberries";
+        else if (shop.equals("ozon")) return "Ozon";
+        return "wb";
     }
 
     @GetMapping("/information")
-    public String itemPage(@RequestParam("shop") String shop,
+    public String informationPage(@RequestParam("shop") String shop,
                            @RequestParam(value = "subject", required = false) String subject,
                            @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
                            @ModelAttribute("user") User user,
@@ -58,15 +130,16 @@ public class PersonalAccountController {
         model.addAttribute("activeShop", shop);
 
         if (subject != null) {
-            List<Product> productsList = productService.findBySubject(subject);
+            List<Product> productsList = productService.findBySubjectAndShopName(subject, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else if (supplierArticle != null) {
-            List<Product> productsList = productService.findBySupplierArticle(supplierArticle);
+            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else {
             List<Product> productsList = productService.findBySupplierArticleNotLike("");
+            productsList.get(0).setSubject("Все товары");
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         }
