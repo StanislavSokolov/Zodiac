@@ -63,6 +63,18 @@ public class Product {
     @Fetch(FetchMode.SELECT)
     private List<Media> medias;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     private transient ArrayList<DayToShow> dayToShows;
 
     private transient int soldAllFromLastPeriod;
@@ -113,7 +125,7 @@ public class Product {
         this.rating = rating;
     }
 
-    public Product(String supplierArticle, String nmId, String subject, int price, int discount, String shopName, String description, String rating) {
+    public Product(String supplierArticle, String nmId, String subject, int price, int discount, String shopName, String description, String rating, User owner) {
         this.supplierArticle = supplierArticle;
         this.nmId = nmId;
         this.subject = subject;
@@ -122,6 +134,7 @@ public class Product {
         this.shopName = shopName;
         this.description = description;
         this.rating = rating;
+        this.owner = owner;
 //        dayToShows = new ArrayList<>();
     }
 

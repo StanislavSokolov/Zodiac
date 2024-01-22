@@ -25,9 +25,5 @@ public class UserValidatorTokenWB implements Validator {
         User user = (User) o;
         if (userService.checkTokenStandartWB(user.getTokenStandartWB()) != null)
             errors.rejectValue("tokenStandartWB", "", "Токен не подходит");
-        if (userService.checkTokenStatisticWB(user.getTokenStatisticWB()) != null)
-            errors.rejectValue("tokenStatisticWB", "", "Токен не подходит");
-        if (userService.checkTokenAdvertisingWB(user.getTokenAdvertisingWB()) != null)
-            errors.rejectValue("tokenAdvertisingWB", "", "Токен не подходит");
     }
 }

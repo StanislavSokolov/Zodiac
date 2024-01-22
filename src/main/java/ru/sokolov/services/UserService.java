@@ -41,7 +41,7 @@ public class UserService {
 
     @Transactional
     public void updateTokenWB(int id, User updatedUser) {
-        userRepository.setTokenWB(updatedUser.getTokenStandartWB(), updatedUser.getTokenStatisticWB(), updatedUser.getTokenAdvertisingWB(), id);
+        userRepository.setTokenWB(updatedUser.getTokenStandartWB(), id);
     }
 
     @Transactional
@@ -61,16 +61,6 @@ public class UserService {
 
     public User checkTokenStandartWB(String tokenStandartWB) {
         List<User> users = userRepository.findByTokenStandartWB(tokenStandartWB);
-        if (users.isEmpty()) return null; else return users.get(0);
-    }
-
-    public User checkTokenStatisticWB(String tokenStatisticWB) {
-        List<User> users = userRepository.findByTokenStatisticWB(tokenStatisticWB);
-        if (users.isEmpty()) return null; else return users.get(0);
-    }
-
-    public User checkTokenAdvertisingWB(String tokenAdvertisingWB) {
-        List<User> users = userRepository.findByTokenAdvertisingWB(tokenAdvertisingWB);
         if (users.isEmpty()) return null; else return users.get(0);
     }
 

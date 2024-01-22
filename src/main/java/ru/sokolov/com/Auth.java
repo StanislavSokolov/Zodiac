@@ -20,7 +20,8 @@ public class Auth {
     public static ArrayList<String> getShops(User userDB) {
         ArrayList<String> shops = new ArrayList<>();
         if ((userDB.getTokenClientOzon() != null) & (userDB.getTokenStatisticOzon() != null)) shops.add("Ozon");
-        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+//        if ((userDB.getTokenStandartWB() != null) & (userDB.getTokenStatisticWB() != null) & (userDB.getTokenAdvertisingWB() != null)) shops.add("Wildberries");
+        if (userDB.getTokenStandartWB() != null) shops.add("Wildberries");
         return shops;
     }
 
