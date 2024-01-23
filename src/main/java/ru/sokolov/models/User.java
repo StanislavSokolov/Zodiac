@@ -4,8 +4,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -21,12 +25,6 @@ public class User {
     @Column(name = "tokenStandartWB")
     private String tokenStandartWB;
 
-    @Column(name = "tokenStatisticWB")
-    private String tokenStatisticWB;
-
-    @Column(name = "tokenAdvertisingWB")
-    private String tokenAdvertisingWB;
-
     @Column(name = "nameShopOzon")
     private String nameShopOzon;
 
@@ -36,14 +34,15 @@ public class User {
     @Column(name = "tokenStatisticOzon")
     private String tokenStatisticOzon;
 
-    @Column(name = "login")
-    private String login;
-
     @Column(name = "email")
     private String email;
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    private List<Product> products;
 
     //@Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be in this format: Country, City, Postal Code (6 digits)")
 //    @Column(name = "address")
@@ -53,15 +52,20 @@ public class User {
 
     }
 
-    public User(String nameShopWB, String tokenStandartWB, String tokenStatisticWB, String tokenAdvertisingWB, String nameShopOzon, String tokenClientOzon, String tokenStatisticOzon, String login, String email, String password) {
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public User(String nameShopWB, String tokenStandartWB, String nameShopOzon, String tokenClientOzon, String tokenStatisticOzon, String email, String password) {
         this.nameShopWB = nameShopWB;
         this.tokenStandartWB = tokenStandartWB;
-        this.tokenStatisticWB = tokenStatisticWB;
-        this.tokenAdvertisingWB = tokenAdvertisingWB;
         this.nameShopOzon = nameShopOzon;
         this.tokenClientOzon = tokenClientOzon;
         this.tokenStatisticOzon = tokenStatisticOzon;
-        this.login = login;
         this.email = email;
         this.password = password;
     }
@@ -90,22 +94,6 @@ public class User {
         this.tokenStandartWB = tokenStandartWB;
     }
 
-    public String getTokenStatisticWB() {
-        return tokenStatisticWB;
-    }
-
-    public void setTokenStatisticWB(String tokenStatisticWB) {
-        this.tokenStatisticWB = tokenStatisticWB;
-    }
-
-    public String getTokenAdvertisingWB() {
-        return tokenAdvertisingWB;
-    }
-
-    public void setTokenAdvertisingWB(String tokenAdvertisingWB) {
-        this.tokenAdvertisingWB = tokenAdvertisingWB;
-    }
-
     public String getNameShopOzon() {
         return nameShopOzon;
     }
@@ -130,14 +118,6 @@ public class User {
         this.tokenStatisticOzon = tokenStatisticOzon;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -152,5 +132,37 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<Product> getProductBySupplierArticle(String supplierArticle, String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (p.getSupplierArticle().equals(supplierArticle) & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+                return productList;
+            }
+        }
+        return productList;
+    }
+
+    public ArrayList<Product> getProductsBySubject(String subject, String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (p.getSubject().equals(subject) & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+            }
+        }
+        System.out.println(productList.size());
+        return productList;
+    }
+
+    public ArrayList<Product> getProducts(String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (!p.getSupplierArticle().equals("") & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+            }
+        }
+        return productList;
     }
 }
