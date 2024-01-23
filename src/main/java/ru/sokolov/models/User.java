@@ -8,6 +8,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -131,5 +132,16 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public ArrayList<Product> getProducts(String supplierArticle, String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (p.getSupplierArticle().equals(supplierArticle) & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+                return productList;
+            }
+        }
+        return null;
     }
 }

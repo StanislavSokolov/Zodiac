@@ -26,19 +26,15 @@ public class PersonalAccountController {
     @Autowired
     private final UserService userService;
     private final ProductService productService;
-    private final ItemService itemService;
-    private final StockService stockService;
     private final YearService yearService;
     private final RequestService requestService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
     private final RequestValidator requestValidator;
 
-    public PersonalAccountController(UserService userService, ProductService productService, ItemService itemService, StockService stockService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
+    public PersonalAccountController(UserService userService, ProductService productService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
         this.userService = userService;
         this.productService = productService;
-        this.itemService = itemService;
-        this.stockService = stockService;
         this.yearService = yearService;
         this.requestService = requestService;
 
@@ -57,13 +53,16 @@ public class PersonalAccountController {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User userDB = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.valueOf(client));
 
-        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shop);
 
+        System.out.println("12345");
+
         if (supplierArticle != null) {
-            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+//            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+            List<Product> productsList = user.getProducts(supplierArticle, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/editingCard";
         } else {
