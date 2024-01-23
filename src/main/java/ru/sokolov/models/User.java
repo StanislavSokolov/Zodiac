@@ -134,7 +134,7 @@ public class User {
         this.password = password;
     }
 
-    public ArrayList<Product> getProducts(String supplierArticle, String shopConverter) {
+    public ArrayList<Product> getProductBySupplierArticle(String supplierArticle, String shopConverter) {
         ArrayList<Product> productList = new ArrayList<>();
         for (Product p: getProducts()) {
             if (p.getSupplierArticle().equals(supplierArticle) & p.getShopName().equals(shopConverter)) {
@@ -142,6 +142,27 @@ public class User {
                 return productList;
             }
         }
-        return null;
+        return productList;
+    }
+
+    public ArrayList<Product> getProductsBySubject(String subject, String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (p.getSubject().equals(subject) & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+            }
+        }
+        System.out.println(productList.size());
+        return productList;
+    }
+
+    public ArrayList<Product> getProducts(String shopConverter) {
+        ArrayList<Product> productList = new ArrayList<>();
+        for (Product p: getProducts()) {
+            if (!p.getSupplierArticle().equals("") & p.getShopName().equals(shopConverter)) {
+                productList.add(p);
+            }
+        }
+        return productList;
     }
 }

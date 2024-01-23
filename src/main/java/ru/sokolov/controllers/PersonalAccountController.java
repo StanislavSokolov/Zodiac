@@ -25,16 +25,14 @@ import java.util.List;
 public class PersonalAccountController {
     @Autowired
     private final UserService userService;
-    private final ProductService productService;
     private final YearService yearService;
     private final RequestService requestService;
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
     private final RequestValidator requestValidator;
 
-    public PersonalAccountController(UserService userService, ProductService productService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
+    public PersonalAccountController(UserService userService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
         this.userService = userService;
-        this.productService = productService;
         this.yearService = yearService;
         this.requestService = requestService;
 
@@ -62,7 +60,7 @@ public class PersonalAccountController {
 
         if (supplierArticle != null) {
 //            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
-            List<Product> productsList = user.getProducts(supplierArticle, shopConverter(shop));
+            List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/editingCard";
         } else {
@@ -80,14 +78,15 @@ public class PersonalAccountController {
 
         requestValidator.validate(request, bindingResult);
 
-        User userDB = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.valueOf(client));
 
-        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shopConverter(request.getShop()));
 
         if (bindingResult.hasErrors()) {
 
-            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getSupplierArticle(), request.getShop());
+//            List<Product> productsList = productService.findBySupplierArticleAndShopName(request.getSupplierArticle(), request.getShop());
+            List<Product> productsList = user.getProductBySupplierArticle(request.getSupplierArticle(), request.getShop());
             model.addAttribute("productsList", createProductsList(productsList));
 
             return "/account/editingCard";
@@ -116,28 +115,31 @@ public class PersonalAccountController {
     public String informationPage(@RequestParam("shop") String shop,
                            @RequestParam(value = "subject", required = false) String subject,
                            @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
-                           @ModelAttribute("user") User user,
+                           @ModelAttribute("user") User usr,
                            Model model,
                            @CookieValue(value = "Authorization", required = false) String authorization,
                            @CookieValue(value = "Client", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User userDB = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.valueOf(client));
 
-        model.addAttribute("shops", Auth.getShops(userDB));
+        model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shop);
 
         if (subject != null) {
-            List<Product> productsList = productService.findBySubjectAndShopName(subject, shopConverter(shop));
+//            List<Product> productsList = productService.findBySubjectAndShopName(subject, shopConverter(shop));
+            List<Product> productsList = user.getProductsBySubject(subject, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else if (supplierArticle != null) {
-            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+//            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
+            List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
         } else {
-            List<Product> productsList = productService.findBySupplierArticleNotLike("");
+//            List<Product> productsList = productService.findBySupplierArticleNotLike("");
+            List<Product> productsList = user.getProducts(shopConverter(shop));
             productsList.get(0).setSubject("Все товары");
             model.addAttribute("productsList", createProductsList(productsList));
             return "account/productCard";
@@ -164,7 +166,7 @@ public class PersonalAccountController {
     @GetMapping("/stock")
     public String stockPage(@RequestParam("shop") String shop,
                             @RequestParam(value = "sort", required = false) String sort,
-                            @ModelAttribute("user") User user,
+                            @ModelAttribute("user") User usr,
                             Model model,
                             @CookieValue(value = "Authorization", required = false) String authorization,
                             @CookieValue(value = "Client", required = false) String client,
@@ -177,15 +179,15 @@ public class PersonalAccountController {
             return "auth/authorization";
         }
 
-        User userDB = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.valueOf(client));
 
-        model.addAttribute("shops", Auth.getShops(userDB));
-        model.addAttribute("user", userDB);
+        model.addAttribute("shops", Auth.getShops(user));
+        model.addAttribute("user", user);
         model.addAttribute("activeShop", shop);
 
         ArrayList<StockToShow> stocksToShow = new ArrayList<>();
         int countForColor = 0;
-        List<Product> productList = productService.findAll();
+        List<Product> productList = user.getProducts();
         for (Product product: productList) {
             List<Stock> stocksList = product.getStocks();
             if (!stocksList.isEmpty()) {
@@ -266,7 +268,7 @@ public class PersonalAccountController {
     @GetMapping("/shop")
     public String shopPage(@RequestParam("shop") String shop,
                            @RequestParam(value = "sort", required = false) String sort,
-                           @ModelAttribute("user") User user,
+                           @ModelAttribute("user") User usr,
                            Model model,
                            @CookieValue(value = "Authorization", required = false) String authorization,
                            @CookieValue(value = "Client", required = false) String client,
@@ -274,9 +276,9 @@ public class PersonalAccountController {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User userDB = userService.findOne(Integer.valueOf(client));
-        model.addAttribute("shops", Auth.getShops(userDB));
-        model.addAttribute("user", userDB);
+        User user = userService.findOne(Integer.valueOf(client));
+        model.addAttribute("shops", Auth.getShops(user));
+        model.addAttribute("user", user);
         model.addAttribute("activeShop", shop);
 
 
@@ -305,7 +307,7 @@ public class PersonalAccountController {
 
         ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
         int countForColor = 0;
-        for (Product product: productService.findAll()) {
+        for (Product product: user.getProducts()) {
             List<Item> itemList = product.getItems();
             if (!itemList.isEmpty()) {
                 int ordered = 0, sold = 0, cancelled = 0;
@@ -408,22 +410,22 @@ public class PersonalAccountController {
     }
 
     @GetMapping("/settings")
-    public String settingPage(@ModelAttribute("user") User user,
+    public String settingPage(@ModelAttribute("user") User usr,
                               Model model,
                               @CookieValue(value = "Authorization", required = false) String authorization,
                               @CookieValue(value = "Client", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User userDB = userService.findOne(Integer.valueOf(client));
-        model.addAttribute("shops", Auth.getShops(userDB));
-        model.addAttribute("user", userDB);
+        User user = userService.findOne(Integer.valueOf(client));
+        model.addAttribute("shops", Auth.getShops(user));
+        model.addAttribute("user", user);
 
         return "account/settings";
     }
 
     @GetMapping("/out")
-    public String outPage(@ModelAttribute("user") User user,
+    public String outPage(@ModelAttribute("user") User usr,
                           @CookieValue(value = "Authorization", required = false) String authorization,
                           @CookieValue(value = "Client", required = false) String client,
                           HttpServletResponse httpServletResponse) {
@@ -448,28 +450,28 @@ public class PersonalAccountController {
     }
 
     @PostMapping("/settings/wb")
-    public String addTokenWB(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+    public String addTokenWB(@ModelAttribute("user") @Valid User usr, BindingResult bindingResult,
                              @CookieValue(value = "Authorization", required = false) String authorization,
                              @CookieValue(value = "Client", required = false) String client) {
-        userValidatorTokenWB.validate(user, bindingResult);
+        userValidatorTokenWB.validate(usr, bindingResult);
 
         if (bindingResult.hasErrors())
             return "account/settings";
 
-        userService.updateTokenWB(Integer.valueOf(client), user);
+        userService.updateTokenWB(Integer.valueOf(client), usr);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
     @PostMapping("/settings/ozon")
-    public String addTokenOzon(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+    public String addTokenOzon(@ModelAttribute("user") @Valid User usr, BindingResult bindingResult,
                                @CookieValue(value = "Authorization", required = false) String authorization,
                                @CookieValue(value = "Client", required = false) String client) {
-        userValidatorTokenOzon.validate(user, bindingResult);
+        userValidatorTokenOzon.validate(usr, bindingResult);
 
         if (bindingResult.hasErrors())
             return "/account/settings";
 
-        userService.updateTokenOzon(Integer.valueOf(client), user);
+        userService.updateTokenOzon(Integer.valueOf(client), usr);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 }
