@@ -40,9 +40,21 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    public List<UserAuth> getUserAuths() {
+        return userAuths;
+    }
+
+    public void setUserAuths(List<UserAuth> userAuths) {
+        this.userAuths = userAuths;
+    }
+
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private List<Product> products;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    private List<UserAuth> userAuths;
 
     //@Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be in this format: Country, City, Postal Code (6 digits)")
 //    @Column(name = "address")

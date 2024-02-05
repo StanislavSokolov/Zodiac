@@ -46,17 +46,15 @@ public class PersonalAccountController {
                            @RequestParam(value = "supplierArticle") String supplierArticle,
                            @ModelAttribute("request") Request request,
                            Model model,
-                           @CookieValue(value = "Authorization", required = false) String authorization,
-                           @CookieValue(value = "Client", required = false) String client) {
+                           @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                           @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
 
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shop);
-
-        System.out.println("12345");
 
         if (supplierArticle != null) {
 //            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
@@ -72,13 +70,13 @@ public class PersonalAccountController {
     @PostMapping("/editing/card")
     public String editingPrice(@ModelAttribute("request") @Valid Request request, BindingResult bindingResult,
                                Model model,
-                               @CookieValue(value = "Authorization", required = false) String authorization,
-                               @CookieValue(value = "Client", required = false) String client) {
-        request.setClientId(Integer.valueOf(client));
+                               @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                               @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
+        request.setClientId(Integer.parseInt(client));
 
         requestValidator.validate(request, bindingResult);
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
 
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shopConverter(request.getShop()));
@@ -117,12 +115,12 @@ public class PersonalAccountController {
                            @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
                            @ModelAttribute("user") User usr,
                            Model model,
-                           @CookieValue(value = "Authorization", required = false) String authorization,
-                           @CookieValue(value = "Client", required = false) String client) {
+                           @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                           @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
 
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("activeShop", shop);
@@ -168,8 +166,8 @@ public class PersonalAccountController {
                             @RequestParam(value = "sort", required = false) String sort,
                             @ModelAttribute("user") User usr,
                             Model model,
-                            @CookieValue(value = "Authorization", required = false) String authorization,
-                            @CookieValue(value = "Client", required = false) String client,
+                            @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                            @CookieValue(value = "mMmQ-12_1e2", required = false) String client,
                             HttpServletResponse httpServletResponse,
                             HttpServletRequest httpServletRequest) {
 
@@ -179,7 +177,7 @@ public class PersonalAccountController {
             return "auth/authorization";
         }
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
 
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("user", user);
@@ -270,13 +268,13 @@ public class PersonalAccountController {
                            @RequestParam(value = "sort", required = false) String sort,
                            @ModelAttribute("user") User usr,
                            Model model,
-                           @CookieValue(value = "Authorization", required = false) String authorization,
-                           @CookieValue(value = "Client", required = false) String client,
+                           @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                           @CookieValue(value = "mMmQ-12_1e2", required = false) String client,
                            HttpServletResponse httpServletResponse) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("user", user);
         model.addAttribute("activeShop", shop);
@@ -412,12 +410,12 @@ public class PersonalAccountController {
     @GetMapping("/settings")
     public String settingPage(@ModelAttribute("user") User usr,
                               Model model,
-                              @CookieValue(value = "Authorization", required = false) String authorization,
-                              @CookieValue(value = "Client", required = false) String client) {
+                              @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                              @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
         if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        User user = userService.findOne(Integer.valueOf(client));
+        User user = userService.findOne(Integer.parseInt(client));
         model.addAttribute("shops", Auth.getShops(user));
         model.addAttribute("user", user);
 
@@ -451,27 +449,27 @@ public class PersonalAccountController {
 
     @PostMapping("/settings/wb")
     public String addTokenWB(@ModelAttribute("user") @Valid User usr, BindingResult bindingResult,
-                             @CookieValue(value = "Authorization", required = false) String authorization,
-                             @CookieValue(value = "Client", required = false) String client) {
+                             @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                             @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
         userValidatorTokenWB.validate(usr, bindingResult);
 
         if (bindingResult.hasErrors())
             return "account/settings";
 
-        userService.updateTokenWB(Integer.valueOf(client), usr);
+        userService.updateTokenWB(Integer.parseInt(client), usr);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
     @PostMapping("/settings/ozon")
     public String addTokenOzon(@ModelAttribute("user") @Valid User usr, BindingResult bindingResult,
-                               @CookieValue(value = "Authorization", required = false) String authorization,
-                               @CookieValue(value = "Client", required = false) String client) {
+                               @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                               @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
         userValidatorTokenOzon.validate(usr, bindingResult);
 
         if (bindingResult.hasErrors())
             return "/account/settings";
 
-        userService.updateTokenOzon(Integer.valueOf(client), usr);
+        userService.updateTokenOzon(Integer.parseInt(client), usr);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 }

@@ -1,6 +1,7 @@
 package ru.sokolov.controllers;
 
 import jakarta.validation.Valid;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.Auth;
 import ru.sokolov.com.Define;
 import ru.sokolov.models.User;
+import ru.sokolov.models.UserAuth;
+import ru.sokolov.services.UserAuthService;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorAuthentication;
 import ru.sokolov.util.UserValidatorAuthorization;
@@ -22,21 +25,26 @@ public class AuthController {
 
     @Autowired
     private final UserService userService;
+    private final UserAuthService userAuthService;
     private final UserValidatorAuthentication userValidatorAuthentication;
     private final UserValidatorAuthorization userValidatorAuthorization;
 
-    public AuthController(UserService userService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization) {
+    public AuthController(UserService userService, UserAuthService userAuthService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization) {
         this.userService = userService;
+        this.userAuthService = userAuthService;
         this.userValidatorAuthentication = userValidatorAuthentication;
         this.userValidatorAuthorization = userValidatorAuthorization;
     }
 
     @GetMapping
     public String authenticationPage(@ModelAttribute("user") User user,
-                                     @CookieValue(value = "Authorization", required = false) String authorization,
-                                     @CookieValue(value = "Client", required = false) String client) {
+                                     HttpServletRequest httpServletRequest,
+                                     @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                                     @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
+
+//        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
+        if (!userAuthService.checkUserAuth(authorization, client, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"))) return "auth/authentication";
 
         return "redirect:/account/settings";
     }
@@ -50,42 +58,41 @@ public class AuthController {
         if (bindingResult.hasErrors())
             return "auth/authentication";
 
+        // Всё надо проверять, нельзя засовывать это в базу.
+        String s = RandomString.make(25);
+
+        UserAuth userAuth = new UserAuth(s, httpServletRequest.getHeader("User-Agent"), httpServletRequest.getRemoteAddr(), user);
         userService.save(user); // если данные формы введены корректно, то сохраняем пользователя
-        // получаем уникальный номер
 
-        System.out.println(httpServletRequest.getHeaderNames());
-
-        Cookie cookieAuthorization = new Cookie("Authorization", "true");
+        Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", s);
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
+        Cookie cookieClient = new Cookie("mMmQ-12_1e2", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
         cookieClient.setMaxAge(Define.getCookieMaxAge());
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
 
-//        Cookie cookieUniqueIdentificator = new Cookie("UniqueIdentificator", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-//        cookieUniqueIdentificator.setMaxAge(60);
-//        cookieUniqueIdentificator.setSecure(true);
-//        cookieUniqueIdentificator.setHttpOnly(true);
-//        cookieUniqueIdentificator.setPath("/");
-//        httpServletResponse.addCookie(cookieUniqueIdentificator);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
     @GetMapping("/authorization")
     public String authorizationPage(@ModelAttribute("user") User user,
-                                    @CookieValue(value = "Authorization", required = false) String authorization,
-                                    @CookieValue(value = "Client", required = false) String client) {
+                                    HttpServletRequest httpServletRequest,
+                                    @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                                    @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
 
-        return "redirect:/account/settings";
+//        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
+//        if (!userAuthService.checkUserAuth(authorization, client, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"))) return "auth/authorization";
+//
+//        return "redirect:/account/settings";
+        return "auth/authorization";
     }
 
     @PostMapping("/authorization")
@@ -97,8 +104,8 @@ public class AuthController {
         if (bindingResult.hasErrors())
             return "auth/authorization";
 
-        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua"));
-        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
+        if (!userAuthService.checkUserAuth(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId(), httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"))) return "auth/authentication";
+
 
         Cookie cookieAuthorization = new Cookie("Authorization", "true");
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
