@@ -30,8 +30,9 @@ public class PersonalAccountController {
     private final UserValidatorTokenWB userValidatorTokenWB;
     private final UserValidatorTokenOzon userValidatorTokenOzon;
     private final RequestValidator requestValidator;
+    private final UserAuthService userAuthService;
 
-    public PersonalAccountController(UserService userService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator) {
+    public PersonalAccountController(UserService userService, YearService yearService, RequestService requestService, UserValidatorTokenWB userValidatorTokenWB, UserValidatorTokenOzon userValidatorTokenOzon, RequestValidator requestValidator, UserAuthService userAuthService) {
         this.userService = userService;
         this.yearService = yearService;
         this.requestService = requestService;
@@ -39,6 +40,7 @@ public class PersonalAccountController {
         this.userValidatorTokenWB = userValidatorTokenWB;
         this.userValidatorTokenOzon = userValidatorTokenOzon;
         this.requestValidator = requestValidator;
+        this.userAuthService = userAuthService;
     }
 
     @GetMapping("/editing")
@@ -46,24 +48,31 @@ public class PersonalAccountController {
                            @RequestParam(value = "supplierArticle") String supplierArticle,
                            @ModelAttribute("request") Request request,
                            Model model,
+                           HttpServletRequest httpServletRequest,
                            @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
                            @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        User user = userService.findOne(Integer.parseInt(client));
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            User user = userService.findOne(Integer.parseInt(client));
 
-        model.addAttribute("shops", Auth.getShops(user));
-        model.addAttribute("activeShop", shop);
+            model.addAttribute("shops", Auth.getShops(user));
+            model.addAttribute("activeShop", shop);
 
-        if (supplierArticle != null) {
+            if (supplierArticle != null) {
 //            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
-            List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
-            model.addAttribute("productsList", createProductsList(productsList));
-            return "account/editingCard";
-        } else {
-            return "account/productCard";
+                List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
+                model.addAttribute("productsList", createProductsList(productsList));
+                return "account/editingCard";
+            } else {
+                return "account/productCard";
+            }
         }
+
+        return "auth/authentication";
 
     }
 
@@ -115,33 +124,41 @@ public class PersonalAccountController {
                            @RequestParam(value = "supplierArticle", required = false) String supplierArticle,
                            @ModelAttribute("user") User usr,
                            Model model,
+                           HttpServletRequest httpServletRequest,
                            @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
                            @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        User user = userService.findOne(Integer.parseInt(client));
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            User user = userService.findOne(Integer.parseInt(client));
 
-        model.addAttribute("shops", Auth.getShops(user));
-        model.addAttribute("activeShop", shop);
+            model.addAttribute("shops", Auth.getShops(user));
+            model.addAttribute("activeShop", shop);
 
-        if (subject != null) {
+            if (subject != null) {
 //            List<Product> productsList = productService.findBySubjectAndShopName(subject, shopConverter(shop));
-            List<Product> productsList = user.getProductsBySubject(subject, shopConverter(shop));
-            model.addAttribute("productsList", createProductsList(productsList));
-            return "account/productCard";
-        } else if (supplierArticle != null) {
+                List<Product> productsList = user.getProductsBySubject(subject, shopConverter(shop));
+                model.addAttribute("productsList", createProductsList(productsList));
+                return "account/productCard";
+            } else if (supplierArticle != null) {
 //            List<Product> productsList = productService.findBySupplierArticleAndShopName(supplierArticle, shopConverter(shop));
-            List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
-            model.addAttribute("productsList", createProductsList(productsList));
-            return "account/productCard";
-        } else {
+                List<Product> productsList = user.getProductBySupplierArticle(supplierArticle, shopConverter(shop));
+                model.addAttribute("productsList", createProductsList(productsList));
+                return "account/productCard";
+            } else {
 //            List<Product> productsList = productService.findBySupplierArticleNotLike("");
-            List<Product> productsList = user.getProducts(shopConverter(shop));
-            productsList.get(0).setSubject("Все товары");
-            model.addAttribute("productsList", createProductsList(productsList));
-            return "account/productCard";
+                List<Product> productsList = user.getProducts(shopConverter(shop));
+                productsList.get(0).setSubject("Все товары");
+                model.addAttribute("productsList", createProductsList(productsList));
+                return "account/productCard";
+            }
         }
+
+        return "auth/authentication";
+
 
     }
 
@@ -171,96 +188,100 @@ public class PersonalAccountController {
                             HttpServletResponse httpServletResponse,
                             HttpServletRequest httpServletRequest) {
 
-//        System.out.println(httpServletRequest.getRequestURI() + shop + sort);
-        if (!Auth.getAuthorization(authorization, client)) {
-//            model.addAttribute("stringRequestURI", httpServletRequest.getRequestURI());
-            return "auth/authorization";
-        }
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        User user = userService.findOne(Integer.parseInt(client));
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            User user = userService.findOne(Integer.parseInt(client));
 
-        model.addAttribute("shops", Auth.getShops(user));
-        model.addAttribute("user", user);
-        model.addAttribute("activeShop", shop);
+            model.addAttribute("shops", Auth.getShops(user));
+            model.addAttribute("user", user);
+            model.addAttribute("activeShop", shop);
 
-        ArrayList<StockToShow> stocksToShow = new ArrayList<>();
-        int countForColor = 0;
-        List<Product> productList = user.getProducts();
-        for (Product product: productList) {
-            List<Stock> stocksList = product.getStocks();
-            if (!stocksList.isEmpty()) {
-                int quantity = 0, quantityFull = 0, inWayFromClient = 0;
-                for (Stock stock: stocksList) {
-                    quantity = quantity + stock.getQuantity();
-                    quantityFull = quantityFull + stock.getQuantityFull();
-                    inWayFromClient = inWayFromClient + stock.getInWayFromClient();
-                }
-                if ((quantity != 0) || (quantityFull != 0)) {
-                    countForColor++;
-                    stocksList.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
-                    stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2, stocksList));
-                }
-            }
-        }
-        if (sort != null) {
-            if (sort.equals("subject")) stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
-            if (sort.equals("quantity")) stocksToShow.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
-            if (sort.equals("quantityFull")) stocksToShow.sort((o1, o2) -> (o2.getQuantityFull() - o2.getQuantity()) - (o1.getQuantityFull() - o1.getQuantity()));
-            if (sort.equals("inWayFromClient")) stocksToShow.sort((o1, o2) -> o2.getInWayFromClient() - o1.getInWayFromClient());
-        } else
-            stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
-
-        for(int i = 0; i < stocksToShow.size(); i++) {
-            stocksToShow.get(i).setColor(i % 2);
-        }
-
-        for(int i = 0; i < stocksToShow.size(); i++) {
-            if (!stocksToShow.get(i).isCoincidence()) {
-                stocksToShow.get(i).setCoincidence(true);
-                ArrayList<StockToShow> stockCoincidence = new ArrayList<>();
-                stockCoincidence.add(stocksToShow.get(i));
-                for (int j = i + 1; j < stocksToShow.size() - 1; j++) {
-                    if (stocksToShow.get(i).getSubject().equals(stocksToShow.get(j).getSubject())) {
-                        stocksToShow.get(j).setCoincidence(true);
-                        stockCoincidence.add(stocksToShow.get(j));
+            ArrayList<StockToShow> stocksToShow = new ArrayList<>();
+            int countForColor = 0;
+            List<Product> productList = user.getProducts();
+            for (Product product: productList) {
+                List<Stock> stocksList = product.getStocks();
+                if (!stocksList.isEmpty()) {
+                    int quantity = 0, quantityFull = 0, inWayFromClient = 0;
+                    for (Stock stock: stocksList) {
+                        quantity = quantity + stock.getQuantity();
+                        quantityFull = quantityFull + stock.getQuantityFull();
+                        inWayFromClient = inWayFromClient + stock.getInWayFromClient();
+                    }
+                    if ((quantity != 0) || (quantityFull != 0)) {
+                        countForColor++;
+                        stocksList.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+                        stocksToShow.add(new StockToShow(product.getSubject(), product.getSupplierArticle(), quantity, quantityFull, inWayFromClient, countForColor % 2, stocksList));
                     }
                 }
-                for (int j = 0; j < stockCoincidence.size(); j++) {
-                    if (j == 0) {
-                        for (Stock s: stockCoincidence.get(j).getStocks()) {
-                            stockCoincidence.get(j).getStocksAll().add(new Stock(s.getWarehouseName(), s.getQuantity(), s.getQuantityFull(), s.getInWayFromClient(), s.getOwner()));
+            }
+            if (sort != null) {
+                if (sort.equals("subject")) stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+                if (sort.equals("quantity")) stocksToShow.sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+                if (sort.equals("quantityFull")) stocksToShow.sort((o1, o2) -> (o2.getQuantityFull() - o2.getQuantity()) - (o1.getQuantityFull() - o1.getQuantity()));
+                if (sort.equals("inWayFromClient")) stocksToShow.sort((o1, o2) -> o2.getInWayFromClient() - o1.getInWayFromClient());
+            } else
+                stocksToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+
+            for(int i = 0; i < stocksToShow.size(); i++) {
+                stocksToShow.get(i).setColor(i % 2);
+            }
+
+            for(int i = 0; i < stocksToShow.size(); i++) {
+                if (!stocksToShow.get(i).isCoincidence()) {
+                    stocksToShow.get(i).setCoincidence(true);
+                    ArrayList<StockToShow> stockCoincidence = new ArrayList<>();
+                    stockCoincidence.add(stocksToShow.get(i));
+                    for (int j = i + 1; j < stocksToShow.size() - 1; j++) {
+                        if (stocksToShow.get(i).getSubject().equals(stocksToShow.get(j).getSubject())) {
+                            stocksToShow.get(j).setCoincidence(true);
+                            stockCoincidence.add(stocksToShow.get(j));
                         }
-                    } else {
-                        for (int a = 0; a < stockCoincidence.get(j).getStocks().size(); a++) {
-                            boolean coincidence = false;
-                            for (int b = 0; b < stockCoincidence.get(0).getStocksAll().size(); b++) {
-                                if (stockCoincidence.get(0).getStocksAll().get(b).getWarehouseName().equals(stockCoincidence.get(j).getStocks().get(a).getWarehouseName())) {
-                                    stockCoincidence.get(0).getStocksAll().get(b).setQuantity(stockCoincidence.get(0).getStocksAll().get(b).getQuantity() + stockCoincidence.get(j).getStocks().get(a).getQuantity());
-                                    stockCoincidence.get(0).getStocksAll().get(b).setQuantityFull(stockCoincidence.get(0).getStocksAll().get(b).getQuantityFull() + stockCoincidence.get(j).getStocks().get(a).getQuantityFull());
-                                    stockCoincidence.get(0).getStocksAll().get(b).setInWayFromClient(stockCoincidence.get(0).getStocksAll().get(b).getInWayFromClient() + stockCoincidence.get(j).getStocks().get(a).getInWayFromClient());
-                                    coincidence = true;
-                                }
+                    }
+                    for (int j = 0; j < stockCoincidence.size(); j++) {
+                        if (j == 0) {
+                            for (Stock s: stockCoincidence.get(j).getStocks()) {
+                                stockCoincidence.get(j).getStocksAll().add(new Stock(s.getWarehouseName(), s.getQuantity(), s.getQuantityFull(), s.getInWayFromClient(), s.getOwner()));
                             }
-                            if (!coincidence) stockCoincidence.get(0).getStocksAll().add(new Stock(stockCoincidence.get(j).getStocks().get(a).getWarehouseName(),
-                                    stockCoincidence.get(j).getStocks().get(a).getQuantity(),
-                                    stockCoincidence.get(j).getStocks().get(a).getQuantityFull(),
-                                    stockCoincidence.get(j).getStocks().get(a).getInWayFromClient(),
-                                    stockCoincidence.get(j).getStocks().get(a).getOwner()));
+                        } else {
+                            for (int a = 0; a < stockCoincidence.get(j).getStocks().size(); a++) {
+                                boolean coincidence = false;
+                                for (int b = 0; b < stockCoincidence.get(0).getStocksAll().size(); b++) {
+                                    if (stockCoincidence.get(0).getStocksAll().get(b).getWarehouseName().equals(stockCoincidence.get(j).getStocks().get(a).getWarehouseName())) {
+                                        stockCoincidence.get(0).getStocksAll().get(b).setQuantity(stockCoincidence.get(0).getStocksAll().get(b).getQuantity() + stockCoincidence.get(j).getStocks().get(a).getQuantity());
+                                        stockCoincidence.get(0).getStocksAll().get(b).setQuantityFull(stockCoincidence.get(0).getStocksAll().get(b).getQuantityFull() + stockCoincidence.get(j).getStocks().get(a).getQuantityFull());
+                                        stockCoincidence.get(0).getStocksAll().get(b).setInWayFromClient(stockCoincidence.get(0).getStocksAll().get(b).getInWayFromClient() + stockCoincidence.get(j).getStocks().get(a).getInWayFromClient());
+                                        coincidence = true;
+                                    }
+                                }
+                                if (!coincidence) stockCoincidence.get(0).getStocksAll().add(new Stock(stockCoincidence.get(j).getStocks().get(a).getWarehouseName(),
+                                        stockCoincidence.get(j).getStocks().get(a).getQuantity(),
+                                        stockCoincidence.get(j).getStocks().get(a).getQuantityFull(),
+                                        stockCoincidence.get(j).getStocks().get(a).getInWayFromClient(),
+                                        stockCoincidence.get(j).getStocks().get(a).getOwner()));
+                            }
+                        }
+                    }
+                    stockCoincidence.get(0).getStocksAll().sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
+                    for (int j = 1; j < stockCoincidence.size(); j++) {
+                        for (int k = 0; k < stockCoincidence.get(0).getStocksAll().size(); k++) {
+                            stockCoincidence.get(j).setStocksAll(stockCoincidence.get(0).getStocksAll());
                         }
                     }
                 }
-                stockCoincidence.get(0).getStocksAll().sort((o1, o2) -> o2.getQuantity() - o1.getQuantity());
-                for (int j = 1; j < stockCoincidence.size(); j++) {
-                    for (int k = 0; k < stockCoincidence.get(0).getStocksAll().size(); k++) {
-                        stockCoincidence.get(j).setStocksAll(stockCoincidence.get(0).getStocksAll());
-                    }
-                }
             }
+
+            model.addAttribute("stocksToShow", stocksToShow);
+
+            return "account/stock";
         }
 
-        model.addAttribute("stocksToShow", stocksToShow);
 
-        return "account/stock";
+        return "auth/authentication";
+
     }
 
     @GetMapping("/shop")
@@ -268,183 +289,211 @@ public class PersonalAccountController {
                            @RequestParam(value = "sort", required = false) String sort,
                            @ModelAttribute("user") User usr,
                            Model model,
+                           HttpServletRequest httpServletRequest,
                            @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
-                           @CookieValue(value = "mMmQ-12_1e2", required = false) String client,
-                           HttpServletResponse httpServletResponse) {
+                           @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        User user = userService.findOne(Integer.parseInt(client));
-        model.addAttribute("shops", Auth.getShops(user));
-        model.addAttribute("user", user);
-        model.addAttribute("activeShop", shop);
-
-
-
-        ArrayList<DayToShow> daysToShow = new ArrayList<>();
-
-        // i - количество дней для показа на календаре
-        // i = 0 (только сегодня), i = -6 (последняя неделя)
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            User user = userService.findOne(Integer.parseInt(client));
+            model.addAttribute("shops", Auth.getShops(user));
+            model.addAttribute("user", user);
+            model.addAttribute("activeShop", shop);
 
 
-        for (int i = -50; i < 1; i++) {
-            List<Year> years = yearService.findByCdate(Data.getData(i));
-            if (!years.isEmpty())
-                daysToShow.add(new DayToShow(years.get(0).getOrders(),
-                        years.get(0).getSales(),
-                        years.get(0).getReturns(),
-                        0,
-                        Data.getData(i)));
-        }
 
-        if (!daysToShow.isEmpty()) {
-            if (daysToShow.get(daysToShow.size() - 1).getDate().equals(Data.getDataCurrent())) model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
-            else model.addAttribute("today", new DayToShow(0, 0, 0 , 0, Data.getDataCurrent()));
-        }
-        model.addAttribute("daysToShow", daysToShow);
+            ArrayList<DayToShow> daysToShow = new ArrayList<>();
 
-        ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
-        int countForColor = 0;
-        for (Product product: user.getProducts()) {
-            List<Item> itemList = product.getItems();
-            if (!itemList.isEmpty()) {
-                int ordered = 0, sold = 0, cancelled = 0;
-                ArrayList<WareHouse> wareHouses = new ArrayList<>();
-                for (Item item: itemList) {
-                    if (item.getCdate().equals(Data.getData(0))) {
-                        if (item.getStatus().equals("ordered")) ordered++;
+            // i - количество дней для показа на календаре
+            // i = 0 (только сегодня), i = -6 (последняя неделя)
+
+
+            for (int i = -50; i < 1; i++) {
+                List<Year> years = yearService.findByCdate(Data.getData(i));
+                if (!years.isEmpty())
+                    daysToShow.add(new DayToShow(years.get(0).getOrders(),
+                            years.get(0).getSales(),
+                            years.get(0).getReturns(),
+                            0,
+                            Data.getData(i)));
+            }
+
+            if (!daysToShow.isEmpty()) {
+                if (daysToShow.get(daysToShow.size() - 1).getDate().equals(Data.getDataCurrent())) model.addAttribute("today", daysToShow.get(daysToShow.size() - 1));
+                else model.addAttribute("today", new DayToShow(0, 0, 0 , 0, Data.getDataCurrent()));
+            }
+            model.addAttribute("daysToShow", daysToShow);
+
+            ArrayList<ItemToShow> itemsToShow = new ArrayList<>();
+            int countForColor = 0;
+            for (Product product: user.getProducts()) {
+                List<Item> itemList = product.getItems();
+                if (!itemList.isEmpty()) {
+                    int ordered = 0, sold = 0, cancelled = 0;
+                    ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                    for (Item item: itemList) {
+                        if (item.getCdate().equals(Data.getData(0))) {
+                            if (item.getStatus().equals("ordered")) ordered++;
 //                        if (item.getStatus().equals("sold")) sold++;
-                        if (item.getStatus().equals("cancelled")) cancelled++;
-                        if (wareHouses.isEmpty()) {
-                            wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
-                        }
-                        else {
-                            boolean coincidence = false;
-                            for (WareHouse wh: wareHouses) {
-                                if (!coincidence) {
-                                    if (wh.getName().equals(item.getWarehouseName())) {
-                                        wh.setQuantity(wh.getQuantity() + 1);
-                                        coincidence = true;
+                            if (item.getStatus().equals("cancelled")) cancelled++;
+                            if (wareHouses.isEmpty()) {
+                                wareHouses.add(0, new WareHouse(item.getWarehouseName(), 1));
+                            }
+                            else {
+                                boolean coincidence = false;
+                                for (WareHouse wh: wareHouses) {
+                                    if (!coincidence) {
+                                        if (wh.getName().equals(item.getWarehouseName())) {
+                                            wh.setQuantity(wh.getQuantity() + 1);
+                                            coincidence = true;
+                                        }
                                     }
                                 }
+                                if (!coincidence) wareHouses.add(wareHouses.size(), new WareHouse(item.getWarehouseName(), 1));
                             }
-                            if (!coincidence) wareHouses.add(wareHouses.size(), new WareHouse(item.getWarehouseName(), 1));
-                        }
 
-                    }
-                    else {
-                        if (item.getSdate().equals(Data.getData(0))) {
-                            if (item.getStatus().equals("sold")) sold++;
+                        }
+                        else {
+                            if (item.getSdate().equals(Data.getData(0))) {
+                                if (item.getStatus().equals("sold")) sold++;
+                            }
                         }
                     }
-                }
 //                if ((ordered != 0) || (sold != 0) || (cancelled != 0)) {
-                if ((ordered != 0) || (cancelled != 0)) {
-                    countForColor++;
-                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
-                } else if (sold != 0) {
-                    wareHouses.add(new WareHouse("Санкт-Петербург", 0));
-                    itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
+                    if ((ordered != 0) || (cancelled != 0)) {
+                        countForColor++;
+                        itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
+                    } else if (sold != 0) {
+                        wareHouses.add(new WareHouse("Санкт-Петербург", 0));
+                        itemsToShow.add(new ItemToShow(product.getSubject(), product.getSupplierArticle(), ordered, sold, cancelled, countForColor % 2, wareHouses));
+                    }
                 }
             }
-        }
-        if (sort != null) {
-            if (sort.equals("subject")) itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
-            if (sort.equals("ordered")) itemsToShow.sort((o1, o2) -> o2.getOrdered() - o1.getOrdered());
-            if (sort.equals("sold")) itemsToShow.sort((o1, o2) -> o2.getSold() - o1.getSold());
-            if (sort.equals("cancelled")) itemsToShow.sort((o1, o2) -> o2.getCancelled() - o1.getCancelled());
-        } else
-            itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+            if (sort != null) {
+                if (sort.equals("subject")) itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
+                if (sort.equals("ordered")) itemsToShow.sort((o1, o2) -> o2.getOrdered() - o1.getOrdered());
+                if (sort.equals("sold")) itemsToShow.sort((o1, o2) -> o2.getSold() - o1.getSold());
+                if (sort.equals("cancelled")) itemsToShow.sort((o1, o2) -> o2.getCancelled() - o1.getCancelled());
+            } else
+                itemsToShow.sort((o1, o2) -> o1.getSubject().compareTo(o2.getSubject()));
 
-        for(int i = 0; i < itemsToShow.size(); i++) {
-            itemsToShow.get(i).setColor(i % 2);
-        }
+            for(int i = 0; i < itemsToShow.size(); i++) {
+                itemsToShow.get(i).setColor(i % 2);
+            }
 
-        ArrayList<ItemToShow> its = new ArrayList<>();
+            ArrayList<ItemToShow> its = new ArrayList<>();
 
-        for (int i = 0; i < itemsToShow.size(); i++) {
-            if (its.isEmpty()) {
-                ArrayList<WareHouse> wareHouses = new ArrayList<>();
-                for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
-                its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
-            } else {
-                boolean coincidence = false;
-                for (int j = 0; j < its.size(); j++) {
-                    if (its.get(j).getSubject().equals(itemsToShow.get(i).getSubject())) {
-                        for (int a = 0; a < itemsToShow.get(i).getWareHouses().size(); a++) {
-                            boolean coincedence2 = false;
-                            for (int b = 0; b < its.get(j).getWareHousesAll().size(); b++) {
-                                if (its.get(j).getWareHousesAll().get(b).getName().equals(itemsToShow.get(i).getWareHouses().get(a).getName())) {
-                                    its.get(j).getWareHousesAll().get(b).setQuantity(its.get(j).getWareHousesAll().get(b).getQuantity() + itemsToShow.get(i).getWareHouses().get(a).getQuantity());
-                                    coincedence2 = true;
-                                }
-                            }
-                            if (!coincedence2) its.get(j).getWareHousesAll().add(new WareHouse(itemsToShow.get(i).getWareHouses().get(a).getName(), itemsToShow.get(i).getWareHouses().get(a).getQuantity()));
-                        }
-                        coincidence = true;
-                    }
-                }
-                if (!coincidence) {
+            for (int i = 0; i < itemsToShow.size(); i++) {
+                if (its.isEmpty()) {
                     ArrayList<WareHouse> wareHouses = new ArrayList<>();
                     for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
                     its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
-                    System.out.println(its.get(its.size() - 1).getSubject() + " " + its.get(its.size() - 1).getWareHousesAll().size());
+                } else {
+                    boolean coincidence = false;
+                    for (int j = 0; j < its.size(); j++) {
+                        if (its.get(j).getSubject().equals(itemsToShow.get(i).getSubject())) {
+                            for (int a = 0; a < itemsToShow.get(i).getWareHouses().size(); a++) {
+                                boolean coincedence2 = false;
+                                for (int b = 0; b < its.get(j).getWareHousesAll().size(); b++) {
+                                    if (its.get(j).getWareHousesAll().get(b).getName().equals(itemsToShow.get(i).getWareHouses().get(a).getName())) {
+                                        its.get(j).getWareHousesAll().get(b).setQuantity(its.get(j).getWareHousesAll().get(b).getQuantity() + itemsToShow.get(i).getWareHouses().get(a).getQuantity());
+                                        coincedence2 = true;
+                                    }
+                                }
+                                if (!coincedence2) its.get(j).getWareHousesAll().add(new WareHouse(itemsToShow.get(i).getWareHouses().get(a).getName(), itemsToShow.get(i).getWareHouses().get(a).getQuantity()));
+                            }
+                            coincidence = true;
+                        }
+                    }
+                    if (!coincidence) {
+                        ArrayList<WareHouse> wareHouses = new ArrayList<>();
+                        for (WareHouse wh: itemsToShow.get(i).getWareHouses()) wareHouses.add(new WareHouse(wh.getName(), wh.getQuantity()));
+                        its.add(new ItemToShow(itemsToShow.get(i).getSubject(), wareHouses));
+                        System.out.println(its.get(its.size() - 1).getSubject() + " " + its.get(its.size() - 1).getWareHousesAll().size());
+                    }
                 }
             }
-        }
 
-        for (ItemToShow i: itemsToShow) {
-            for (ItemToShow t: its) {
-                if (i.getSubject().equals(t.getSubject())) {
-                    i.setWareHousesAll(t.getWareHousesAll());
+            for (ItemToShow i: itemsToShow) {
+                for (ItemToShow t: its) {
+                    if (i.getSubject().equals(t.getSubject())) {
+                        i.setWareHousesAll(t.getWareHousesAll());
+                    }
                 }
             }
+
+            model.addAttribute("itemsToShow", itemsToShow);
+
+
+            return "account/shop";
         }
 
-        model.addAttribute("itemsToShow", itemsToShow);
-
-
-        return "account/shop";
+        return "auth/authentication";
     }
 
     @GetMapping("/settings")
     public String settingPage(@ModelAttribute("user") User usr,
                               Model model,
+                              HttpServletRequest httpServletRequest,
                               @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
                               @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        User user = userService.findOne(Integer.parseInt(client));
-        model.addAttribute("shops", Auth.getShops(user));
-        model.addAttribute("user", user);
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            User user = userService.findOne(Integer.parseInt(client));
+            model.addAttribute("shops", Auth.getShops(user));
+            model.addAttribute("user", user);
 
-        return "account/settings";
+            return "account/settings";
+        }
+
+        return "auth/authentication";
     }
 
     @GetMapping("/out")
     public String outPage(@ModelAttribute("user") User usr,
                           @CookieValue(value = "Authorization", required = false) String authorization,
                           @CookieValue(value = "Client", required = false) String client,
+                          HttpServletRequest httpServletRequest,
                           HttpServletResponse httpServletResponse) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null) {
+            System.out.println("here12");
+            return "auth/authentication";
+        }
 
-        Cookie cookieAuthorization = new Cookie("Authorization", "false");
-        cookieAuthorization.setMaxAge(0);
-        cookieAuthorization.setSecure(true);
-        cookieAuthorization.setHttpOnly(true);
-        cookieAuthorization.setPath("/");
-        httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", "Qwxs12MM");
-        cookieClient.setMaxAge(0);
-        cookieClient.setSecure(true);
-        cookieClient.setHttpOnly(true);
-        cookieClient.setPath("/");
-        httpServletResponse.addCookie(cookieClient);
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
+            System.out.println("here");
+            Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", "false");
+            cookieAuthorization.setMaxAge(0);
+            cookieAuthorization.setSecure(true);
+            cookieAuthorization.setHttpOnly(true);
+            cookieAuthorization.setPath("/");
+            httpServletResponse.addCookie(cookieAuthorization);
 
-        return "auth/authorization";
+            Cookie cookieClient = new Cookie("mMmQ-12_1e2", "false");
+            cookieClient.setMaxAge(0);
+            cookieClient.setSecure(true);
+            cookieClient.setHttpOnly(true);
+            cookieClient.setPath("/");
+            httpServletResponse.addCookie(cookieClient);
+
+            return "auth/authorization";
+        }
+
+        System.out.println("here123");
+
+        return "auth/authentication";
+
+
     }
 
     @PostMapping("/settings/wb")
