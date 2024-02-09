@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sokolov.models.Stock;
+import ru.sokolov.models.User;
 import ru.sokolov.models.UserAuth;
 import ru.sokolov.repositories.UserAuthRepository;
 
@@ -19,16 +20,16 @@ public class UserAuthService {
     public UserAuthService(UserAuthRepository userAuthRepository) {
         this.userAuthRepository = userAuthRepository;
     }
-    public List<UserAuth> findByAuthorizationAndUser_idAndDeviceAndIp(String authorization, String user_id, String device, String ip) {
-        return userAuthRepository.findByAuthorizationAndUser_idAndDeviceAndIp(authorization, user_id, device, ip);
+
+    public List<UserAuth> findByAuthorizationAndDeviceAndIp(String authorization, String device, String ip) {
+        List<UserAuth> userAuths = userAuthRepository.findByAuthorizationAndDeviceAndIp(authorization, device, ip);
+        if (userAuths.isEmpty())
+            return null;
+        return userAuths;
     }
 
-    public boolean checkUserAuth(String authorization, String user_id, String device, String ip) {
-        if (userAuthRepository.findByAuthorizationAndUser_idAndDeviceAndIp(authorization, user_id, device, ip).isEmpty())
-        return false;
-        return true;
-    }
-
-    public boolean checkUserAuth(int user_id, String remoteAddr, String header) {
+    @Transactional
+    public void save(UserAuth userAuth) {
+        userAuthRepository.save(userAuth);
     }
 }
