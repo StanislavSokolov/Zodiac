@@ -458,42 +458,31 @@ public class PersonalAccountController {
 
     @GetMapping("/out")
     public String outPage(@ModelAttribute("user") User usr,
-                          @CookieValue(value = "Authorization", required = false) String authorization,
-                          @CookieValue(value = "Client", required = false) String client,
+                          @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                          @CookieValue(value = "mMmQ-12_1e2", required = false) String client,
                           HttpServletRequest httpServletRequest,
                           HttpServletResponse httpServletResponse) {
 
         List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
         if (userAuths == null) {
-            System.out.println("here12");
             return "auth/authentication";
         }
 
+        Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", "false");
+        cookieAuthorization.setMaxAge(0);
+        cookieAuthorization.setSecure(true);
+        cookieAuthorization.setHttpOnly(true);
+        cookieAuthorization.setPath("/");
+        httpServletResponse.addCookie(cookieAuthorization);
 
-        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client)) {
-            System.out.println("here");
-            Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", "false");
-            cookieAuthorization.setMaxAge(0);
-            cookieAuthorization.setSecure(true);
-            cookieAuthorization.setHttpOnly(true);
-            cookieAuthorization.setPath("/");
-            httpServletResponse.addCookie(cookieAuthorization);
+        Cookie cookieClient = new Cookie("mMmQ-12_1e2", "false");
+        cookieClient.setMaxAge(0);
+        cookieClient.setSecure(true);
+        cookieClient.setHttpOnly(true);
+        cookieClient.setPath("/");
+        httpServletResponse.addCookie(cookieClient);
 
-            Cookie cookieClient = new Cookie("mMmQ-12_1e2", "false");
-            cookieClient.setMaxAge(0);
-            cookieClient.setSecure(true);
-            cookieClient.setHttpOnly(true);
-            cookieClient.setPath("/");
-            httpServletResponse.addCookie(cookieClient);
-
-            return "auth/authorization";
-        }
-
-        System.out.println("here123");
-
-        return "auth/authentication";
-
-
+        return "auth/authorization";
     }
 
     @PostMapping("/settings/wb")
