@@ -113,15 +113,41 @@ public class AuthController {
 
         User u = userService.checkAuthorization(user.getEmail(), user.getPassword());
 
+        boolean coincidence = false;
+        int count = 0;
+        for (int i = 0; i < u.getUserAuths().size(); i++) {
+            if (!coincidence) {
+                if ((u.getUserAuths().get(i).getIp().equals(httpServletRequest.getRemoteAddr())) & (u.getUserAuths().get(i).getDevice().equals(httpServletRequest.getHeader("User-Agent")))) {
+                    coincidence = true;
+                    count = i;
+                }
+            }
+        }
 
         String s = RandomString.make(25);
 
-        Cookie cookieAuthorization = new Cookie("Authorization", s);
+        if (coincidence) {
+            u.getUserAuths().get(count).setAuthorization(s);
+        } else {
+            // вход с нового устройства
+            u.getUserAuths().add(new UserAuth(s, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"), u));
+        }
+
+        userService.update(u.getId(), u);
+
+        Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", s);
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
+
+        Cookie cookieClient = new Cookie("mMmQ-12_1e2", String.valueOf(u.getId()));
+        cookieClient.setMaxAge(Define.getCookieMaxAge());
+        cookieClient.setSecure(true);
+        cookieClient.setHttpOnly(true);
+        cookieClient.setPath("/");
+        httpServletResponse.addCookie(cookieClient);
 
         return "redirect:/account/settings"; // и переходим в лк
     }
