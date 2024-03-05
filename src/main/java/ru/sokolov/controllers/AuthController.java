@@ -117,7 +117,7 @@ public class AuthController {
         int count = 0;
         for (int i = 0; i < u.getUserAuths().size(); i++) {
             if (!coincidence) {
-                if ((u.getUserAuths().get(i).getIp().equals(httpServletRequest.getRemoteAddr())) & (u.getUserAuths().get(i).getDevice().equals(httpServletRequest.getHeader("User-Agent")))) {
+               if (u.getUserAuths().get(i).getDevice().equals(httpServletRequest.getRemoteAddr())) {
                     coincidence = true;
                     count = i;
                 }
@@ -128,12 +128,11 @@ public class AuthController {
 
         if (coincidence) {
             u.getUserAuths().get(count).setAuthorization(s);
+            userAuthService.save(u.getUserAuths().get(count));
         } else {
             // вход с нового устройства
-            u.getUserAuths().add(new UserAuth(s, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"), u));
+            userAuthService.save(new UserAuth(s, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"), u));
         }
-
-        userService.update(u.getId(), u);
 
         Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", s);
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
