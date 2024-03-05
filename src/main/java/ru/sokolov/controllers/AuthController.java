@@ -1,6 +1,7 @@
 package ru.sokolov.controllers;
 
 import jakarta.validation.Valid;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.sokolov.com.Auth;
 import ru.sokolov.com.Define;
 import ru.sokolov.models.User;
+import ru.sokolov.models.UserAuth;
+import ru.sokolov.services.UserAuthService;
 import ru.sokolov.services.UserService;
 import ru.sokolov.util.UserValidatorAuthentication;
 import ru.sokolov.util.UserValidatorAuthorization;
@@ -15,6 +18,7 @@ import ru.sokolov.util.UserValidatorAuthorization;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
 @RequestMapping("/auth")
@@ -22,70 +26,80 @@ public class AuthController {
 
     @Autowired
     private final UserService userService;
+    private final UserAuthService userAuthService;
     private final UserValidatorAuthentication userValidatorAuthentication;
     private final UserValidatorAuthorization userValidatorAuthorization;
 
-    public AuthController(UserService userService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization) {
+    public AuthController(UserService userService, UserAuthService userAuthService, UserValidatorAuthentication userValidatorAuthentication, UserValidatorAuthorization userValidatorAuthorization) {
         this.userService = userService;
+        this.userAuthService = userAuthService;
         this.userValidatorAuthentication = userValidatorAuthentication;
         this.userValidatorAuthorization = userValidatorAuthorization;
     }
 
     @GetMapping
     public String authenticationPage(@ModelAttribute("user") User user,
-                                     @CookieValue(value = "Authorization", required = false) String authorization,
-                                     @CookieValue(value = "Client", required = false) String client) {
+                                     HttpServletRequest httpServletRequest,
+                                     @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                                     @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authentication";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authentication";
 
-        return "redirect:/account/settings";
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client))
+            return "redirect:/account/settings";
+
+        return "auth/authentication";
     }
 
     @PostMapping()
-    public String authenticationUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+    public String authenticationUser(@ModelAttribute("user") @Valid User usr, BindingResult bindingResult,
                                      HttpServletRequest httpServletRequest,
                                      HttpServletResponse httpServletResponse) {
-        userValidatorAuthentication.validate(user, bindingResult);
+        userValidatorAuthentication.validate(usr, bindingResult);
 
         if (bindingResult.hasErrors())
             return "auth/authentication";
 
-        userService.save(user); // если данные формы введены корректно, то сохраняем пользователя
-        // получаем уникальный номер
+        User user = userService.save(usr);
+        String s = RandomString.make(25);
+        UserAuth userAuth = new UserAuth(s, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"), user);
+        userAuthService.save(userAuth);
 
-        System.out.println(httpServletRequest.getHeaderNames());
+        // Всё надо проверять, нельзя засовывать это в базу.
 
-        Cookie cookieAuthorization = new Cookie("Authorization", "true");
+        Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", s);
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
+        Cookie cookieClient = new Cookie("mMmQ-12_1e2", String.valueOf(user.getId()));
         cookieClient.setMaxAge(Define.getCookieMaxAge());
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);
         cookieClient.setPath("/");
         httpServletResponse.addCookie(cookieClient);
 
-//        Cookie cookieUniqueIdentificator = new Cookie("UniqueIdentificator", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
-//        cookieUniqueIdentificator.setMaxAge(60);
-//        cookieUniqueIdentificator.setSecure(true);
-//        cookieUniqueIdentificator.setHttpOnly(true);
-//        cookieUniqueIdentificator.setPath("/");
-//        httpServletResponse.addCookie(cookieUniqueIdentificator);
         return "redirect:/account/settings"; // и переходим в лк (в раздел настройки)
     }
 
     @GetMapping("/authorization")
     public String authorizationPage(@ModelAttribute("user") User user,
-                                    @CookieValue(value = "Authorization", required = false) String authorization,
-                                    @CookieValue(value = "Client", required = false) String client) {
+                                    HttpServletRequest httpServletRequest,
+                                    @CookieValue(value = "Eq5__4tJHe", required = false) String authorization,
+                                    @CookieValue(value = "mMmQ-12_1e2", required = false) String client) {
 
-        if (!Auth.getAuthorization(authorization, client)) return "auth/authorization";
+        List<UserAuth> userAuths = userAuthService.findByAuthorizationAndDeviceAndIp(authorization, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"));
+        if (userAuths == null)
+            return "auth/authorization";
 
-        return "redirect:/account/settings";
+        if (userAuths.get(0).getOwner().getId() == Integer.parseInt(client))
+            return "redirect:/account/settings";
+
+        return "auth/authorization";
     }
 
     @PostMapping("/authorization")
@@ -97,17 +111,37 @@ public class AuthController {
         if (bindingResult.hasErrors())
             return "auth/authorization";
 
-        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua"));
-        System.out.println(httpServletRequest.getHeader("Sec-Ch-Ua-Platform"));
+        User u = userService.checkAuthorization(user.getEmail(), user.getPassword());
 
-        Cookie cookieAuthorization = new Cookie("Authorization", "true");
+        boolean coincidence = false;
+        int count = 0;
+        for (int i = 0; i < u.getUserAuths().size(); i++) {
+            if (!coincidence) {
+               if (u.getUserAuths().get(i).getDevice().equals(httpServletRequest.getRemoteAddr())) {
+                    coincidence = true;
+                    count = i;
+                }
+            }
+        }
+
+        String s = RandomString.make(25);
+
+        if (coincidence) {
+            u.getUserAuths().get(count).setAuthorization(s);
+            userAuthService.save(u.getUserAuths().get(count));
+        } else {
+            // вход с нового устройства
+            userAuthService.save(new UserAuth(s, httpServletRequest.getRemoteAddr(), httpServletRequest.getHeader("User-Agent"), u));
+        }
+
+        Cookie cookieAuthorization = new Cookie("Eq5__4tJHe", s);
         cookieAuthorization.setMaxAge(Define.getCookieMaxAge());
         cookieAuthorization.setSecure(true);
         cookieAuthorization.setHttpOnly(true);
         cookieAuthorization.setPath("/");
         httpServletResponse.addCookie(cookieAuthorization);
 
-        Cookie cookieClient = new Cookie("Client", String.valueOf(userService.checkAuthorization(user.getEmail(), user.getPassword()).getId()));
+        Cookie cookieClient = new Cookie("mMmQ-12_1e2", String.valueOf(u.getId()));
         cookieClient.setMaxAge(Define.getCookieMaxAge());
         cookieClient.setSecure(true);
         cookieClient.setHttpOnly(true);

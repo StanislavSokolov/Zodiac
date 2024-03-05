@@ -1,9 +1,4 @@
 package ru.sokolov.models;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -40,9 +35,25 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    public List<UserAuth> getUserAuths() {
+        return userAuths;
+    }
+
+    public void setUserAuths(List<UserAuth> userAuths) {
+        this.userAuths = userAuths;
+    }
+
+    public void setUserAuth(UserAuth userAuth) {
+        this.userAuths.add(userAuth);
+    }
+
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     @Fetch(FetchMode.SELECT)
     private List<Product> products;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
+    private List<UserAuth> userAuths;
 
     //@Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}", message = "Your address should be in this format: Country, City, Postal Code (6 digits)")
 //    @Column(name = "address")
